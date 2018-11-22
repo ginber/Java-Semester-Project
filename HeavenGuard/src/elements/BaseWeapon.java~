@@ -1,8 +1,6 @@
 package elements;
 
-import javax.swing.ImageIcon;
-
-public abstract class BaseWeapon extends ImageIcon {
+public abstract class BaseWeapon {
 	
 	private int fireSpeed;
 	
@@ -16,10 +14,5 @@ public abstract class BaseWeapon extends ImageIcon {
     	double flightTime = (2 * fireSpeed * Math.sin(aimAngle)) / gravity;
     	return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
     }
-	
-	public void fire() {
-		
-	}
 
 }
-

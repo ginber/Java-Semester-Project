@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -11,11 +13,20 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
+
+import elements.*;
 
 
 public class MainFrame extends JFrame {
 	
 	private final String BG_PATH = "res/images/misc/background.png";
+	private final String BASE_PATH = "res/images/misc/base.png";
+	
+	private BaseWeapon baseWeapon;
+	
+	JPanel container;
 	
 	JLabel backgroundContainer = null;
 	
@@ -48,12 +59,32 @@ public class MainFrame extends JFrame {
 		
 		super(title);
 		
-		createBackground();
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
 		
-		add(backgroundContainer);
+		container = new JPanel();
+		//container.setLayout(new OverlayLayout(container));
 		
+		createBackground();
+		
+		JLabel base = new JLabel(new ImageIcon(BASE_PATH));
+		
+		/*
+		base.setAlignmentX(Component.CENTER_ALIGNMENT);
+		base.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		
+		base.setOpaque(false);
+		backgroundContainer.setOpaque(false);
+		
+		*/
+		
+		//backgroundContainer.add(base);
+		container.add(backgroundContainer);
+		//container.add(base);
+		
+		add(container);
+		
+		addMouseListener(new HGMouseListener(this));
 		addKeyListener(new HGKeyListener());
 		
 		setVisible(true);
@@ -73,6 +104,8 @@ public class MainFrame extends JFrame {
 	    return resizedImage;
 		
 	}
+	
+	public BaseWeapon getBaseWeapon() { return baseWeapon; }
 
 }
 

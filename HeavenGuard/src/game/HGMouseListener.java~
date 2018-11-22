@@ -9,31 +9,10 @@ import javax.swing.JFrame;
 
 public class HGMouseListener implements MouseListener {
 	
-	int x, y;
-	
-	MainFrame context;
-	
-	public HGMouseListener(MainFrame context) {
-		
-		this.context = context;
-		
-	}
-	
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
-		x = e.getX();
-		y = e.getY();
 		
-		context.getBaseWeapon().fire();
 
 	}
 
@@ -66,4 +45,3 @@ public class HGMouseListener implements MouseListener {
 	}
 
 }
-
