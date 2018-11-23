@@ -5,6 +5,9 @@ import javax.swing.ImageIcon;
 public abstract class BaseWeapon extends ImageIcon {
 	
 	private int fireSpeed;
+	private double reloadTime;
+	
+	private String IMAGE_PATH;
 	
 	public double aimAngle(int mouseX, int mouseY, int weaponX, int weaponY ) {
 
@@ -17,9 +20,17 @@ public abstract class BaseWeapon extends ImageIcon {
     	return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
     	}
 	
-	public void fire() {
+	public void fire(int x, int y) {
 		
 	}
 
+	protected int getFireSpeed() {
+		return fireSpeed;
+	}
+
+	protected void setFireSpeed(int fireSpeed) {
+		this.fireSpeed = fireSpeed;
+	}
+	
 }
 
