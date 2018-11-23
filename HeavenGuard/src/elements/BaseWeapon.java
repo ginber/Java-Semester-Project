@@ -15,7 +15,7 @@ public abstract class BaseWeapon extends ImageIcon {
 	public double rotationAngle(long initialTime, double aimAngle, double gravity) {
     	double flightTime = (2 * fireSpeed * Math.sin(aimAngle)) / gravity;
     	return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
-    }
+    	}
 	
 	public void fire() {
 		
