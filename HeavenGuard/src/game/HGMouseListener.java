@@ -33,7 +33,7 @@ public class HGMouseListener implements MouseListener {
 		x = e.getX();
 		y = e.getY();
 		
-		context.getBaseWeapon().fire();
+		context.getBaseWeapon().fire(x, y);
 
 	}
 

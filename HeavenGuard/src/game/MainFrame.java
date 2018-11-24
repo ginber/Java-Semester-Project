@@ -6,7 +6,10 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,6 +17,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -120,6 +124,18 @@ public class MainFrame extends JFrame {
 		createBackground();
 		createBase();
 		createHouse();
+		
+		baseWeapon = new BaseWeapon();
+	
+		// ----------------------------------------------------------------------------------
+		
+		// Somewhat working code
+		
+		// No no no
+		
+		// Lame code hahahahahahahah
+		
+		/*
 
 		backgroundContainer.setLayout(new BorderLayout());
 
@@ -135,6 +151,9 @@ public class MainFrame extends JFrame {
 		
 		baseContainer.setLayout(new BorderLayout());	
 		
+		baseContainer.add(leftContainer, BorderLayout.WEST);
+		baseContainer.add(rightContainer, BorderLayout.EAST);
+		
 		for(int i = 0; i < houseContainers.length; i++) {
 			
 			if(i < 2) {
@@ -148,11 +167,50 @@ public class MainFrame extends JFrame {
 			}
 			
 		}
-		
-		baseContainer.add(leftContainer, BorderLayout.WEST);
-		baseContainer.add(rightContainer, BorderLayout.EAST);
 
 		backgroundContainer.add(baseContainer, BorderLayout.SOUTH);
+		
+		*/
+		
+		// ----------------------------------------------------------------------------
+		
+		backgroundContainer.setLayout(new GridBagLayout());
+		GridBagConstraints constraints = new GridBagConstraints();
+		
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.weightx = 0.5;
+		constraints.weighty = 0.5;
+		constraints.fill = GridBagConstraints.BOTH;
+		
+		backgroundContainer.add(Box.createGlue(), constraints); // Dummy object for GridBagLayout
+		
+		constraints.gridy = 2;
+		constraints.weighty = 0;
+		constraints.anchor = GridBagConstraints.PAGE_END;
+		constraints.fill = GridBagConstraints.NONE;
+		
+		constraints.gridx = 2;
+		backgroundContainer.add(baseContainer, constraints);
+		
+		constraints.gridx = 0;
+		backgroundContainer.add(houseContainers[0], constraints);
+		
+		constraints.gridx = 1;
+		backgroundContainer.add(houseContainers[1], constraints);
+		
+		constraints.gridx = 3;
+		backgroundContainer.add(houseContainers[2], constraints);
+		
+		constraints.gridx = 4;
+		backgroundContainer.add(houseContainers[3], constraints);
+		
+		constraints.gridx = 2;
+		constraints.gridy = 1;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		
+		backgroundContainer.add(new JLabel(baseWeapon));
 
 		add(backgroundContainer);
 
@@ -178,6 +236,8 @@ public class MainFrame extends JFrame {
 	}
 
 	public BaseWeapon getBaseWeapon() { return baseWeapon; }
+	
+	public int getBaseHeight() { return baseContainer.getHeight(); }
 
 }
 

@@ -5,6 +5,7 @@ import javax.swing.SwingUtilities;
 public class Game {
 	
 	private static final String NAME = "HeavenGuard";
+	private static final int GRAVITY = 10;
 	
 	public static void main(String[] args) {
 		
