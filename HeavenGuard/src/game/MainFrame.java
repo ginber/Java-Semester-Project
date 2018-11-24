@@ -126,61 +126,14 @@ public class MainFrame extends JFrame {
 		createHouse();
 		
 		baseWeapon = new BaseWeapon();
-	
-		// ----------------------------------------------------------------------------------
-		
-		// Somewhat working code
-		
-		// No no no
-		
-		// Lame code hahahahahahahah
-		
-		/*
-
-		backgroundContainer.setLayout(new BorderLayout());
-
-		//baseContainer.setBorder(BorderFactory.createLineBorder(Color.RED));
-
-		JPanel leftContainer = new JPanel(new BorderLayout());
-		JPanel rightContainer = new JPanel(new BorderLayout());
-		
-		leftContainer.setOpaque(false);
-		rightContainer.setOpaque(false);
-		
-		//leftContainer.setBorder(BorderFactory.createLineBorder(Color.GREEN,10));
-		
-		baseContainer.setLayout(new BorderLayout());	
-		
-		baseContainer.add(leftContainer, BorderLayout.WEST);
-		baseContainer.add(rightContainer, BorderLayout.EAST);
-		
-		for(int i = 0; i < houseContainers.length; i++) {
-			
-			if(i < 2) {
-				
-				leftContainer.add(houseContainers[i], BorderLayout.PAGE_END);
-				
-			} else {
-				
-				rightContainer.add(houseContainers[i], BorderLayout.PAGE_END);
-				
-			}
-			
-		}
-
-		backgroundContainer.add(baseContainer, BorderLayout.SOUTH);
-		
-		*/
-		
-		// ----------------------------------------------------------------------------
 		
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 		
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.weightx = 0.5;
-		constraints.weighty = 0.5;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
 		constraints.fill = GridBagConstraints.BOTH;
 		
 		backgroundContainer.add(Box.createGlue(), constraints); // Dummy object for GridBagLayout
@@ -207,10 +160,13 @@ public class MainFrame extends JFrame {
 		
 		constraints.gridx = 2;
 		constraints.gridy = 1;
-		constraints.weightx = 1.0;
-		constraints.weighty = 1.0;
+		constraints.weightx = 0.5;
+		constraints.weighty = 0.5;
+		constraints.anchor = GridBagConstraints.PAGE_END;
 		
-		backgroundContainer.add(new JLabel(baseWeapon));
+		baseContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		
+		backgroundContainer.add(new JLabel(baseWeapon), constraints);
 
 		add(backgroundContainer);
 
