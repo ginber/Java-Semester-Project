@@ -18,26 +18,44 @@ public class BaseWeapon extends ImageIcon {
 	private int fireSpeed;
 	private double reloadTime;
 
-	private static String IMAGE_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	private final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	private final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
+	//private final String WEAPON_2_PATH = "HeavenGuard/res/images/misc/house.png";
+	//private final String WEAPON_3_PATH = "HeavenGuard/res/images/misc/house.png";
 
 	private static BufferedImage weaponImage = null;
 
 	private static BaseWeapon baseWeapon = null;
 
-	public  BaseWeapon() {
+	public BaseWeapon createWeapon(String tag) {
+		
+		if(tag.equals("cannon")) {
+			
+			try {
+				
+				weaponImage = ImageIO.read(new File(CANNON_PATH));
 
-		try {
+			} catch(IOException e) {
 
-			weaponImage = ImageIO.read(new File(IMAGE_PATH));
+				System.out.println("Weapon could not be found");
 
-		} catch(IOException e) {
+			}
 
-			System.out.println("Weapon could not be found");
-
+			baseWeapon = new CannonWeapon(30);
+			
 		}
-
+		
+		else if(tag.equals("mg")) {
+			
+			// bla bla bla
+			
+		}
+		
+		// en sonunda
+		
 		setImage(weaponImage);
-
+		return baseWeapon;
+		
 	}
 
 	public double aimAngle(int mouseX, int mouseY, int weaponX, int weaponY ) {
@@ -56,21 +74,6 @@ public class BaseWeapon extends ImageIcon {
 	public void fire(int x, int y) {
 
 
-
-	}
-
-	public void rotate(double rotationAngle) {
-
-		AffineTransform transform = AffineTransform.getRotateInstance(rotationAngle, 
-				weaponImage.getWidth() / 2, weaponImage.getHeight() / 2);
-
-		AffineTransformOp transformOp = new AffineTransformOp(transform, 
-				AffineTransformOp.TYPE_BILINEAR);
-
-		Graphics2D g2d = (Graphics2D) weaponImage.getGraphics();
-
-		g2d.drawImage(transformOp.filter(weaponImage, null), weaponImage.getWidth() / 2,
-				weaponImage.getHeight() / 2, null);
 
 	}
 

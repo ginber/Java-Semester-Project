@@ -5,6 +5,8 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 
+import elements.BaseWeapon;
+
 // Custom MouseListener to handle mouse events
 
 public class HGMouseListener implements MouseListener {
@@ -13,9 +15,12 @@ public class HGMouseListener implements MouseListener {
 	
 	MainFrame context;
 	
+	BaseWeapon bw;
+	
 	public HGMouseListener(MainFrame context) {
 		
 		this.context = context;
+		bw = context.getBaseWeapon();
 		
 	}
 	
@@ -41,7 +46,8 @@ public class HGMouseListener implements MouseListener {
 	public void mouseEntered(MouseEvent e) {
 		
 		
-
+		context.rotateWeapon(bw.aimAngle(x, y, context.getScreenWidth() / 2, context.getBaseHeight()));
+		
 	}
 
 	@Override

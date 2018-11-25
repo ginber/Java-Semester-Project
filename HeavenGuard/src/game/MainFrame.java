@@ -5,12 +5,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,11 +37,17 @@ public class MainFrame extends JFrame {
 	private final String BG_PATH = "HeavenGuard/res/images/misc/background.png";
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
+	
+	private final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	private final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
+	//private final String WEAPON_2_PATH = "HeavenGuard/res/images/misc/house.png";
+	//private final String WEAPON_3_PATH = "HeavenGuard/res/images/misc/house.png";
 
 	private BaseWeapon baseWeapon;
 
 	JLabel backgroundContainer = null;
 	JLabel baseContainer = null;
+	JLabel weaponContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
 
 	private final int screenWidth = getToolkit().getScreenSize().width;
@@ -126,6 +135,7 @@ public class MainFrame extends JFrame {
 		createHouse();
 		
 		baseWeapon = new BaseWeapon();
+		weaponContainer.setIcon(baseWeapon);
 		
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -164,9 +174,7 @@ public class MainFrame extends JFrame {
 		constraints.weighty = 0.5;
 		constraints.anchor = GridBagConstraints.PAGE_END;
 		
-		baseContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-		
-		backgroundContainer.add(new JLabel(baseWeapon), constraints);
+		backgroundContainer.add(weaponContainer, constraints);
 
 		add(backgroundContainer);
 
@@ -194,6 +202,20 @@ public class MainFrame extends JFrame {
 	public BaseWeapon getBaseWeapon() { return baseWeapon; }
 	
 	public int getBaseHeight() { return baseContainer.getHeight(); }
+	
+	public int getScreenWidth() { return screenWidth; }
+	
+	public void rotateWeapon(double rotationAngle) {
+
+		Graphics2D g = (Graphics2D) getGraphics();
+		
+		g.rotate(rotationAngle);
+		
+		BufferedImage rotatedImage = new BufferedImage(weaponContainer.getWidth(), weaponContainer.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		
+		g.drawImage(rotatedImage, 0, 0, weaponContainer.getWidth(), weaponContainer.getHeight(), null);
+
+	}
 
 }
 

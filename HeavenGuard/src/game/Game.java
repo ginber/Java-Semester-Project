@@ -21,5 +21,7 @@ public class Game {
 		});
 		
 	}
+	
+	public static int getGravity() { return GRAVITY; }
 
 }
