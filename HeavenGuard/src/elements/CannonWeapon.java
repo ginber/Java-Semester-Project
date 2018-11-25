@@ -1,11 +1,15 @@
 package elements;
 
 public class CannonWeapon extends BaseWeapon {
-	
-	public CannonWeapon(int fireSpeed) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	int maxPower;
+	public CannonWeapon(int maxPower, int damage) {
 		
-		this.setFireSpeed(fireSpeed);
-		
+		this.maxPower = maxPower;
+		this.damage = damage;
 	}
 
 }
