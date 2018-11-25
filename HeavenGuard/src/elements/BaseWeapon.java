@@ -41,7 +41,7 @@ public class BaseWeapon extends ImageIcon {
 
 			}
 
-			baseWeapon = new CannonWeapon(30);
+			baseWeapon = new CannonWeapon();
 			
 		}
 		
@@ -53,7 +53,7 @@ public class BaseWeapon extends ImageIcon {
 		
 		// en sonunda
 		
-		setImage(weaponImage);
+		baseWeapon.setImage(weaponImage);
 		return baseWeapon;
 		
 	}

@@ -38,12 +38,9 @@ public class MainFrame extends JFrame {
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 	
-	private final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
-	private final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
-	//private final String WEAPON_2_PATH = "HeavenGuard/res/images/misc/house.png";
-	//private final String WEAPON_3_PATH = "HeavenGuard/res/images/misc/house.png";
+	
 
-	private BaseWeapon baseWeapon;
+	private BaseWeapon baseWeapon = null;
 
 	JLabel backgroundContainer = null;
 	JLabel baseContainer = null;
@@ -73,6 +70,14 @@ public class MainFrame extends JFrame {
 
 		backgroundContainer = new JLabel(background);
 
+	}
+	
+	public void createWeapon(String tag) {
+		
+		BaseWeapon weapon = new BaseWeapon().createWeapon(tag);
+		
+		weaponContainer = new JLabel(weapon);
+		
 	}
 
 	public void createBase() {
@@ -133,9 +138,7 @@ public class MainFrame extends JFrame {
 		createBackground();
 		createBase();
 		createHouse();
-		
-		baseWeapon = new BaseWeapon();
-		weaponContainer.setIcon(baseWeapon);
+		createWeapon("cannon");
 		
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -175,6 +178,8 @@ public class MainFrame extends JFrame {
 		constraints.anchor = GridBagConstraints.PAGE_END;
 		
 		backgroundContainer.add(weaponContainer, constraints);
+		
+		//weaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 
 		add(backgroundContainer);
 
