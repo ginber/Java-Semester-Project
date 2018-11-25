@@ -16,12 +16,13 @@ import javax.swing.JLabel;
 public class BaseWeapon extends ImageIcon {
 
 	private int fireSpeed;
-	private double reloadTime;
+	protected double reloadTime = 0;
+	protected int damage,weapon1lvl = 1,weapon2lvl = 1,weapon3lvl = 1,weapon4lvl = 1;
 
-	private final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
-	private final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
-	//private final String WEAPON_2_PATH = "HeavenGuard/res/images/misc/house.png";
-	//private final String WEAPON_3_PATH = "HeavenGuard/res/images/misc/house.png";
+	private static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	private static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
+	private static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
+	private static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
 
 	private static BufferedImage weaponImage = null;
 
@@ -41,15 +42,42 @@ public class BaseWeapon extends ImageIcon {
 
 			}
 
-			baseWeapon = new CannonWeapon();
+
+			baseWeapon = new CannonWeapon(100*weapon1lvl, weapon1lvl * 3);
 			
 		}
 		
 		else if(tag.equals("mg")) {
 			
-			// bla bla bla
+			try { 
+				weaponImage = ImageIO.read(new File(MACHINEGUN_PATH));
+			} catch(IOException e) {
+				System.out.println("Weapon could not be found");
+			}
+			baseWeapon = new MachineGun(weapon2lvl + 1);
 			
 		}
+		
+	else if(tag.equals("lasergun")) {
+			
+			try { 
+				weaponImage = ImageIO.read(new File(LASERGUN_PATH));
+			} catch(IOException e) {
+				System.out.println("Weapon could not be found");
+			}
+			baseWeapon = new LaserGun(30 - (weapon3lvl * 2), (weapon3lvl*10));
+			
+		}
+	else if(tag.equals("shieldgun")) {
+		
+		try { 
+			weaponImage = ImageIO.read(new File(SHIELDGUN_PATH));
+		} catch(IOException e) {
+			System.out.println("Weapon could not be found");
+		}
+		baseWeapon = new ShieldGun(60 - (weapon4lvl * 2), (weapon4lvl * 20));
+		
+	}
 		
 		// en sonunda
 		
