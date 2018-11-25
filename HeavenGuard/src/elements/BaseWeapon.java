@@ -26,17 +26,21 @@ public class BaseWeapon extends ImageIcon {
 	private static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
 	private static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
 
+	private static String weaponPath;
+	
 	private static BufferedImage weaponImage = null;
 
 	private static BaseWeapon baseWeapon = null;
 
 	public BaseWeapon createWeapon(String tag) {
-		
+
 		if(tag.equals("cannon")) {
 			
+			weaponPath = CANNON_PATH;
+
 			try {
-				
-				weaponImage = ImageIO.read(new File(CANNON_PATH));
+
+				weaponImage = ImageIO.read(new File(weaponPath));
 
 			} catch(IOException e) {
 
@@ -46,53 +50,72 @@ public class BaseWeapon extends ImageIcon {
 
 
 			baseWeapon = new CannonWeapon(100*weapon1lvl, weapon1lvl * 3);
-			
+
 		}
-		
+
 		else if(tag.equals("mg")) {
+
+			weaponPath = MACHINEGUN_PATH;
 			
 			try { 
-				weaponImage = ImageIO.read(new File(MACHINEGUN_PATH));
+				
+				weaponImage = ImageIO.read(new File(weaponPath));
+				
 			} catch(IOException e) {
+				
 				System.out.println("Weapon could not be found");
+				
 			}
+			
 			baseWeapon = new MachineGun(weapon2lvl + 1);
-			
+
 		}
-		
-	else if(tag.equals("lasergun")) {
+
+		else if(tag.equals("lasergun")) {
 			
+			weaponPath = LASERGUN_PATH;
+
 			try { 
-				weaponImage = ImageIO.read(new File(LASERGUN_PATH));
+				
+				weaponImage = ImageIO.read(new File(weaponPath));
+				
 			} catch(IOException e) {
+				
 				System.out.println("Weapon could not be found");
+				
 			}
-			baseWeapon = new LaserGun(30 - (weapon3lvl * 2), (weapon3lvl*10));
 			
+			baseWeapon = new LaserGun(30 - (weapon3lvl * 2), (weapon3lvl*10));
+
 		}
-	else if(tag.equals("shieldgun")) {
-		
-		try { 
-			weaponImage = ImageIO.read(new File(SHIELDGUN_PATH));
-		} catch(IOException e) {
-			System.out.println("Weapon could not be found");
+		else if(tag.equals("shieldgun")) {
+			
+			weaponPath = SHIELDGUN_PATH;
+
+			try { 
+				
+				weaponImage = ImageIO.read(new File(weaponPath));
+				
+			} catch(IOException e) {
+				
+				System.out.println("Weapon could not be found");
+				
+			}
+			
+			baseWeapon = new ShieldGun(60 - (weapon4lvl * 2), (weapon4lvl * 20));
+
 		}
-		baseWeapon = new ShieldGun(60 - (weapon4lvl * 2), (weapon4lvl * 20));
-		
-	}
-		
-		// en sonunda
-		
+
 		baseWeapon.setImage(weaponImage);
 		return baseWeapon;
-		
+
 	}
 
 	public double aimAngle(double mouseX, double mouseY, double weaponX, double weaponY ) {
-		
+
 		System.out.println("Weapon x: " + weaponX);
 		System.out.println("Weapon y: " + weaponY);
-		return (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
+		return 90 - (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
 
 	}
 
@@ -109,12 +132,18 @@ public class BaseWeapon extends ImageIcon {
 
 	}
 
-	protected int getFireSpeed() {
+	public int getFireSpeed() {
 		return fireSpeed;
 	}
 
-	protected void setFireSpeed(int fireSpeed) {
+	public void setFireSpeed(int fireSpeed) {
 		this.fireSpeed = fireSpeed;
+	}
+	
+	public String getWeaponPath() {
+		
+		return weaponPath;
+		
 	}
 
 }

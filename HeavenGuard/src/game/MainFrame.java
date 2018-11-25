@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -37,8 +38,6 @@ public class MainFrame extends JFrame {
 	private final String BG_PATH = "HeavenGuard/res/images/misc/background.png";
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
-	
-	
 
 	private BaseWeapon baseWeapon = null;
 
@@ -183,7 +182,8 @@ public class MainFrame extends JFrame {
 
 		add(backgroundContainer);
 
-		addMouseListener(new HGMouseListener(this));
+		addMouseListener(new HGMouseListener());
+		addMouseMotionListener(new HGMouseMotionListener(this));
 		addKeyListener(new HGKeyListener());
 
 		setVisible(true);
@@ -209,17 +209,30 @@ public class MainFrame extends JFrame {
 	public int getBaseHeight() { return baseContainer.getHeight(); }
 	
 	public int getScreenWidth() { return screenWidth; }
+	public int getScreenHeight() { return screenHeight; }
 	
-	public void rotateWeapon(double rotationAngle) {
-
-		Graphics2D g = (Graphics2D) getGraphics();
+	public void rotateWeapon(final double rotationAngle) {
 		
-		g.rotate(rotationAngle);
-		System.out.println((rotationAngle));
-		BufferedImage rotatedImage = new BufferedImage(weaponContainer.getWidth(), weaponContainer.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		BufferedImage weaponImage = null;
 		
-		g.drawImage(rotatedImage, 0, 0, weaponContainer.getWidth(), weaponContainer.getHeight(), null);
-
+		try {
+			
+			weaponImage = ImageIO.read(new File(baseWeapon.getWeaponPath()));
+			
+		} catch(IOException e) {
+			
+			System.out.println("Could not loat the weapon image for some reason lol");
+			
+		}
+		
+		Graphics g = getGraphics();
+		Graphics2D g2d = (Graphics2D) g;
+		
+		AffineTransform transform = AffineTransform.getRotateInstance(Math.toRadians(rotationAngle));
+		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+		
+		g2d.drawImage(op.filter(weaponImage, null), screenWidth / 2, screenHeight - baseContainer.getHeight(), null);
+		
 	}
 
 }
