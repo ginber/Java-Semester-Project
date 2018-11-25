@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import com.sun.media.sound.ModelSource;
+
 public class BaseWeapon extends ImageIcon {
 
 	private int fireSpeed;
@@ -86,9 +88,11 @@ public class BaseWeapon extends ImageIcon {
 		
 	}
 
-	public double aimAngle(int mouseX, int mouseY, int weaponX, int weaponY ) {
-
-		return Math.atan((mouseY - weaponY) / (mouseX - weaponX));
+	public double aimAngle(double mouseX, double mouseY, double weaponX, double weaponY ) {
+		
+		System.out.println("Weapon x: " + weaponX);
+		System.out.println("Weapon y: " + weaponY);
+		return (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
 
 	}
 

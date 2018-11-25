@@ -74,9 +74,9 @@ public class MainFrame extends JFrame {
 	
 	public void createWeapon(String tag) {
 		
-		BaseWeapon weapon = new BaseWeapon().createWeapon(tag);
+		baseWeapon = new BaseWeapon().createWeapon(tag);
 		
-		weaponContainer = new JLabel(weapon);
+		weaponContainer = new JLabel(baseWeapon);
 		
 	}
 
@@ -215,7 +215,7 @@ public class MainFrame extends JFrame {
 		Graphics2D g = (Graphics2D) getGraphics();
 		
 		g.rotate(rotationAngle);
-		
+		System.out.println((rotationAngle));
 		BufferedImage rotatedImage = new BufferedImage(weaponContainer.getWidth(), weaponContainer.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		
 		g.drawImage(rotatedImage, 0, 0, weaponContainer.getWidth(), weaponContainer.getHeight(), null);
