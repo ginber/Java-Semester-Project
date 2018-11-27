@@ -15,11 +15,11 @@ import javax.swing.JLabel;
 
 import com.sun.media.sound.ModelSource;
 
+import elements.WeaponFactory.Builder;
+
 public class BaseWeapon extends ImageIcon {
 
-	private int fireSpeed;
-	protected double reloadTime = 0;
-	protected int damage,weapon1lvl = 1,weapon2lvl = 1,weapon3lvl = 1,weapon4lvl = 1;
+	private int fireSpeed, damage, weaponLevel,  reloadTime;
 
 	static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
 	static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
@@ -27,16 +27,28 @@ public class BaseWeapon extends ImageIcon {
 	static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
 
 	private static String weaponPath, bulletPath;
-	
-	private static BufferedImage weaponImage = null;
-	private static BufferedImage bulletImage = null;
+
+	private BufferedImage weaponImage = null;
+	private BufferedImage bulletImage = null;
 
 	private static BaseWeapon baseWeapon = null;
+	
+	public BaseWeapon(WeaponBuilder builder) {
+		
+		this.damage = builder.damage;
+		this.reloadTime = builder.reloadTime;
+		this.fireSpeed = builder.fireSpeed;
+		this.weaponLevel = builder.weaponLevel;
+		this.bulletPath = builder.bulletPath;
+		this.weaponPath = builder.weaponPath;
+		
+	}
+
 
 	public BaseWeapon createBaseWeapon(String tag) {
 
 		if(tag.equals("cannon")) {
-			
+
 			weaponPath = CANNON_PATH;
 			bulletPath = "HeavenGuard/res/images/cannongun/cannonbullet.png";
 
@@ -52,21 +64,21 @@ public class BaseWeapon extends ImageIcon {
 		}
 
 		else if(tag.equals("lasergun")) {
-			
+
 			weaponPath = LASERGUN_PATH;
 
-			
+
 			baseWeapon = new LaserGun(30 - (weapon3lvl * 2), (weapon3lvl*10));
 
 		}
 		else if(tag.equals("shieldgun")) {
-			
+
 			weaponPath = SHIELDGUN_PATH;
-			
+
 			baseWeapon = new ShieldGun(60 - (weapon4lvl * 2), (weapon4lvl * 20));
 
 		}
-		
+
 		try {
 
 			weaponImage = ImageIO.read(new File(weaponPath));
@@ -88,7 +100,7 @@ public class BaseWeapon extends ImageIcon {
 		if(angle > 0) {
 			return 90-angle;	
 		}else return 270-angle;
-		
+
 
 	}
 
@@ -101,7 +113,7 @@ public class BaseWeapon extends ImageIcon {
 
 	public void fire(double aimAngle) {
 
-		
+
 
 	}
 
@@ -112,12 +124,14 @@ public class BaseWeapon extends ImageIcon {
 	public void setFireSpeed(int fireSpeed) {
 		this.fireSpeed = fireSpeed;
 	}
-	
+
 	public String getWeaponPath() {
-		
+
 		return weaponPath;
-		
+
 	}
+
+	public static void setWeapon(BaseWeapon weapon) { baseWeapon = weapon; }
 
 }
 

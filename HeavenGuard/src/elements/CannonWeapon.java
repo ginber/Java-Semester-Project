@@ -7,10 +7,11 @@ public class CannonWeapon extends BaseWeapon {
 	 */
 	private static final long serialVersionUID = 1L;
 	int maxPower;
-	public CannonWeapon(int maxPower, int damage) {
+	
+	public CannonWeapon(WeaponBuilder builder) {
 		
-		this.maxPower = maxPower;
-		this.damage = damage;
+		super(builder);
+		
 	}
 
 
