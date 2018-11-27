@@ -45,7 +45,7 @@ public class HGMouseListener implements MouseListener {
 		//System.out.println( context.getBaseHeight());
 		//System.out.println( (context.getScreenWidth() / 2));
 		//System.out.println(bw.aimAngle(x, y, context.getScreenWidth() / 2, context.getBaseHeight()));
-		context.rotateWeapon(bw.aimAngle(x, y, context.getScreenWidth() / 2, context.getHeight() - context.getBaseHeight()));
+		//context.getBaseWeapon().rotateWeapon(bw.aimAngle(x, y, context.getScreenWidth() / 2, context.getHeight() - context.getBaseHeight()));
 
 	}
 

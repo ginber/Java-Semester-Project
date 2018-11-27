@@ -210,9 +210,9 @@ public class MainFrame extends JFrame {
 	
 	public int getScreenWidth() { return screenWidth; }
 	
-	public void rotateWeapon(double rotationAngle) {
-
-		Graphics2D g = (Graphics2D) getGraphics();
+	public void rotateWeapon(double rotationAngle, Graphics bWeapon) {
+		super.paintComponents(bWeapon);
+		Graphics2D g = (Graphics2D) bWeapon;
 		
 		g.rotate(rotationAngle);
 		System.out.println((rotationAngle));
