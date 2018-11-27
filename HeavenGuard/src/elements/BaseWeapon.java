@@ -112,10 +112,11 @@ public class BaseWeapon extends ImageIcon {
 	}
 
 	public double aimAngle(double mouseX, double mouseY, double weaponX, double weaponY ) {
-
-		System.out.println("Weapon x: " + weaponX);
-		System.out.println("Weapon y: " + weaponY);
-		return 90 - (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
+		double angle = (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
+		if(angle > 0) {
+			return 90-angle;	
+		}else return 270-angle;
+		
 
 	}
 

@@ -6,17 +6,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 public class HGMouseMotionListener implements MouseMotionListener {
-
-	MainFrame context;
-
-	BaseWeapon bw;
-
-	public HGMouseMotionListener(MainFrame context) {
-
-		this.context = context;
-		bw = context.getBaseWeapon();
-
-	}
+	
+	int x, y;
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
@@ -27,9 +18,12 @@ public class HGMouseMotionListener implements MouseMotionListener {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 
-		context.rotateWeapon(bw.aimAngle(e.getX(), e.getY(), context.getScreenWidth() / 2,
-				context.getScreenHeight() - context.getBaseHeight()));
+		x = e.getX();
+		y = e.getY();
 
 	}
+	
+	public int getX() { return x; }
+	public int getY() { return y; }
 
 }

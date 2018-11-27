@@ -26,7 +26,8 @@ public class HGMouseListener implements MouseListener {
 		
 		x = e.getX();
 		y = e.getY();
-
+		System.out.println(x);
+		System.out.println(y);
 	}
 
 	@Override
