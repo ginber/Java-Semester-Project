@@ -65,7 +65,7 @@ public class MainFrame extends JFrame {
 
 	public void createWeapon(String tag) {
 
-		baseWeapon = new BaseWeapon().createWeapon(tag);
+		baseWeapon = new BaseWeapon().createBaseWeapon(tag);
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 

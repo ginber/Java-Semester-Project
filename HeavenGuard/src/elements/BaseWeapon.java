@@ -21,33 +21,24 @@ public class BaseWeapon extends ImageIcon {
 	protected double reloadTime = 0;
 	protected int damage,weapon1lvl = 1,weapon2lvl = 1,weapon3lvl = 1,weapon4lvl = 1;
 
-	private static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
-	private static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
-	private static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
-	private static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
+	static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
+	static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
+	static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
 
-	private static String weaponPath;
+	private static String weaponPath, bulletPath;
 	
 	private static BufferedImage weaponImage = null;
+	private static BufferedImage bulletImage = null;
 
 	private static BaseWeapon baseWeapon = null;
 
-	public BaseWeapon createWeapon(String tag) {
+	public BaseWeapon createBaseWeapon(String tag) {
 
 		if(tag.equals("cannon")) {
 			
 			weaponPath = CANNON_PATH;
-
-			try {
-
-				weaponImage = ImageIO.read(new File(weaponPath));
-
-			} catch(IOException e) {
-
-				System.out.println("Weapon could not be found");
-
-			}
-
+			bulletPath = "HeavenGuard/res/images/cannongun/cannonbullet.png";
 
 			baseWeapon = new CannonWeapon(100*weapon1lvl, weapon1lvl * 3);
 
@@ -56,17 +47,6 @@ public class BaseWeapon extends ImageIcon {
 		else if(tag.equals("mg")) {
 
 			weaponPath = MACHINEGUN_PATH;
-			
-			try { 
-				
-				weaponImage = ImageIO.read(new File(weaponPath));
-				
-			} catch(IOException e) {
-				
-				System.out.println("Weapon could not be found");
-				
-			}
-			
 			baseWeapon = new MachineGun(weapon2lvl + 1);
 
 		}
@@ -75,15 +55,6 @@ public class BaseWeapon extends ImageIcon {
 			
 			weaponPath = LASERGUN_PATH;
 
-			try { 
-				
-				weaponImage = ImageIO.read(new File(weaponPath));
-				
-			} catch(IOException e) {
-				
-				System.out.println("Weapon could not be found");
-				
-			}
 			
 			baseWeapon = new LaserGun(30 - (weapon3lvl * 2), (weapon3lvl*10));
 
@@ -91,18 +62,19 @@ public class BaseWeapon extends ImageIcon {
 		else if(tag.equals("shieldgun")) {
 			
 			weaponPath = SHIELDGUN_PATH;
-
-			try { 
-				
-				weaponImage = ImageIO.read(new File(weaponPath));
-				
-			} catch(IOException e) {
-				
-				System.out.println("Weapon could not be found");
-				
-			}
 			
 			baseWeapon = new ShieldGun(60 - (weapon4lvl * 2), (weapon4lvl * 20));
+
+		}
+		
+		try {
+
+			weaponImage = ImageIO.read(new File(weaponPath));
+			bulletImage = ImageIO.read(new File(bulletPath));
+
+		} catch(IOException e) {
+
+			System.out.println("Weapon or bullet could not be found");
 
 		}
 
@@ -127,9 +99,9 @@ public class BaseWeapon extends ImageIcon {
 
 	}
 
-	public void fire(int x, int y) {
+	public void fire(double aimAngle) {
 
-
+		
 
 	}
 
