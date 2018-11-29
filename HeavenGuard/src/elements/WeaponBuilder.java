@@ -6,18 +6,22 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import game.MainFrame;
+
 // Builder class for BaseWeapon since there are so many child classes for it
 
 public class WeaponBuilder {
 
 	int damage, reloadTime, fireSpeed, weaponLevel, maxPower;
-	String weaponPath, bulletPath;
+	String weaponPath;
+	Bullet bullet;
+	MainFrame context = null;
 	
 	BufferedImage weaponImage = null;
-	BufferedImage bulletImage = null;
 
-	public WeaponBuilder(int damage) {
+	public WeaponBuilder(int damage, MainFrame context) {
 		this.damage = damage;
+		this.context = context;
 	}
 
 	public WeaponBuilder reloadTime(int reloadTime) {
@@ -51,7 +55,7 @@ public class WeaponBuilder {
 		if(tag.equals("cannon")) {
 
 			weaponPath = BaseWeapon.CANNON_PATH;
-			bulletPath = BaseWeapon.CANNONBULLET_PATH;
+			bullet = new Bullet(BaseWeapon.CANNONBULLET_PATH, context);
 			weaponToReturn = new CannonWeapon(this);
 
 		}
@@ -59,7 +63,7 @@ public class WeaponBuilder {
 		else if(tag.equals("mg")) {
 
 			weaponPath = BaseWeapon.MACHINEGUN_PATH;
-			bulletPath = BaseWeapon.MGBULLET_PATH;
+			bullet = new Bullet(BaseWeapon.MGBULLET_PATH, context);
 			weaponToReturn = new MachineGun(this);
 
 		}
@@ -67,7 +71,7 @@ public class WeaponBuilder {
 		else if(tag.equals("lasergun")) {
 
 			weaponPath = BaseWeapon.LASERGUN_PATH;
-			bulletPath = BaseWeapon.LASERBULLET_PATH;
+			bullet = new Bullet(BaseWeapon.LASERBULLET_PATH, context);
 			weaponToReturn = new LaserGun(this);
 
 		}
@@ -75,28 +79,27 @@ public class WeaponBuilder {
 		else if(tag.equals("shieldgun")) {
 
 			weaponPath = BaseWeapon.SHIELDGUN_PATH;
-			bulletPath = BaseWeapon.SHIELDBULLET_PATH;
+			bullet = new Bullet(BaseWeapon.SHIELDBULLET_PATH, context);
 			weaponToReturn = new ShieldGun(this);
 
 		}
 
-		createImages(weaponPath, bulletPath);
+		createImage(weaponPath);
 		weaponToReturn.setImage(weaponImage);
 
 		return weaponToReturn;
 
 	}
 	
-	private void createImages(String weaponPath, String bulletPath) {
+	private void createImage(String weaponPath) {
 		
 		try {
 
 			weaponImage = ImageIO.read(new File(weaponPath));
-			bulletImage = ImageIO.read(new File(bulletPath));
 
 		} catch(IOException e) {
 
-			System.out.println("Weapon or bullet could not be found");
+			System.out.println("Weapon could not be found");
 
 		}
 		

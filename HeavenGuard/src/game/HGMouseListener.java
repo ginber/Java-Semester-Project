@@ -34,12 +34,8 @@ public class HGMouseListener implements MouseListener {
 		x = e.getX();
 		y = e.getY();
 
-
-		context.fireBullet(x, y);
-
-
-		System.out.println(x);
-		System.out.println(y);
+		//context.fireBullet(x, y);
+		
 	}
 
 	@Override

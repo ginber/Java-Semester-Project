@@ -30,10 +30,10 @@ public class BaseWeapon extends ImageIcon {
 	static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
 	static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
 
-	private static String weaponPath, bulletPath;
-
+	private String weaponPath;
 	private BufferedImage weaponImage = null;
-	private BufferedImage bulletImage = null;
+	
+	private Bullet bulletType;
 	
 	public BaseWeapon(WeaponBuilder builder) {
 		
@@ -42,22 +42,35 @@ public class BaseWeapon extends ImageIcon {
 		this.fireSpeed = builder.fireSpeed;
 		this.weaponLevel = builder.weaponLevel;
 		this.weaponPath = builder.weaponPath;
-		this.bulletPath = builder.bulletPath;
-
-		//this.bulletImage = builder.bulletImage;
+		this.bulletType = builder.bullet;
+		this.weaponImage = builder.weaponImage;
 		
 	}
-
+	
+	public Bullet getBullet() {
+		
+		return this.bulletType;
+		
+	}
+	
+	// Function that gives how many degrees the weapon should rotate according to mouse movement
 	public double aimAngle(double mouseX, double mouseY, double weaponX, double weaponY ) {
+		
 		double angle = (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
+		
 		if(angle > 0) {
-			return 90-angle;	
-		}else return 270-angle;
+			
+			return (90 - angle);
+			
+		}
 
+		return (270 - angle);
 
 	}
 
-	public double rotationAngle(long initialTime, double aimAngle, double gravity) {
+	// Function that gives how many degrees the bullet fired by this weapon should rotate 
+	// momentarily
+	public double bulletRotationAngle(long initialTime, double aimAngle, double gravity) {
 
 		double flightTime = (2 * fireSpeed * Math.sin(aimAngle)) / gravity;
 		return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
@@ -84,16 +97,5 @@ public class BaseWeapon extends ImageIcon {
 
 	}
 
-	public String getBulletPath() {
-
-		return bulletPath;
-
-	}
-
-	public BufferedImage getBulletImage() {
-
-		return bulletImage;
-
-	}
 }
 

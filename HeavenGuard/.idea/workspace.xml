@@ -4,13 +4,7 @@
     <bookmark url="file://$PROJECT_DIR$/src/game/MainFrame.java" line="25" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="332f4e95-5cb9-4629-b3c5-dc70d809ab20" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/elements/BaseWeapon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/elements/BaseWeapon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/elements/Bullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/elements/Bullet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/elements/WeaponBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/elements/WeaponBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/HGMouseListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/HGMouseListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/game/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/MainFrame.java" afterDir="false" />
-    </list>
+    <list default="true" id="332f4e95-5cb9-4629-b3c5-dc70d809ab20" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +16,7 @@
     <session id="-1095218770">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.opened" value="1" />
         </counts>
@@ -74,8 +69,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/game/MainFrame.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="25" column="53" lean-forward="true" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
+            <state relative-caret-position="221">
+              <caret line="29" column="68" lean-forward="true" selection-start-line="29" selection-start-column="68" selection-end-line="29" selection-end-column="68" />
             </state>
           </provider>
         </entry>
@@ -174,7 +169,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543496589070" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543496593215" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -239,7 +234,7 @@
       <window_info anchor="bottom" id="Messages" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3295082" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3295082" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -305,8 +300,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/game/MainFrame.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="25" column="53" lean-forward="true" selection-start-line="25" selection-start-column="53" selection-end-line="25" selection-end-column="53" />
+        <state relative-caret-position="221">
+          <caret line="29" column="68" lean-forward="true" selection-start-line="29" selection-start-column="68" selection-end-line="29" selection-end-column="68" />
         </state>
       </provider>
     </entry>

@@ -3,50 +3,64 @@ package elements;
 import game.MainFrame;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Bullet extends ImageIcon {
 
-	private boolean onScreen = false;
 	private String path;
 	private Point currentLocation;
 	private MainFrame context = null;
-	private double aimAngle;
+	private BufferedImage image = null;
 
 	public String getPath() {
+
 		return path;
+
 	}
 
 	public void setPath(String path) {
+
 		this.path = path;
+
 	}
 
-	public Bullet(Point location, boolean onScreen, MainFrame context, double aimAngle) {
+	public Bullet(String path, MainFrame context) {
 
-		currentLocation = location;
-		this.onScreen = onScreen;
+		this.path = path;
 		this.context = context;
-		this.aimAngle = aimAngle;
 		
-		if(onScreen) {
-			
-			context.getBulletsOnScreen().add(this);
-			
+		try {
+
+			image = ImageIO.read(new File(path));
+
+		} catch(IOException e) {
+
+			System.out.println("Could not load bullet");
+
 		}
 		
+		setImage(image);
 
 	}
 
 	public Point getCurrentLocation() {
+		
 		return currentLocation;
+		
 	}
-
-	public Bullet(Point location) {
-
-		currentLocation = location;
-
+	
+	/*
+	public Point calculateMove(double angle) {
+		
+		
+		
 	}
+	*/
 
 	public boolean isOnScreen() {
 

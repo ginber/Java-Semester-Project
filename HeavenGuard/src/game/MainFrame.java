@@ -21,28 +21,34 @@ import elements.*;
 
 public class MainFrame extends JFrame {
 
+	// Path for images that are used in environment
 	private final String BG_PATH = "HeavenGuard/res/images/misc/background.png";
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 
+	// Weapon of the Base in this frame and its Bullet
 	private BaseWeapon baseWeapon = null;
-	
-	protected ArrayList<Bullet> bulletsOnScreen = new ArrayList<>();
+	private Bullet bullet = null;
 
+	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener();
 
+	// Containers for images	
 	JLabel backgroundContainer = null;
 	JLabel baseContainer = null;
-	JLabel firstWeaponContainer = null;
+	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
 	JLabel[] houseContainers = new JLabel[4];
 
+	// Width and height of the final screen in terms of pixels
 	private final int screenWidth = getToolkit().getScreenSize().width;
 	private final int screenHeight = getToolkit().getScreenSize().height;
 
-	private int weaponX, weaponY;
+	// X and Y coordinates of weapon and bullets
+	private int weaponX, weaponY, bulletX ,bulletY;
+	
+	private int refreshRate = 50; // Refresh rate of the screen in milliseconds
 
-	private int bulletX ,bulletY;
-
+	// Methods to initialize BufferedImages and JLabels
 	public void createBackground() {
 
 		BufferedImage bgImage = null;
@@ -67,7 +73,8 @@ public class MainFrame extends JFrame {
 
 	public void createWeapon(String tag) {
 
-		baseWeapon = new WeaponBuilder(30).build(tag);
+		baseWeapon = new WeaponBuilder(30, this).build(tag);
+		bullet = baseWeapon.getBullet();
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 
@@ -125,10 +132,13 @@ public class MainFrame extends JFrame {
 
 		super(title);
 
+		// Making the frame full screen
 		setExtendedState(MAXIMIZED_BOTH);
+		
 		setUndecorated(true);
 
-		Timer timer = new Timer(50, new ActionListener() {
+		// A Timer object to refresh the screen at every refreshRate milliseconds
+		Timer timer = new Timer(refreshRate, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -196,9 +206,11 @@ public class MainFrame extends JFrame {
 
 	}
 
+	// A method to scale image as Image.getScaledInstance is not efficient
 	public static Image getScaledImage(Image image, int width, int height) {
 
-		BufferedImage resizedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage resizedImage = new BufferedImage(width, height, 
+				BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g = resizedImage.createGraphics();
 
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
@@ -225,52 +237,42 @@ public class MainFrame extends JFrame {
 		double rotationAngle = baseWeapon.aimAngle(listener.getX(), listener.getY(), screenWidth / 2,
 				screenHeight - baseContainer.getHeight());
 
-		BufferedImage weaponImage = null;
-
-		try {
-
-			weaponImage = ImageIO.read(new File(baseWeapon.getWeaponPath()));
-
-		} catch(Exception e) {
-
-			System.out.println("Could not load the weapon image for some reason lol");
-
-		}
+		BufferedImage weaponImage = (BufferedImage) baseWeapon.getImage();
+		BufferedImage bulletImage = (BufferedImage) bullet.getImage();
 
 		Graphics2D g2d = (Graphics2D) getGraphics();
 
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(Math.toRadians(rotationAngle), baseContainer.getX() + (baseContainer.getWidth() / 2), baseContainer.getY());
+		transform.rotate(Math.toRadians(rotationAngle), 
+				baseContainer.getX() + (baseContainer.getWidth() / 2), baseContainer.getY());
 
 		AffineTransform backup = g2d.getTransform();
 
 		g2d.setTransform(transform);
 		
 		firstWeaponContainer.setVisible(false);
-
-		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 		
-		baseWeapon.setImage(weaponImage);
+		weaponX = firstWeaponContainer.getX();
+		weaponY = firstWeaponContainer.getY();
+		
+		bulletX = baseContainer.getX() + (baseContainer.getWidth() / 2) - (bulletImage.getWidth() / 2);
+		bulletY = baseContainer.getY() - firstWeaponContainer.getHeight() - bulletImage.getHeight();
+		
+		g2d.drawImage(weaponImage, weaponX, weaponY, null);
+		g2d.drawImage(bulletImage, bulletX, bulletY, null);
 
 		g2d.setTransform(backup);
 
-		weaponX = firstWeaponContainer.getX();
-		weaponY = screenHeight - baseContainer.getHeight() - firstWeaponContainer.getHeight();
-
-		bulletX = weaponX;
-		bulletY = weaponY + firstWeaponContainer.getHeight();
-
 	}
+	
+	/*
 
-	public ArrayList<Bullet> getBulletsOnScreen() {
-		return bulletsOnScreen;
-	}
-
-	public void fireBullet(double posX, double posY) {
+	public void fireBullet(int posX, int posY) {
 
 		double aimAngle = baseWeapon.aimAngle(posX, posY, firstWeaponContainer.getX(), screenHeight - baseContainer.getHeight());
 
 		Bullet bullet = new Bullet(new Point(bulletX, bulletY), true, this, aimAngle);
+		// Added itself to ArrayList
 		bullet.setPath(baseWeapon.getBulletPath());
 
 		Graphics g = getGraphics();
@@ -283,6 +285,8 @@ public class MainFrame extends JFrame {
 		}
 
 	}
+	
+	*/
 	
 	
 
