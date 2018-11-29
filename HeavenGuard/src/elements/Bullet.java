@@ -11,7 +11,11 @@ public class Bullet extends ImageIcon {
 	private boolean onScreen = false;
 	private String path;
 	private Point currentLocation;
+
 	//private MainFrame context = null;
+
+	private MainFrame context = null;
+	private double aimAngle;
 
 	public String getPath() {
 		return path;
@@ -21,11 +25,12 @@ public class Bullet extends ImageIcon {
 		this.path = path;
 	}
 
-	public Bullet(Point location, boolean onScreen, MainFrame context) {
+	public Bullet(Point location, boolean onScreen, MainFrame context, double aimAngle) {
 
 		currentLocation = location;
 		this.onScreen = onScreen;
-		//this.context = context;
+		this.context = context;
+		this.aimAngle = aimAngle;
 		
 		if(onScreen) {
 			
@@ -36,10 +41,13 @@ public class Bullet extends ImageIcon {
 
 	}
 
-	public Bullet(Point location, MainFrame context) {
+	public Point getCurrentLocation() {
+		return currentLocation;
+	}
+
+	public Bullet(Point location) {
 
 		currentLocation = location;
-		this.context = context;
 
 	}
 

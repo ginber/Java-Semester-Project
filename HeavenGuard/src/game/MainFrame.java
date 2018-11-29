@@ -1,11 +1,6 @@
 package game;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.RenderingHints;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
@@ -44,6 +39,10 @@ public class MainFrame extends JFrame {
 	private final int screenWidth = getToolkit().getScreenSize().width;
 	private final int screenHeight = getToolkit().getScreenSize().height;
 
+	private int weaponX, weaponY;
+
+	private int bulletX ,bulletY;
+
 	public void createBackground() {
 
 		BufferedImage bgImage = null;
@@ -69,8 +68,8 @@ public class MainFrame extends JFrame {
 	public void createWeapon(String tag) {
 
 
+		baseWeapon = new WeaponBuilder(30).build(tag);
 
-		baseWeapon = new WeaponBuilder(30).build("cannon");
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 
@@ -191,7 +190,7 @@ public class MainFrame extends JFrame {
 
 		add(backgroundContainer);
 
-		addMouseListener(new HGMouseListener());
+		addMouseListener(new HGMouseListener(this));
 		addMouseMotionListener(listener);
 		addKeyListener(new HGKeyListener());
 
@@ -251,11 +250,17 @@ public class MainFrame extends JFrame {
 		
 		firstWeaponContainer.setVisible(false);
 
-		g2d.drawImage(weaponImage, firstWeaponContainer.getX(), screenHeight - baseContainer.getHeight() - firstWeaponContainer.getHeight(), null);
+		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 		
 		baseWeapon.setImage(weaponImage);
 
 		g2d.setTransform(backup);
+
+		weaponX = firstWeaponContainer.getX();
+		weaponY = screenHeight - baseContainer.getHeight() - firstWeaponContainer.getHeight();
+
+		bulletX = weaponX;
+		bulletY = weaponY + firstWeaponContainer.getHeight();
 
 	}
 
@@ -263,6 +268,24 @@ public class MainFrame extends JFrame {
 		
 		return bulletsOnScreen;
 		
+	}
+
+	public void fireBullet(double posX, double posY) {
+
+		double aimAngle = baseWeapon.aimAngle(posX, posY, firstWeaponContainer.getX(), screenHeight - baseContainer.getHeight());
+
+		Bullet bullet = new Bullet(new Point(bulletX, bulletY), true, this, aimAngle);
+		bullet.setPath(baseWeapon.getBulletPath());
+
+		Graphics g = getGraphics();
+		Graphics2D g2d = (Graphics2D) g;
+
+		for(Bullet b : bulletsOnScreen) {
+
+			g2d.drawImage(baseWeapon.getBulletImage(), bulletX, bulletY, null);
+
+		}
+
 	}
 	
 	

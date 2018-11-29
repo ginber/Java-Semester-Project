@@ -12,6 +12,7 @@ import elements.BaseWeapon;
 public class HGMouseListener implements MouseListener {
 	
 	int x, y;
+	MainFrame context;
 	
 	public int getX() {
 		return x;
@@ -21,12 +22,23 @@ public class HGMouseListener implements MouseListener {
 		return y;
 	}
 
+	public HGMouseListener(MainFrame context) {
+
+	    this.context = context;
+
+    }
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
 		x = e.getX();
 		y = e.getY();
-		
+
+
+		context.fireBullet(x, y);
+		System.out.println(x);
+		System.out.println(y);
+
 	}
 
 	@Override

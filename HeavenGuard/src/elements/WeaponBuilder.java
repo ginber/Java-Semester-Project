@@ -82,6 +82,7 @@ public class WeaponBuilder {
 
 		createImages(weaponPath, bulletPath);
 		weaponToReturn.setImage(weaponImage);
+
 		return weaponToReturn;
 
 	}
