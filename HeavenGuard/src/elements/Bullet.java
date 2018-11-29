@@ -14,6 +14,9 @@ public class Bullet extends ImageIcon {
 
 	private String path;
 	private Point currentLocation;
+
+	//private MainFrame context = null;
+
 	private MainFrame context = null;
 	private BufferedImage image = null;
 

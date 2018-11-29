@@ -1,30 +1,24 @@
 package elements;
 
-import java.awt.Container;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 
 public class BaseWeapon extends ImageIcon {
 
 	private int fireSpeed, damage, weaponLevel,  reloadTime;
-	
+
 	// Canonical paths of image files
 
 	static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
 	static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
 	static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
 	static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
-	
+
 	static final String CANNONBULLET_PATH = "HeavenGuard/res/images/cannongun/cannonbullet.png";
 	static final String MGBULLET_PATH = "HeavenGuard/res/images/machinegun/machinegun.png";
 	static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
@@ -36,7 +30,7 @@ public class BaseWeapon extends ImageIcon {
 	private Bullet bulletType;
 	
 	public BaseWeapon(WeaponBuilder builder) {
-		
+
 		this.damage = builder.damage;
 		this.reloadTime = builder.reloadTime;
 		this.fireSpeed = builder.fireSpeed;
@@ -79,7 +73,7 @@ public class BaseWeapon extends ImageIcon {
 
 	public void fire(double aimAngle) {
 
-		
+
 
 	}
 

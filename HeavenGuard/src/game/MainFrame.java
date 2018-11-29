@@ -94,7 +94,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		Image scaledImage = getScaledImage(baseImage, screenWidth / 5, screenHeight / 5);
+		Image scaledImage = getScaledImage(baseImage, screenWidth / 6, screenHeight / 8);
 
 		ImageIcon base = new ImageIcon(scaledImage);
 
@@ -136,6 +136,7 @@ public class MainFrame extends JFrame {
 		setExtendedState(MAXIMIZED_BOTH);
 		
 		setUndecorated(true);
+
 
 		// A Timer object to refresh the screen at every refreshRate milliseconds
 		Timer timer = new Timer(refreshRate, new ActionListener() {
