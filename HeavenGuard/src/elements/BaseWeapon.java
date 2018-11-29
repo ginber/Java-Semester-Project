@@ -52,14 +52,14 @@ public class BaseWeapon extends ImageIcon {
 			weaponPath = CANNON_PATH;
 			bulletPath = "HeavenGuard/res/images/cannongun/cannonbullet.png";
 
-			baseWeapon = new CannonWeapon(100*weapon1lvl, weapon1lvl * 3);
+			baseWeapon = new CannonWeapon();
 
 		}
 
 		else if(tag.equals("mg")) {
 
 			weaponPath = MACHINEGUN_PATH;
-			baseWeapon = new MachineGun(weapon2lvl + 1);
+			baseWeapon = new MachineGun(0 + 1);
 
 		}
 
