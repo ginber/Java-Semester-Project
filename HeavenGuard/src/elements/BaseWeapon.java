@@ -43,6 +43,8 @@ public class BaseWeapon extends ImageIcon {
 		this.weaponLevel = builder.weaponLevel;
 		this.weaponPath = builder.weaponPath;
 		this.bulletPath = builder.bulletPath;
+
+		//this.bulletImage = builder.bulletImage;
 		
 	}
 
@@ -82,5 +84,16 @@ public class BaseWeapon extends ImageIcon {
 
 	}
 
+	public String getBulletPath() {
+
+		return bulletPath;
+
+	}
+
+	public BufferedImage getBulletImage() {
+
+		return bulletImage;
+
+	}
 }
 
