@@ -11,7 +11,7 @@ public class Bullet extends ImageIcon {
 	private boolean onScreen = false;
 	private String path;
 	private Point currentLocation;
-	private MainFrame context = null;
+	//private MainFrame context = null;
 
 	public String getPath() {
 		return path;
@@ -25,7 +25,7 @@ public class Bullet extends ImageIcon {
 
 		currentLocation = location;
 		this.onScreen = onScreen;
-		this.context = context;
+		//this.context = context;
 		
 		if(onScreen) {
 			

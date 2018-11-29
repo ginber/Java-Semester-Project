@@ -90,7 +90,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		Image scaledImage = getScaledImage(baseImage, screenWidth / 5, screenHeight / 5);
+		Image scaledImage = getScaledImage(baseImage, screenWidth / 6, screenHeight / 8);
 
 		ImageIcon base = new ImageIcon(scaledImage);
 
@@ -131,7 +131,7 @@ public class MainFrame extends JFrame {
 		setExtendedState(MAXIMIZED_BOTH);
 		setUndecorated(true);
 
-		Timer timer = new Timer(50, new ActionListener() {
+		Timer timer = new Timer(55, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -260,7 +260,9 @@ public class MainFrame extends JFrame {
 	}
 
 	public ArrayList<Bullet> getBulletsOnScreen() {
+		
 		return bulletsOnScreen;
+		
 	}
 	
 	
