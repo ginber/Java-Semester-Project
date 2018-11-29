@@ -12,6 +12,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
@@ -30,6 +31,8 @@ public class MainFrame extends JFrame {
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 
 	private BaseWeapon baseWeapon = null;
+	
+	protected ArrayList<Bullet> bulletsOnScreen = new ArrayList<>();
 
 	private final HGMouseMotionListener listener = new HGMouseMotionListener();
 
@@ -65,7 +68,9 @@ public class MainFrame extends JFrame {
 
 	public void createWeapon(String tag) {
 
-		baseWeapon = new BaseWeapon(null).createBaseWeapon(tag);
+
+
+		baseWeapon = new WeaponBuilder(30).build("cannon");
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 
@@ -229,7 +234,7 @@ public class MainFrame extends JFrame {
 
 			weaponImage = ImageIO.read(new File(baseWeapon.getWeaponPath()));
 
-		} catch(IOException e) {
+		} catch(Exception e) {
 
 			System.out.println("Could not load the weapon image for some reason lol");
 
@@ -253,6 +258,12 @@ public class MainFrame extends JFrame {
 		g2d.setTransform(backup);
 
 	}
+
+	public ArrayList<Bullet> getBulletsOnScreen() {
+		return bulletsOnScreen;
+	}
+	
+	
 
 }
 
