@@ -37,8 +37,6 @@ public class HGMouseListener implements MouseListener {
 		x = e.getX();
 		y = e.getY();
 		
-		context.getBaseWeapon().setFiring(true);
-		
 	}
 
 	@Override
@@ -59,14 +57,14 @@ public class HGMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		//fireCheckThread.start();
+		weapon.setFiring(true);
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		
-		//fireCheckThread.interrupt();
+		weapon.setFiring(false);
 
 	}
 

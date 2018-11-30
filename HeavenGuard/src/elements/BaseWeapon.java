@@ -18,6 +18,8 @@ public class BaseWeapon extends ImageIcon {
 	private int fireSpeed, damage, weaponLevel,  reloadTime;
 
 	private boolean isFiring = false;
+	
+	private double angle;
 
 	// Canonical paths of image files
 
@@ -78,18 +80,6 @@ public class BaseWeapon extends ImageIcon {
 
 	}
 
-	public void fire(double aimAngle, Graphics2D g2d) {
-
-		Point change = bulletType.calculateMove(aimAngle, fireSpeed);
-		
-		g2d.translate(change.x, change.y);
-
-		g2d.drawImage(bulletType.getImage(), 0, 0, null);
-		
-		//setFiring(false);
-
-	}
-
 	public int getFireSpeed() {
 		return fireSpeed;
 	}
@@ -110,7 +100,13 @@ public class BaseWeapon extends ImageIcon {
 		this.isFiring = isFiring;
 	}
 
+	public double getAngle() {
+		return angle;
+	}
 
+	public void setAngle(double angle) {
+		this.angle = angle;
+	}
 
 }
 

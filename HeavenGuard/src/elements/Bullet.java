@@ -50,6 +50,12 @@ public class Bullet extends ImageIcon {
 		setImage(image);
 
 	}
+	
+	public void move() {
+		
+		
+		
+	}
 
 	public Point getCurrentLocation() {
 
@@ -63,6 +69,7 @@ public class Bullet extends ImageIcon {
 
 	}
 
+	// Returns the new position of Bullet after it is fired
 	public Point calculateMove(double angle, int initialSpeed) {
 
 		int changeX = initialSpeed;
@@ -78,7 +85,7 @@ public class Bullet extends ImageIcon {
 
 		}
 
-		return new Point(0, 0);
+		return new Point();
 
 	}
 
