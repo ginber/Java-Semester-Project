@@ -36,7 +36,7 @@ public class Bullet extends ImageIcon {
 
 		this.path = path;
 		this.context = context;
-		
+
 		try {
 
 			image = ImageIO.read(new File(path));
@@ -46,29 +46,54 @@ public class Bullet extends ImageIcon {
 			System.out.println("Could not load bullet");
 
 		}
-		
+
 		setImage(image);
 
 	}
 
 	public Point getCurrentLocation() {
-		
+
 		return currentLocation;
-		
+
 	}
-	
-	/*
-	public Point calculateMove(double angle) {
-		
-		
-		
+
+	public void setCurrentLocation(Point newLocation) {
+
+		currentLocation = newLocation;
+
 	}
-	*/
+
+	public Point calculateMove(double angle, int initialSpeed) {
+
+		int changeX = initialSpeed;
+		int changeY = (int) (changeX * Math.tan(angle));
+
+		Point newPoint = new Point(changeX, changeY);
+
+		if(isOnScreen(newPoint)) {
+
+			currentLocation = new Point(currentLocation.x + changeX, currentLocation.y - changeY);
+
+			return currentLocation;
+
+		}
+
+		return new Point(0, 0);
+
+	}
+
 
 	public boolean isOnScreen() {
 
 		return ((context.getScreenWidth() > currentLocation.x) && (currentLocation.x > 0)
 				&& (context.getScreenHeight() > currentLocation.y) && (currentLocation.y > 0));
+
+	}
+
+	public boolean isOnScreen(Point p) {
+
+		return ((context.getScreenWidth() > p.x) && (p.x > 0)
+				&& (context.getScreenHeight() > p.y) && (p.y > 0));
 
 	}
 

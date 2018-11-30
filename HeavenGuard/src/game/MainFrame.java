@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -32,6 +33,8 @@ public class MainFrame extends JFrame {
 
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener();
+	
+	private ArrayList<Bullet> bulletsOnScreen;
 
 	// Containers for images	
 	JLabel backgroundContainer = null;
@@ -73,7 +76,7 @@ public class MainFrame extends JFrame {
 
 	public void createWeapon(String tag) {
 
-		baseWeapon = new WeaponBuilder(30, this).build(tag);
+		baseWeapon = new WeaponBuilder(30, this).fireSpeed(1).build(tag);
 		bullet = baseWeapon.getBullet();
 
 		firstWeaponContainer = new JLabel(baseWeapon);
@@ -116,7 +119,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		Image scaledImage = getScaledImage(houseImage, screenWidth / 6, screenHeight / 6);
+		Image scaledImage = getScaledImage(houseImage, screenWidth / 6, screenHeight / 8);
 
 		ImageIcon house = new ImageIcon(scaledImage);
 
@@ -136,6 +139,8 @@ public class MainFrame extends JFrame {
 		setExtendedState(MAXIMIZED_BOTH);
 		
 		setUndecorated(true);
+		
+		bulletsOnScreen = new ArrayList<>();
 
 
 		// A Timer object to refresh the screen at every refreshRate milliseconds
@@ -195,7 +200,8 @@ public class MainFrame extends JFrame {
 
 		backgroundContainer.add(firstWeaponContainer, constraints);
 
-		//weaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		//baseContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
 
 		add(backgroundContainer);
 
@@ -259,37 +265,31 @@ public class MainFrame extends JFrame {
 		bulletX = baseContainer.getX() + (baseContainer.getWidth() / 2) - (bulletImage.getWidth() / 2);
 		bulletY = baseContainer.getY() - firstWeaponContainer.getHeight() - bulletImage.getHeight();
 		
+		bullet.setCurrentLocation(new Point(bulletX, bulletY));
+		
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
-		g2d.drawImage(bulletImage, bulletX, bulletY, null);
+		
+		if(baseWeapon.isFiring()) {	
+			
+			bulletsOnScreen.add(bullet);
+			
+		}
+		
+		for(Bullet b : bulletsOnScreen) {
+			
+			baseWeapon.fire(rotationAngle, g2d);
+			
+		}
 
 		g2d.setTransform(backup);
 
 	}
 	
-	/*
-
-	public void fireBullet(int posX, int posY) {
-
-		double aimAngle = baseWeapon.aimAngle(posX, posY, firstWeaponContainer.getX(), screenHeight - baseContainer.getHeight());
-
-		Bullet bullet = new Bullet(new Point(bulletX, bulletY), true, this, aimAngle);
-		// Added itself to ArrayList
-		bullet.setPath(baseWeapon.getBulletPath());
-
-		Graphics g = getGraphics();
-		Graphics2D g2d = (Graphics2D) g;
-
-		for(Bullet b : bulletsOnScreen) {
-
-			g2d.drawImage(baseWeapon.getBulletImage(), bulletX, bulletY, null);
-
-		}
-
+	public JLabel getWeaponContainer() {
+		
+		return firstWeaponContainer;
+		
 	}
 	
-	*/
-	
-	
-
 }
 
