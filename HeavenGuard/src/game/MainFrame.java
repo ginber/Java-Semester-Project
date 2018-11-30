@@ -195,7 +195,7 @@ public class MainFrame extends JFrame {
 
 		backgroundContainer.add(firstWeaponContainer, constraints);
 
-		//weaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
+		firstweaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 
 		add(backgroundContainer);
 
@@ -266,28 +266,28 @@ public class MainFrame extends JFrame {
 
 	}
 	
-	/*
+	
 
 	public void fireBullet(int posX, int posY) {
 
 		double aimAngle = baseWeapon.aimAngle(posX, posY, firstWeaponContainer.getX(), screenHeight - baseContainer.getHeight());
 
-		Bullet bullet = new Bullet(new Point(bulletX, bulletY), true, this, aimAngle);
+		Bullet bullet = new Bullet(baseWeapon.getBullet().getPath(),this);
 		// Added itself to ArrayList
-		bullet.setPath(baseWeapon.getBulletPath());
+		bullet.setPath(baseWeapon.getBullet().getPath());
 
 		Graphics g = getGraphics();
 		Graphics2D g2d = (Graphics2D) g;
 
-		for(Bullet b : bulletsOnScreen) {
+		/*for(Bullet b : bulletsOnScreen) {
 
 			g2d.drawImage(baseWeapon.getBulletImage(), bulletX, bulletY, null);
 
-		}
+		}*/
 
 	}
 	
-	*/
+	
 	
 	
 
