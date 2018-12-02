@@ -1,16 +1,25 @@
 package elements;
 
+import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+import game.MainFrame;
 
 
 public class BaseWeapon extends ImageIcon {
 
 	private int fireSpeed, damage, weaponLevel,  reloadTime;
+
+	private boolean isFiring = false;
+	
+	private double angle;
 
 	// Canonical paths of image files
 
@@ -26,9 +35,9 @@ public class BaseWeapon extends ImageIcon {
 
 	private String weaponPath;
 	private BufferedImage weaponImage = null;
-	
+
 	private Bullet bulletType;
-	
+
 	public BaseWeapon(WeaponBuilder builder) {
 
 		this.damage = builder.damage;
@@ -38,24 +47,24 @@ public class BaseWeapon extends ImageIcon {
 		this.weaponPath = builder.weaponPath;
 		this.bulletType = builder.bullet;
 		this.weaponImage = builder.weaponImage;
-		
+
 	}
-	
+
 	public Bullet getBullet() {
-		
+
 		return this.bulletType;
-		
+
 	}
-	
+
 	// Function that gives how many degrees the weapon should rotate according to mouse movement
 	public double aimAngle(double mouseX, double mouseY, double weaponX, double weaponY ) {
-		
+
 		double angle = (Math.toDegrees(Math.atan((Math.abs((mouseY - weaponY)) / (mouseX - weaponX)))));
-		
+
 		if(angle > 0) {
-			
+
 			return (90 - angle);
-			
+
 		}
 
 		return (270 - angle);
@@ -71,12 +80,6 @@ public class BaseWeapon extends ImageIcon {
 
 	}
 
-	public void fire(double aimAngle) {
-
-
-
-	}
-
 	public int getFireSpeed() {
 		return fireSpeed;
 	}
@@ -86,9 +89,23 @@ public class BaseWeapon extends ImageIcon {
 	}
 
 	public String getWeaponPath() {
-
 		return weaponPath;
+	}
 
+	public boolean isFiring() {
+		return isFiring;
+	}
+
+	public void setFiring(boolean isFiring) {
+		this.isFiring = isFiring;
+	}
+
+	public double getAngle() {
+		return angle;
+	}
+
+	public void setAngle(double angle) {
+		this.angle = angle;
 	}
 
 }

@@ -1,9 +1,10 @@
 package game;
 
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-import javax.swing.JFrame;
+import java.util.TimerTask;
+import java.util.Timer;
 
 import elements.BaseWeapon;
 
@@ -13,6 +14,7 @@ public class HGMouseListener implements MouseListener {
 	
 	int x, y;
 	MainFrame context;
+	BaseWeapon weapon;
 	
 	public int getX() {
 		return x;
@@ -25,7 +27,8 @@ public class HGMouseListener implements MouseListener {
 	public HGMouseListener(MainFrame context) {
 
 	    this.context = context;
-
+	    weapon = context.getBaseWeapon();
+	    	
     }
 
 	@Override
@@ -53,14 +56,14 @@ public class HGMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		
+		weapon.setFiring(true);
 
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		
-		
+		weapon.setFiring(false);
 
 	}
 
