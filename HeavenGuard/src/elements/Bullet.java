@@ -15,9 +15,8 @@ public class Bullet extends ImageIcon {
 	private String path;
 	private Point currentLocation;
 
-	//private MainFrame context = null;
-
 	private MainFrame context = null;
+	private BaseWeapon weapon = null;
 	private BufferedImage image = null;
 
 	public String getPath() {
@@ -36,6 +35,8 @@ public class Bullet extends ImageIcon {
 
 		this.path = path;
 		this.context = context;
+		
+		weapon = context.getBaseWeapon();
 
 		try {
 
@@ -49,12 +50,8 @@ public class Bullet extends ImageIcon {
 
 		setImage(image);
 
-	}
-	
-	public void move() {
-		
-		
-		
+		context.getBulletsOnScreen().add(this);
+
 	}
 
 	public Point getCurrentLocation() {
@@ -85,7 +82,16 @@ public class Bullet extends ImageIcon {
 
 		}
 
-		return new Point();
+		return null;
+
+	}
+
+	// Function that gives how many degrees the bullet fired by this weapon should rotate 
+	// momentarily
+	public double bulletRotationAngle(long initialTime, double aimAngle, double gravity) {
+
+		double flightTime = (2 * weapon.getFireSpeed() * Math.sin(aimAngle)) / gravity;
+		return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
 
 	}
 
