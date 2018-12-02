@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 public class Bullet extends ImageIcon {
 
 	private String path;
+	private int index = 0;
 	private Point currentLocation;
 
 	private MainFrame context = null;
@@ -50,6 +51,7 @@ public class Bullet extends ImageIcon {
 
 		setImage(image);
 
+		index = context.getBulletsOnScreen().size();
 		context.getBulletsOnScreen().add(this);
 
 	}
@@ -62,7 +64,15 @@ public class Bullet extends ImageIcon {
 
 	public void setCurrentLocation(Point newLocation) {
 
-		currentLocation = newLocation;
+		if(!isOnScreen(newLocation)) {
+			
+			context.getBulletsOnScreen().remove(index);
+			
+		} else {
+			
+			currentLocation = newLocation;
+			
+		}
 
 	}
 
