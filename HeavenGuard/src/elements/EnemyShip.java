@@ -1,18 +1,31 @@
 package elements;
 
+import java.util.*;
+import game.MainFrame;
+
 public abstract class EnemyShip {
 	
 	private int health, damage, speed;
-	
+	private int xPosition,yPosition;
+	private MainFrame context = null;
 	private String tag, imgPath;
 	
+	public EnemyShip(String tag, String imgPath,MainFrame context) {
+		
+		setTag(tag);
+		setPath(imgPath);
+		setContext(context);
+		this.xPosition =(int) Math.random()*context.getWidth();
+		this.yPosition = (int) Math.random()*(context.getHeight()/3);
+		
+	}
+
 	public EnemyShip(String tag, String imgPath) {
 		
 		setTag(tag);
 		setPath(imgPath);
-		
+				
 	}
-
 	public int getHealth() {
 		return health;
 	}
@@ -49,7 +62,41 @@ public abstract class EnemyShip {
 		this.imgPath = imgPath;
 	}
 	
+	
+	public int getxPosition() {
+		return xPosition;
+	}
+
+	public void setxPosition(int xPosition) {
+		this.xPosition = xPosition;
+	}
+
+	public int getyPosition() {
+		return yPosition;
+	}
+
+	public void setyPosition(int yPosition) {
+		this.yPosition = yPosition;
+	}
+
+	public MainFrame getContext() {
+		return context;
+	}
+
+	public void setContext(MainFrame context) {
+		this.context = context;
+	}
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+
 	public abstract void fire();
 	public abstract void move(int xDir, int yDir);
+	
 
 }
