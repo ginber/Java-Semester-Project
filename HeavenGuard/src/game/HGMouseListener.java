@@ -77,7 +77,7 @@ public class HGMouseListener implements MouseListener {
 				}
 			});
 			
-			timer.setDelay(10);
+			timer.setDelay(100);
 			
 			timer.start();
 

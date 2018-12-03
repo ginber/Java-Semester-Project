@@ -1,9 +1,12 @@
 package elements;
 
 import java.util.*;
+
+import javax.swing.ImageIcon;
+
 import game.MainFrame;
 
-public abstract class EnemyShip {
+public abstract class EnemyShip extends ImageIcon{
 	
 	private int health, damage, speed;
 	private int xPosition,yPosition;
