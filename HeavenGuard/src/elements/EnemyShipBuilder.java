@@ -1,6 +1,10 @@
 package elements;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import game.MainFrame;
 
@@ -53,6 +57,19 @@ public class EnemyShipBuilder {
 		
 	}
 
+	private void createImage(String IMG_Path) {
+
+		try {
+
+			weaponImage = ImageIO.read(new File(IMG_Path));
+
+		} catch(IOException e) {
+
+			System.out.println("Enemy image could not be found");
+
+		}
+
+	}
 
 
 
