@@ -2,7 +2,7 @@ package elements;
 
 public class BasicEnemyShip extends EnemyShip {
 
-	private final static String TAG = "BES";
+	public final static String TAG = "BES";
 	private final static String IMG_PATH = "res/images/enemy0frame0.png";
 	
 	private final int SPEED = 20;
@@ -51,26 +51,8 @@ public class BasicEnemyShip extends EnemyShip {
 		this.yPosition = yPosition;
 	}
 
-	public String getTag() {
-		return TAG;
-	}
-
-	protected String getImgPath() {
+	protected static String getImgPath() {
 		return IMG_PATH;
 	}
-
-	protected int getSPEED() {
-		return SPEED;
-	}
-
-	protected int getHEALTH() {
-		return HEALTH;
-	}
-
-	protected int getDAMAGE() {
-		return DAMAGE;
-	};
-
-	
 	
 }

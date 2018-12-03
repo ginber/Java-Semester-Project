@@ -66,19 +66,19 @@ public class HGMouseListener implements MouseListener {
 		if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
 			cannonWeapon = (CannonWeapon) weapon;
+			int barFill = cannonWeapon.getMaxPower();
 			
 			timer.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
-					cannonWeapon.setMaxPower(cannonWeapon.getMaxPower() + 1);
-					context.cannonBar.setValue(cannonWeapon.getMaxPower());
+					context.cannonBar.setValue(barFill);
 					
 				}
 			});
 			
-			timer.setDelay(10);
+			timer.setDelay(100);
 			
 			timer.start();
 
@@ -101,7 +101,6 @@ public class HGMouseListener implements MouseListener {
 			cannonWeapon.setMaxPower(0);
 			context.cannonBar.setValue(0);
 			
-
 		} else {
 
 			weapon.setFiring(false);

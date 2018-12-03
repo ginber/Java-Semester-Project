@@ -41,15 +41,15 @@ public class EnemyShipBuilder {
 
 	public EnemyShip build(String tag) {
 		
-		EnemyShip HellBringers = null;
+		EnemyShip hellBringers = null;
 		
-		if(tag.equals(BasicEnemyShip.getTag())) {
+		if(tag.equals(BasicEnemyShip.TAG)) {
 			
 			imgPath = BasicEnemyShip.getImgPath();
-			tag = BasicEnemyShip.getTag();
-			HellBringers = new BasicEnemyShip(this);
+			hellBringers = new BasicEnemyShip(this);
 		}
-		return HellBringers;
+		
+		return hellBringers;
 		
 	}
 

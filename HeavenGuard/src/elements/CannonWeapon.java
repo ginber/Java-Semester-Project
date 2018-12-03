@@ -36,7 +36,9 @@ public class CannonWeapon extends BaseWeapon {
 		int bulletX = bullet.getCurrentLocation().x;
 		int bulletY = bullet.getCurrentLocation().y;
 		
-		bullet.setCurrentLocation(new Point(bulletX, bulletY));
+		System.out.println("bulletX: " + bulletX);
+		System.out.println();
+		System.out.println("bulletY: " + bulletY);
 		
 		while(bullet.isOnScreen()) {
 			
@@ -50,6 +52,7 @@ public class CannonWeapon extends BaseWeapon {
 		}
 				
 		setFiring(false);
+		
 		
 		return bullet;
 		

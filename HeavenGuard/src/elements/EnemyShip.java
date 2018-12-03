@@ -1,6 +1,8 @@
 package elements;
 
-public abstract class EnemyShip {
+import javax.swing.ImageIcon;
+
+public abstract class EnemyShip extends ImageIcon {
 	
 	private int health, damage, speed;
 	
