@@ -34,11 +34,14 @@ public abstract class BaseWeapon extends ImageIcon {
 	static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
 
 	private String weaponPath, type;
-	private BufferedImage weaponImage = null;
+	private BufferedImage weaponImage = null;	
+	private WeaponBuilder weaponBuilder = null;
 
 	private Bullet bulletType;
 
 	public BaseWeapon(WeaponBuilder builder) {
+		
+		weaponBuilder = builder;
 
 		this.damage = builder.damage;
 		this.reloadTime = builder.reloadTime;
@@ -108,6 +111,10 @@ public abstract class BaseWeapon extends ImageIcon {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+	
+	public WeaponBuilder getBuilder() {
+		return weaponBuilder;
 	}
 
 }

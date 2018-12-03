@@ -15,6 +15,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
 import elements.*;
@@ -41,6 +42,8 @@ public class MainFrame extends JFrame {
 	JLabel baseContainer = null;
 	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
 	JLabel[] houseContainers = new JLabel[4];
+	
+	JProgressBar cannonBar = null;
 
 	// Width and height of the final screen in terms of pixels
 	private final int screenWidth = getToolkit().getScreenSize().width;
@@ -158,6 +161,8 @@ public class MainFrame extends JFrame {
 		
 		bulletsOnScreen = new ArrayList<>();
 		
+		cannonBar = new JProgressBar(0, 100);
+		
 		// Creating the environment
 		createBackground();
 		createBase();
@@ -165,8 +170,6 @@ public class MainFrame extends JFrame {
 		createWeapon("cannon");
 		
 		timer.start();
-		
-		
 
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -196,8 +199,8 @@ public class MainFrame extends JFrame {
 		constraints.gridx = 3;
 		backgroundContainer.add(houseContainers[2], constraints);
 
-		//constraints.gridx = 4;
-		//backgroundContainer.add(houseContainers[3], constraints);
+		constraints.gridx = 4;
+		backgroundContainer.add(houseContainers[3], constraints);
 
 		constraints.gridx = 2;
 		constraints.gridy = 1;
@@ -206,6 +209,12 @@ public class MainFrame extends JFrame {
 		constraints.anchor = GridBagConstraints.PAGE_END;
 
 		backgroundContainer.add(firstWeaponContainer, constraints);
+		
+		constraints.gridx = 3;
+		constraints.weightx = 1.0;
+		constraints.anchor = GridBagConstraints.SOUTHWEST;
+		
+		backgroundContainer.add(cannonBar, constraints);
 
 
 		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
@@ -213,6 +222,11 @@ public class MainFrame extends JFrame {
 
 
 		getContentPane().add(backgroundContainer);
+		
+		pack();
+		
+		bulletX = weaponX;
+		System.out.println(bulletX);
 
 		// Adding listeners
 		addMouseListener(new HGMouseListener(this));
@@ -286,6 +300,11 @@ public class MainFrame extends JFrame {
 		
 		weaponX = firstWeaponContainer.getX();
 		weaponY = firstWeaponContainer.getY();
+		
+		bulletX = weaponX + bullet.getIconWidth() / 2;
+		bulletY = weaponY - weaponImage.getHeight();
+		
+		bullet.setCurrentLocation(new Point(bulletX, bulletY));
 		
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 			
