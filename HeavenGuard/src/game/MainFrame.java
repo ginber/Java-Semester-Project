@@ -31,6 +31,9 @@ public class MainFrame extends JFrame {
 	// Weapon of the Base in this frame and its Bullet
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
+	private EnemyShip enemyShip = null;
+	
+	private int finalCountdown = 0;
 	
 	private ArrayList<Bullet> bulletsOnScreen;
 
@@ -52,9 +55,9 @@ public class MainFrame extends JFrame {
 	// X and Y coordinates of weapon and bullets
 	private int weaponX, weaponY, bulletX ,bulletY;
 	
-	BufferedImage bulletImage, weaponImage;
+	BufferedImage bulletImage, weaponImage,enemyImage;
 	
-	private int refreshRate = 50; // Refresh rate of the screen in milliseconds
+	private int refreshRate = 40; // Refresh rate of the screen in milliseconds
 
 	// Methods to initialize BufferedImages and JLabels
 	public void createBackground() {
@@ -89,6 +92,14 @@ public class MainFrame extends JFrame {
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 
+	}
+	
+	public void createEnemy(String tag) {
+		
+		enemyShip = new EnemyShipBuilder(this).build(tag);
+		
+		enemyImage = (BufferedImage) enemyShip.getImage();
+		
 	}
 
 	public void createBase() {
@@ -153,6 +164,8 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				finalCountdown ++;
 				
 				repaint();
 
@@ -219,8 +232,7 @@ public class MainFrame extends JFrame {
 
 		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 		//baseContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-
-
+	
 		getContentPane().add(backgroundContainer);
 		
 		pack();
@@ -316,6 +328,10 @@ public class MainFrame extends JFrame {
 
 		g2d.setTransform(backup);
 
+		if(finalCountdown % 20 == 0) {
+			g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
+		}
+		
 	}
 	
 	public JLabel getWeaponContainer() {

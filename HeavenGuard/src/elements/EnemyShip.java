@@ -1,17 +1,27 @@
 package elements;
 
+import java.util.*;
+
 import javax.swing.ImageIcon;
 
-public abstract class EnemyShip extends ImageIcon {
+import game.MainFrame;
+
+public abstract class EnemyShip extends ImageIcon{
+
 	
-	private int health, damage, speed;
-	
+	private int health, damage, speed, level;
+	private int xPosition,yPosition;
+	private MainFrame context = null;
 	private String tag, imgPath;
 	
-	public EnemyShip(String tag, String imgPath) {
+	public EnemyShip(EnemyShipBuilder builder) {
 		
-		setTag(tag);
-		setPath(imgPath);
+		health = builder.health;
+		damage = builder.damage;
+		speed = builder.speed;
+		level = builder.lvl;
+		tag = builder.tag;
+		imgPath = builder.imgPath;
 		
 	}
 
@@ -51,7 +61,41 @@ public abstract class EnemyShip extends ImageIcon {
 		this.imgPath = imgPath;
 	}
 	
+	
+	public int getxPosition() {
+		return xPosition;
+	}
+
+	public void setxPosition(int xPosition) {
+		this.xPosition = xPosition;
+	}
+
+	public int getyPosition() {
+		return yPosition;
+	}
+
+	public void setyPosition(int yPosition) {
+		this.yPosition = yPosition;
+	}
+
+	public MainFrame getContext() {
+		return context;
+	}
+
+	public void setContext(MainFrame context) {
+		this.context = context;
+	}
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
+	}
+
 	public abstract void fire();
 	public abstract void move(int xDir, int yDir);
+	
 
 }

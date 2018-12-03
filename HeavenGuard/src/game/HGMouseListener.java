@@ -5,7 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import javax.swing.Timer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import elements.BaseWeapon;
 import elements.CannonWeapon;
@@ -19,6 +20,29 @@ public class HGMouseListener implements MouseListener {
 	BaseWeapon weapon;
 	CannonWeapon cannonWeapon;
 	Timer timer;
+	
+	class HGCannonTimerTask extends TimerTask {
+		
+		int barFill = 0, maxPower;
+		
+		public HGCannonTimerTask(CannonWeapon cw) {
+			
+			if(cw != null)
+				maxPower = cw.getMaxPower();
+			
+		}
+
+		@Override
+		public void run() {
+			
+			barFill++;
+			// maxPower a göre oranlayýp artýrýrýz sonra þimdilik birer birer artsýn
+			
+			context.cannonBar.setValue(barFill);
+			
+		}
+		
+	}
 
 	public int getX() {
 		return x;
@@ -32,8 +56,6 @@ public class HGMouseListener implements MouseListener {
 
 		this.context = context;
 		weapon = context.getBaseWeapon();
-		
-		timer = new Timer(0, null);
 
 	}
 
@@ -66,21 +88,8 @@ public class HGMouseListener implements MouseListener {
 		if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
 			cannonWeapon = (CannonWeapon) weapon;
-			int barFill = cannonWeapon.getMaxPower();
 			
-			timer.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					
-					context.cannonBar.setValue(barFill);
-					
-				}
-			});
-			
-			timer.setDelay(100);
-			
-			timer.start();
+			timer.schedule(new HGCannonTimerTask(cannonWeapon), 100);
 
 		} else {
 
@@ -96,9 +105,8 @@ public class HGMouseListener implements MouseListener {
 		if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
 			weapon.setFiring(true);
-			timer.stop();
-			
-			cannonWeapon.setMaxPower(0);
+			timer.cancel();
+		
 			context.cannonBar.setValue(0);
 			
 		} else {

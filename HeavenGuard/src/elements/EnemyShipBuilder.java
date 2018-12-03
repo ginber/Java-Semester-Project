@@ -1,14 +1,14 @@
 package elements;
 
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import game.MainFrame;
 
 public class EnemyShipBuilder {
 
-	private int health, damage, speed;
-	private int lvl;
-	private String tag, imgPath;
+	int health, damage, speed, lvl, xPosition, yPosition;
+	String tag, imgPath;
 	
 	MainFrame context = null;
 	
@@ -45,16 +45,25 @@ public class EnemyShipBuilder {
 		
 		if(tag.equals(BasicEnemyShip.TAG)) {
 			
-			imgPath = BasicEnemyShip.getImgPath();
+			imgPath = BasicEnemyShip.IMG_PATH;
+			tag = BasicEnemyShip.TAG;
+			
 			hellBringers = new BasicEnemyShip(this);
+			
 		}
+		
+		xPosition = new Random().nextInt(context.getScreenWidth());
+		yPosition = new Random().nextInt(context.getScreenHeight());
+		
+		hellBringers.setxPosition(xPosition);
+		hellBringers.setyPosition(yPosition);
 		
 		return hellBringers;
 		
 	}
 
 
-
+	
 
 
 
