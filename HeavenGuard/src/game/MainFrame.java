@@ -55,9 +55,9 @@ public class MainFrame extends JFrame {
 	// X and Y coordinates of weapon and bullets
 	private int weaponX, weaponY, bulletX ,bulletY;
 	
-	BufferedImage bulletImage, weaponImage,enemyImage;
+	BufferedImage bulletImage, weaponImage, enemyImage;
 	
-	private int refreshRate = 40; // Refresh rate of the screen in milliseconds
+	private int refreshRate = 50; // Refresh rate of the screen in milliseconds
 
 	// Methods to initialize BufferedImages and JLabels
 	public void createBackground() {
@@ -181,6 +181,7 @@ public class MainFrame extends JFrame {
 		createBase();
 		createHouse();
 		createWeapon("cannon");
+		createEnemy("BES");
 		
 		timer.start();
 
@@ -328,9 +329,16 @@ public class MainFrame extends JFrame {
 
 		g2d.setTransform(backup);
 
-		if(finalCountdown % 20 == 0) {
-			g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
-		}
+		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
+		
+		AffineTransform newTransform = new AffineTransform();
+		newTransform.scale(1.2, 1.2);
+		
+		g2d.setTransform(newTransform);
+		g2d.setColor(Color.RED);
+		
+		g2d.drawString("Enver Paþa did nothing wrong", enemyShip.getxPosition() + 300, enemyShip.getyPosition());
+		
 		
 	}
 	

@@ -2,6 +2,11 @@ package elements;
 
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 
 import game.MainFrame;
 
@@ -12,7 +17,7 @@ public class EnemyShipBuilder {
 	
 	MainFrame context = null;
 	
-	BufferedImage weaponImage = null;
+	BufferedImage shipImage = null;
 
 	
 	public EnemyShipBuilder(MainFrame context) {
@@ -46,14 +51,19 @@ public class EnemyShipBuilder {
 		if(tag.equals(BasicEnemyShip.TAG)) {
 			
 			imgPath = BasicEnemyShip.IMG_PATH;
-			tag = BasicEnemyShip.TAG;
+			//tag = BasicEnemyShip.TAG;
 			
 			hellBringers = new BasicEnemyShip(this);
 			
-		}
+		}	
 		
-		xPosition = new Random().nextInt(context.getScreenWidth());
-		yPosition = new Random().nextInt(context.getScreenHeight());
+		createImage(imgPath);
+		hellBringers.setImage(shipImage);
+		
+		// Burasý düzeltilmeli
+		xPosition = new Random().nextInt(context.getScreenWidth()) - shipImage.getWidth();
+		yPosition = new Random().nextInt(context.getScreenHeight())- shipImage.getHeight();
+		// -----------------------------------------------------------------------------------
 		
 		hellBringers.setxPosition(xPosition);
 		hellBringers.setyPosition(yPosition);
@@ -62,6 +72,19 @@ public class EnemyShipBuilder {
 		
 	}
 
+	private void createImage(String shipPath) {
+
+		try {
+
+			shipImage = ImageIO.read(new File(shipPath));
+
+		} catch(IOException e) {
+
+			System.out.println("Enemy image could not be found");
+
+		}
+
+	}
 
 	
 

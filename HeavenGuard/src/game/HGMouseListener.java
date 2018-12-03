@@ -56,6 +56,7 @@ public class HGMouseListener implements MouseListener {
 
 		this.context = context;
 		weapon = context.getBaseWeapon();
+		timer = new Timer();
 
 	}
 
@@ -88,6 +89,8 @@ public class HGMouseListener implements MouseListener {
 		if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
 			cannonWeapon = (CannonWeapon) weapon;
+			
+			timer = new Timer();
 			
 			timer.schedule(new HGCannonTimerTask(cannonWeapon), 100);
 
