@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import game.MainFrame;
 
 
-public class BaseWeapon extends ImageIcon {
+public abstract class BaseWeapon extends ImageIcon {
 
 	private int fireSpeed, damage, weaponLevel,  reloadTime;
 
@@ -33,7 +33,7 @@ public class BaseWeapon extends ImageIcon {
 	static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
 	static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
 
-	private String weaponPath;
+	private String weaponPath, type;
 	private BufferedImage weaponImage = null;
 
 	private Bullet bulletType;
@@ -47,6 +47,7 @@ public class BaseWeapon extends ImageIcon {
 		this.weaponPath = builder.weaponPath;
 		this.bulletType = builder.bullet;
 		this.weaponImage = builder.weaponImage;
+		this.type = builder.type;
 
 	}
 
@@ -70,15 +71,8 @@ public class BaseWeapon extends ImageIcon {
 		return (270 - angle);
 
 	}
-
-	// Function that gives how many degrees the bullet fired by this weapon should rotate 
-	// momentarily
-	public double bulletRotationAngle(long initialTime, double aimAngle, double gravity) {
-
-		double flightTime = (2 * fireSpeed * Math.sin(aimAngle)) / gravity;
-		return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
-
-	}
+	
+	public abstract void fire(Graphics2D g2d);
 
 	public int getFireSpeed() {
 		return fireSpeed;
@@ -106,6 +100,14 @@ public class BaseWeapon extends ImageIcon {
 
 	public void setAngle(double angle) {
 		this.angle = angle;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 }

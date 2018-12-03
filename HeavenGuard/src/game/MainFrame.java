@@ -30,9 +30,11 @@ public class MainFrame extends JFrame {
 	// Weapon of the Base in this frame and its Bullet
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
+	
+	private ArrayList<Bullet> bulletsOnScreen;
 
 	// A custom listener for tracking mouse motions
-	private final HGMouseMotionListener listener = new HGMouseMotionListener();
+	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
 
 	// Containers for images	
 	JLabel backgroundContainer = null;
@@ -76,7 +78,7 @@ public class MainFrame extends JFrame {
 
 	public void createWeapon(String tag) {
 
-		baseWeapon = new WeaponBuilder(30, this).fireSpeed(1).build(tag);
+		baseWeapon = new WeaponBuilder(30, this).fireSpeed(10).build(tag);
 		bullet = baseWeapon.getBullet();
 		
 		weaponImage = (BufferedImage) baseWeapon.getImage();
@@ -150,12 +152,11 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				repaint();
-				
-				bulletX = weaponX;
-				bulletY = weaponY;
 
 			}
 		});
+		
+		bulletsOnScreen = new ArrayList<>();
 		
 		// Creating the environment
 		createBackground();
@@ -164,6 +165,8 @@ public class MainFrame extends JFrame {
 		createWeapon("cannon");
 		
 		timer.start();
+		
+		
 
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -210,8 +213,6 @@ public class MainFrame extends JFrame {
 
 
 		getContentPane().add(backgroundContainer);
-		
-		System.out.println("firstWeapon X from Constructor: " + firstWeaponContainer.getX());
 
 		// Adding listeners
 		addMouseListener(new HGMouseListener(this));
@@ -226,13 +227,25 @@ public class MainFrame extends JFrame {
 	// A method to scale image
 	public static Image getScaledImage(Image image, int width, int height) {
 
+		/*
+		 * 
+		 * Create a BufferedImage container to draw the image into
+		 * 
+		 * Draw the image into it by getting its Graphics2D object and setting appropriate
+		 * RenderingHint(s)
+		 * 
+		 */
+		
 		BufferedImage resizedImage = new BufferedImage(width, height, 
 				BufferedImage.TYPE_INT_ARGB);
+		
 		Graphics2D g = resizedImage.createGraphics();
 
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
 				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		
 		g.drawImage(image, 0, 0, width, height, null);
+		
 		g.dispose();
 
 		return resizedImage;
@@ -240,16 +253,16 @@ public class MainFrame extends JFrame {
 	}
 
 	public BaseWeapon getBaseWeapon() { return baseWeapon; }
-
 	public int getBaseHeight() { return baseContainer.getHeight(); }
-
 	public int getScreenWidth() { return screenWidth; }
 	public int getScreenHeight() { return screenHeight; }
 
+	// This is where the magic happens
 	@Override
 	public void paint(Graphics g) {
 
-		super.paint(g);
+		// Every object in the frame will be set after superclass' constructor call
+		super.paint(g); // I mean after this line
 
 		// How many degrees should the weapon rotate in terms of degrees
 		double rotationAngle = baseWeapon.aimAngle(listener.getX(), listener.getY(), screenWidth / 2,
@@ -278,6 +291,7 @@ public class MainFrame extends JFrame {
 			
 		if(baseWeapon.isFiring()) {
 						
+/*
 			bulletX += 80;
 			bulletY -= Math.tan(
 					baseWeapon.bulletRotationAngle(
@@ -290,7 +304,8 @@ public class MainFrame extends JFrame {
 			System.out.println("bulletX: " + bulletX);
 			//System.out.println("bulletY: " + bulletY);
 			
-			
+*/
+			baseWeapon.fire(g2d);	
 			
 		}
 
@@ -322,6 +337,16 @@ public class MainFrame extends JFrame {
 		return firstWeaponContainer;
 		
 	}
+
+	public ArrayList<Bullet> getBulletsOnScreen() {
+		return bulletsOnScreen;
+	}
+
+	public void setBulletsOnScreen(ArrayList<Bullet> bulletsOnScreen) {
+		this.bulletsOnScreen = bulletsOnScreen;
+	}
+	
+	
 	
 }
 

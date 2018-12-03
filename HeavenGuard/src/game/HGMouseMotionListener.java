@@ -1,6 +1,7 @@
 package game;
 
 import elements.BaseWeapon;
+import elements.CannonWeapon;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -8,10 +9,25 @@ import java.awt.event.MouseMotionListener;
 public class HGMouseMotionListener implements MouseMotionListener {
 	
 	int x, y;
+	private MainFrame context = null;
+	
+	public HGMouseMotionListener(MainFrame context) {
+		
+		this.context = context;
+		
+	}
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
+		
+		
+		if(!(context.getBaseWeapon().getType().equals(CannonWeapon.TYPE))) {
+			
+			x = e.getX();
+			y = e.getY();
+			
+		}
+		
 
 	}
 
