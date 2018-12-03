@@ -64,15 +64,7 @@ public class Bullet extends ImageIcon {
 
 	public void setCurrentLocation(Point newLocation) {
 
-		if(!isOnScreen(newLocation)) {
-			
-			context.getBulletsOnScreen().remove(index);
-			
-		} else {
-			
-			currentLocation = newLocation;
-			
-		}
+		currentLocation = newLocation;
 
 	}
 

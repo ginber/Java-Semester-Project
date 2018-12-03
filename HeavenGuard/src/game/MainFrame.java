@@ -306,9 +306,9 @@ public class MainFrame extends JFrame {
 		
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 			
-		if(baseWeapon.isFiring()) {
+		while(baseWeapon.isFiring()) {
 						
-			baseWeapon.fire(g2d);	
+			bulletsOnScreen.add(baseWeapon.fire(g2d));	
 			
 		}
 

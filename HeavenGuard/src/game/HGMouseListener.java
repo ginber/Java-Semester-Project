@@ -17,6 +17,7 @@ public class HGMouseListener implements MouseListener {
 	int x, y;
 	MainFrame context;
 	BaseWeapon weapon;
+	CannonWeapon cannonWeapon;
 	Timer timer;
 
 	public int getX() {
@@ -64,7 +65,7 @@ public class HGMouseListener implements MouseListener {
 
 		if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
-			CannonWeapon cannonWeapon = (CannonWeapon) weapon;
+			cannonWeapon = (CannonWeapon) weapon;
 			
 			timer.addActionListener(new ActionListener() {
 				
@@ -96,8 +97,6 @@ public class HGMouseListener implements MouseListener {
 
 			weapon.setFiring(true);
 			timer.stop();
-			
-			CannonWeapon cannonWeapon = (CannonWeapon) weapon;
 			
 			cannonWeapon.setMaxPower(0);
 			context.cannonBar.setValue(0);

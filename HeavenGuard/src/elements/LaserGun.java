@@ -13,8 +13,11 @@ public class LaserGun extends BaseWeapon{
 	}
 
 	@Override
-	public void fire(Graphics2D g2d) {
+	public Bullet fire(Graphics2D g2d) {
 		// TODO Auto-generated method stub
+		Bullet bullet = getBullet();
+		
+		return bullet;
 		
 	}
 }

@@ -13,9 +13,11 @@ public class ShieldGun extends BaseWeapon{
 	}
 
 	@Override
-	public void fire(Graphics2D g2d) {
+	public Bullet fire(Graphics2D g2d) {
 		
+		Bullet bullet = getBullet();
 		
+		return bullet;
 		
 	}
 	

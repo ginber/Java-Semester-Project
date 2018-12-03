@@ -75,7 +75,7 @@ public abstract class BaseWeapon extends ImageIcon {
 
 	}
 	
-	public abstract void fire(Graphics2D g2d);
+	public abstract Bullet fire(Graphics2D g2d);
 
 	public int getFireSpeed() {
 		return fireSpeed;
