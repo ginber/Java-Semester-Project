@@ -9,7 +9,7 @@ public class CannonWeapon extends BaseWeapon {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+		
 	public final static String TYPE = "cannon";
 	
 	private int maxPower;

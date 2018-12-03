@@ -216,8 +216,10 @@ public class MainFrame extends JFrame {
 		
 		backgroundContainer.add(cannonBar, constraints);
 
+
 		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 		//baseContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+
 
 		getContentPane().add(backgroundContainer);
 		
