@@ -36,8 +36,9 @@ public class HGMouseListener implements MouseListener {
 		public void run() {
 			
 			barFill++;		
+			//System.out.println("bf:" + barFill);
 			context.cannonBar.setValue(barFill);	
-			cannonWeapon.setFireSpeed(barFill / 2000000);
+			context.getBaseWeapon().setFireSpeed(barFill);
 			
 		}
 		
@@ -107,12 +108,13 @@ public class HGMouseListener implements MouseListener {
 
 		if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
-			cannonWeapon.setFiring(true);
+			context.getBaseWeapon().setFiring(true);
 			timer.cancel();
 			
-			barFill = 0;
-			cannonWeapon.setFireSpeed(0);
+			
+			barFill = 0;		
 			context.cannonBar.setValue(barFill);
+	
 			
 		} else {
 

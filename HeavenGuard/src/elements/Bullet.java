@@ -19,6 +19,9 @@ public class Bullet extends ImageIcon {
 	private MainFrame context = null;
 	private BaseWeapon weapon = null;
 	private BufferedImage image = null;
+	
+	public final static int RETURN_SUCCESS = 1;
+	public final static int RETURN_FAIL = 0;
 
 	public String getPath() {
 
@@ -70,28 +73,29 @@ public class Bullet extends ImageIcon {
 			return;
 			
 		}
-		
-		context.getBulletsOnScreen().remove(index);
 
 	}
 
 	// Returns the new position of Bullet after it is fired
-	public Point calculateMove(double angle, int initialSpeed) {
+	public int calculateMove(double angle, int initialSpeed) {
 
+		System.out.println("angle: " + angle);
+		System.out.println("i s: " + initialSpeed);
+		
 		int changeX = initialSpeed;
-		int changeY = (int) (changeX * Math.tan(angle));
-
-		Point newPoint = new Point(changeX, changeY);
-
+		int changeY = (int) (changeX / Math.abs(Math.tan(angle)));
+		
+		Point newPoint = new Point(getCurrentLocation().x + changeX, getCurrentLocation().y + changeY);
+		
 		if(isOnScreen(newPoint)) {
-
-			currentLocation = new Point(currentLocation.x + changeX, currentLocation.y - changeY);
-
-			return currentLocation;
-
+			
+			setCurrentLocation(newPoint);
+			
+			return RETURN_SUCCESS;
+			
 		}
-
-		return null;
+		
+		return RETURN_FAIL;
 
 	}
 

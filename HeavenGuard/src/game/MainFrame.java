@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
@@ -37,6 +38,7 @@ public class MainFrame extends JFrame {
 	private int finalCountdown = 0;
 	
 	private ArrayList<Bullet> bulletsOnScreen;
+	Iterator bulletIterator;
 
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
@@ -45,6 +47,7 @@ public class MainFrame extends JFrame {
 	JLabel backgroundContainer = null;
 	JLabel baseContainer = null;
 	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
+	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
 	
 	JProgressBar cannonBar = null;
@@ -102,6 +105,7 @@ public class MainFrame extends JFrame {
 		bulletImage = (BufferedImage) bullet.getImage();
 
 		firstWeaponContainer = new JLabel(baseWeapon);
+		bulletContainer = new JLabel(bullet);
 
 	}
 	
@@ -237,12 +241,21 @@ public class MainFrame extends JFrame {
 
 		backgroundContainer.add(firstWeaponContainer, constraints);
 		
-		constraints.gridx = 3;
-		constraints.weightx = 1.0;
-		constraints.anchor = GridBagConstraints.SOUTHWEST;
+		if(baseWeapon.getType().equals(CannonWeapon.TYPE)) {
+			
+			constraints.gridx = 3;
+			constraints.weightx = 1.0;
+			constraints.anchor = GridBagConstraints.SOUTHWEST;
+			
+			backgroundContainer.add(cannonBar, constraints);
+			
+		}
 		
-		backgroundContainer.add(cannonBar, constraints);
-
+		constraints.gridx = 2;
+		constraints.gridy = 1;
+		constraints.anchor = GridBagConstraints.ABOVE_BASELINE;
+		
+		backgroundContainer.add(bulletContainer, constraints);
 
 		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 		//baseContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
@@ -320,12 +333,15 @@ public class MainFrame extends JFrame {
 		g2d.setTransform(transform);
 		
 		firstWeaponContainer.setVisible(false);
+		bulletContainer.setVisible(false);
 		
 		weaponX = firstWeaponContainer.getX();
 		weaponY = firstWeaponContainer.getY();
 		
-		bulletX = weaponX + bullet.getIconWidth() / 2;
-		bulletY = weaponY - weaponImage.getHeight();
+		bulletX = bulletContainer.getX();
+		bulletY = bulletContainer.getY();
+		
+		// int size = bulletsOnScreen.size();
 		
 		bullet.setCurrentLocation(new Point(bulletX, bulletY));
 		
@@ -333,26 +349,55 @@ public class MainFrame extends JFrame {
 			
 		if(baseWeapon.isFiring()) {
 						
-			baseWeapon.fire();	
+			baseWeapon.fire();
+			
+			//System.out.println(bulletsOnScreen.size());
 			
 		}	
+		
+		/*
 		
 		for(Bullet b : bulletsOnScreen) {
 			
 			if(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) != null) {
 			
 				b.setCurrentLocation(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()));
+				
+				System.out.println("x: " + b.getCurrentLocation().x + "\ny: " + b.getCurrentLocation().y);
+				
 				g2d.drawImage(bulletImage, b.getCurrentLocation().x, b.getCurrentLocation().y, null);
 			
-			} 
+			} else {
+				
+				System.out.println("Move is not calculated");
+				
+			}
 			
 			
 		}
 		
+		*/
 		
+		g2d.setTransform(backup);
+		
+		for(bulletIterator = bulletsOnScreen.iterator(); bulletIterator.hasNext();) {
+			
+			bullet = (Bullet) bulletIterator.next();
+			
+			if(bullet.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) == Bullet.RETURN_SUCCESS) {
+				
+				g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, bullet.getCurrentLocation().y, null);
+				
+			} else {
+				
+				bulletIterator.remove();
+				
+			}
+			
+		}
 		
 
-		g2d.setTransform(backup);
+		
 
 		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
 		
