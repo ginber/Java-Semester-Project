@@ -12,7 +12,7 @@ import game.MainFrame;
 
 public class WeaponBuilder {
 
-	int damage, reloadTime, fireSpeed, weaponLevel, maxPower;
+	int reloadTime, fireSpeed, weaponLevel, maxPower, damage;
 	String weaponPath, type;
 	Bullet bullet;
 	MainFrame context = null;
@@ -20,8 +20,8 @@ public class WeaponBuilder {
 	BufferedImage weaponImage = null;
 
 	public WeaponBuilder(int damage, MainFrame context) {
-		this.damage = damage;
 		this.context = context;
+		this.damage = damage;
 	}
 
 	public WeaponBuilder reloadTime(int reloadTime) {

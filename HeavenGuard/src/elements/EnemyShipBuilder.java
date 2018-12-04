@@ -29,7 +29,7 @@ public class EnemyShipBuilder {
 		return this;
 	}
 	
-	public EnemyShipBuilder health(int damage) {
+	public EnemyShipBuilder health(int health) {
 		this.health=health;
 		return this;
 	}
@@ -61,12 +61,14 @@ public class EnemyShipBuilder {
 		hellBringers.setImage(shipImage);
 		
 		// Burasý düzeltilmeli
-		xPosition = new Random().nextInt(context.getScreenWidth()) - shipImage.getWidth();
-		yPosition = new Random().nextInt(context.getScreenHeight())- shipImage.getHeight();
+		xPosition = new Random().nextInt(context.getScreenWidth() - shipImage.getWidth());
+		yPosition = new Random().nextInt(context.getScreenHeight() / 3 - shipImage.getHeight());
 		// -----------------------------------------------------------------------------------
 		
 		hellBringers.setxPosition(xPosition);
 		hellBringers.setyPosition(yPosition);
+		
+		System.out.println("Enemy Ship Created\nType: " + tag + "\nHealth: " + health + "\nDamage: " + damage + "\nLevel: " + lvl);
 		
 		return hellBringers;
 		

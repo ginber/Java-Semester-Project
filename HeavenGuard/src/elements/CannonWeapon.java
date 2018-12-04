@@ -29,32 +29,11 @@ public class CannonWeapon extends BaseWeapon {
 	}
 
 	@Override
-	public Bullet fire(Graphics2D g2d) {
-		
-		Bullet bullet = getBullet();
-		
-		int bulletX = bullet.getCurrentLocation().x;
-		int bulletY = bullet.getCurrentLocation().y;
-		
-		System.out.println("bulletX: " + bulletX);
-		System.out.println();
-		System.out.println("bulletY: " + bulletY);
-		
-		while(bullet.isOnScreen()) {
-			
-			bulletX += getFireSpeed();
-			bulletY += bulletX * Math.tan(getAngle());
-			
-			bullet.setCurrentLocation(new Point(bulletX, bulletY));
-			
-			g2d.drawImage(bullet.getImage(), bulletX, bulletY, null);
-			
-		}
-				
-		setFiring(false);
+	public void fire() {
 		
 		
-		return bullet;
+		
+		//getBuilder().context.getBulletsOnScreen().add(getBullet());
 		
 	}
 

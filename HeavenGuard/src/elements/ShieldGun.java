@@ -13,11 +13,9 @@ public class ShieldGun extends BaseWeapon{
 	}
 
 	@Override
-	public Bullet fire(Graphics2D g2d) {
+	public void fire() {
 		
-		Bullet bullet = getBullet();
-		
-		return bullet;
+		getBuilder().context.getBulletsOnScreen().add(getBullet());
 		
 	}
 	

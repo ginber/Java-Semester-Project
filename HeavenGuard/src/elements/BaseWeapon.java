@@ -15,11 +15,11 @@ import game.MainFrame;
 
 public abstract class BaseWeapon extends ImageIcon {
 
-	private int fireSpeed, damage, weaponLevel,  reloadTime;
-
+	private int fireSpeed, weaponLevel,  reloadTime;
+	
 	private boolean isFiring = false;
 	
-	private double angle;
+	private double angle, damage;
 
 	// Canonical paths of image files
 
@@ -29,7 +29,7 @@ public abstract class BaseWeapon extends ImageIcon {
 	static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
 
 	static final String CANNONBULLET_PATH = "HeavenGuard/res/images/cannongun/cannonbullet.png";
-	static final String MGBULLET_PATH = "HeavenGuard/res/images/machinegun/machinegun.png";
+	static final String MGBULLET_PATH = "HeavenGuard/res/images/machinegun/machinegunammo.png";
 	static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
 	static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
 
@@ -75,7 +75,7 @@ public abstract class BaseWeapon extends ImageIcon {
 
 	}
 	
-	public abstract Bullet fire(Graphics2D g2d);
+	public abstract void fire();
 
 	public int getFireSpeed() {
 		return fireSpeed;

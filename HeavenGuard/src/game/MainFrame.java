@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -58,6 +59,16 @@ public class MainFrame extends JFrame {
 	BufferedImage bulletImage, weaponImage, enemyImage;
 	
 	private int refreshRate = 50; // Refresh rate of the screen in milliseconds
+	
+	private class BulletFireTask extends TimerTask {
+
+		@Override
+		public void run() {
+			
+			
+		}
+		
+	}
 
 	// Methods to initialize BufferedImages and JLabels
 	public void createBackground() {
@@ -84,7 +95,7 @@ public class MainFrame extends JFrame {
 
 	public void createWeapon(String tag) {
 
-		baseWeapon = new WeaponBuilder(30, this).fireSpeed(10).build(tag);
+		baseWeapon = new WeaponBuilder(30, this).build(tag);
 		bullet = baseWeapon.getBullet();
 		
 		weaponImage = (BufferedImage) baseWeapon.getImage();
@@ -165,7 +176,7 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				finalCountdown ++;
+				finalCountdown++;
 				
 				repaint();
 
@@ -182,6 +193,8 @@ public class MainFrame extends JFrame {
 		createHouse();
 		createWeapon("cannon");
 		createEnemy("BES");
+		
+		//baseWeapon.setFireSpeed(10);
 		
 		timer.start();
 
@@ -237,9 +250,6 @@ public class MainFrame extends JFrame {
 		getContentPane().add(backgroundContainer);
 		
 		pack();
-		
-		bulletX = weaponX;
-		System.out.println(bulletX);
 
 		// Adding listeners
 		addMouseListener(new HGMouseListener(this));
@@ -321,15 +331,36 @@ public class MainFrame extends JFrame {
 		
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 			
-		while(baseWeapon.isFiring()) {
+		if(baseWeapon.isFiring()) {
 						
-			bulletsOnScreen.add(baseWeapon.fire(g2d));	
+			baseWeapon.fire();	
+			
+		}	
+		
+		for(Bullet b : bulletsOnScreen) {
+			
+			if(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) != null) {
+			
+				b.setCurrentLocation(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()));
+				g2d.drawImage(bulletImage, b.getCurrentLocation().x, b.getCurrentLocation().y, null);
+			
+			} 
+			
 			
 		}
+		
+		
+		
 
 		g2d.setTransform(backup);
 
 		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
+		
+		/*
+		
+		THE TRUTH
+		
+		---------------------------------------------------------------------------------------------------------------
 		
 		AffineTransform newTransform = new AffineTransform();
 		newTransform.scale(1.2, 1.2);
@@ -338,6 +369,10 @@ public class MainFrame extends JFrame {
 		g2d.setColor(Color.RED);
 		
 		g2d.drawString("Enver Paþa did nothing wrong", enemyShip.getxPosition() + 300, enemyShip.getyPosition());
+		
+		---------------------------------------------------------------------------------------------------------------
+		
+		*/
 		
 		
 	}
@@ -354,6 +389,10 @@ public class MainFrame extends JFrame {
 
 	public void setBulletsOnScreen(ArrayList<Bullet> bulletsOnScreen) {
 		this.bulletsOnScreen = bulletsOnScreen;
+	}
+	
+	public int getRefreshRate() {
+		return refreshRate;
 	}
 	
 	
