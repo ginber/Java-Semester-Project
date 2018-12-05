@@ -14,6 +14,7 @@ public class Bullet extends ImageIcon {
 
 	private String path;
 	private int index = 0; // index of the bullet in the ArrayList in MainFrame
+	private int firedSpeed;
 	private Point currentLocation;
 
 	private MainFrame context = null;
@@ -34,6 +35,14 @@ public class Bullet extends ImageIcon {
 		this.path = path;
 
 	}
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
 	public Bullet(String path, MainFrame context) {
 
@@ -53,9 +62,6 @@ public class Bullet extends ImageIcon {
 		}
 
 		setImage(image);
-
-		index = context.getBulletsOnScreen().size();
-		context.getBulletsOnScreen().add(this);
 
 	}
 
@@ -78,18 +84,28 @@ public class Bullet extends ImageIcon {
 
 	// Returns the new position of Bullet after it is fired
 	public int calculateMove(double angle, int initialSpeed) {
-
+		
+		angle += 90;
+		
 		System.out.println("angle: " + angle);
 		System.out.println("i s: " + initialSpeed);
 		
-		int changeX = initialSpeed;
-		int changeY = (int) (changeX / Math.abs(Math.tan(angle)));
+		double changeX = -(initialSpeed * Math.cos(Math.toRadians(angle)));
+	
+		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle)));
 		
-		Point newPoint = new Point(getCurrentLocation().x + changeX, getCurrentLocation().y + changeY);
+		System.out.println("ch x " + changeX);
+		System.out.println("ch y " + changeY);
+		
+		Point newPoint = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
+		
+		System.out.println(isOnScreen(newPoint));
 		
 		if(isOnScreen(newPoint)) {
 			
-			setCurrentLocation(newPoint);
+			//setCurrentLocation(newPoint);
+			
+			context.getBulletsOnScreen().get(index - 1).setCurrentLocation(newPoint);
 			
 			return RETURN_SUCCESS;
 			

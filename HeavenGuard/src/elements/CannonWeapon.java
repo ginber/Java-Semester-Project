@@ -36,6 +36,7 @@ public class CannonWeapon extends BaseWeapon {
 		if(!isFired) {
 			
 			getBuilder().context.getBulletsOnScreen().add(getBullet());
+			getBullet().setIndex(getBuilder().context.getBulletsOnScreen().size());
 			
 			isFired = true;
 			

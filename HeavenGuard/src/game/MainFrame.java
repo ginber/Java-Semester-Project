@@ -232,6 +232,14 @@ public class MainFrame extends JFrame {
 
 		constraints.gridx = 4;
 		backgroundContainer.add(houseContainers[3], constraints);
+		
+		constraints.gridx = 2;
+		constraints.gridy = 1;
+		constraints.weightx = 0.0;
+		constraints.weighty = 0.5;
+		constraints.anchor = GridBagConstraints.SOUTH;
+		
+		backgroundContainer.add(bulletContainer, constraints);
 
 		constraints.gridx = 2;
 		constraints.gridy = 1;
@@ -250,15 +258,9 @@ public class MainFrame extends JFrame {
 			backgroundContainer.add(cannonBar, constraints);
 			
 		}
-		
-		constraints.gridx = 2;
-		constraints.gridy = 1;
-		constraints.anchor = GridBagConstraints.ABOVE_BASELINE;
-		
-		backgroundContainer.add(bulletContainer, constraints);
 
 		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-		//baseContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
+		//bulletContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
 	
 		getContentPane().add(backgroundContainer);
 		
@@ -384,6 +386,8 @@ public class MainFrame extends JFrame {
 			
 			bullet = (Bullet) bulletIterator.next();
 			
+			System.out.println("bw fs:" + baseWeapon.getFireSpeed());
+			
 			if(bullet.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) == Bullet.RETURN_SUCCESS) {
 				
 				g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, bullet.getCurrentLocation().y, null);
@@ -396,7 +400,7 @@ public class MainFrame extends JFrame {
 			
 		}
 		
-
+		
 		
 
 		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
