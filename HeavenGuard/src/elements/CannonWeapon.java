@@ -14,8 +14,6 @@ public class CannonWeapon extends BaseWeapon {
 	
 	private int maxPower;
 	
-	private boolean isFired = false;
-	
 	public CannonWeapon(WeaponBuilder builder) {
 		
 		super(builder);
@@ -33,14 +31,10 @@ public class CannonWeapon extends BaseWeapon {
 	@Override
 	public void fire() {	
 		
-		if(!isFired) {
-			
-			getBuilder().context.getBulletsOnScreen().add(getBullet());
-			getBullet().setIndex(getBuilder().context.getBulletsOnScreen().size());
-			
-			isFired = true;
-			
-		}
+		getBullet().setIndex(getBuilder().context.getBulletsOnScreen().size());
+		getBuilder().context.getBulletsOnScreen().add(getBullet());
+		
+		setFiring(false);
 		
 	}
 
