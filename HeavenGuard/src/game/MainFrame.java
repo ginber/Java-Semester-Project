@@ -390,9 +390,10 @@ public class MainFrame extends JFrame {
 		*/
 		
 		g2d.setTransform(backup);
-	
+
 		for(bulletIterator = bulletsOnScreen.iterator(); bulletIterator.hasNext();) {
 			//sa++;
+			
 			
 			bullet = (Bullet) bulletIterator.next();
 			
@@ -419,9 +420,6 @@ public class MainFrame extends JFrame {
 			}
 			
 		}
-		
-		
-		
 
 		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
 		

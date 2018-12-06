@@ -5,9 +5,7 @@ import java.awt.Point;
 
 public class CannonWeapon extends BaseWeapon {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 		
 	public final static String TYPE = "cannon";
@@ -33,6 +31,7 @@ public class CannonWeapon extends BaseWeapon {
 	@Override
 	public void fire() {	
 		
+
 		System.out.println("CannonWeapon firing");
 		
 		if(!isFired) {
@@ -49,6 +48,7 @@ public class CannonWeapon extends BaseWeapon {
 			isFired = false;
 			
 		}
+
 		
 	}
 
