@@ -33,12 +33,20 @@ public class CannonWeapon extends BaseWeapon {
 	@Override
 	public void fire() {	
 		
+		System.out.println("CannonWeapon firing");
+		
 		if(!isFired) {
 			
 			getBuilder().context.getBulletsOnScreen().add(getBullet());
-			getBullet().setIndex(getBuilder().context.getBulletsOnScreen().size());
+			getBullet().setIndex(getBuilder().context.getBulletsOnScreen().size() - 1);
 			
 			isFired = true;
+			
+		} else {
+			
+			getBuilder().context.getBulletsOnScreen().remove(getBullet().getIndex());
+			
+			isFired = false;
 			
 		}
 		

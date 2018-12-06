@@ -16,6 +16,9 @@ public class Bullet extends ImageIcon {
 	private int index = 0; // index of the bullet in the ArrayList in MainFrame
 	private int firedSpeed;
 	private Point currentLocation;
+	
+	
+	private boolean moving = false;
 
 	private MainFrame context = null;
 	private BaseWeapon weapon = null;
@@ -75,44 +78,40 @@ public class Bullet extends ImageIcon {
 
 		if(isOnScreen(newLocation)) {
 			
+			System.out.println("deðiþtirmeden önce: " + currentLocation);
+			
 			currentLocation = newLocation;
-			return;
+			
+			System.out.println("deðiþtirdikten sonra: " + currentLocation);
 			
 		}
+		
+		
 
 	}
 
 	// Returns the new position of Bullet after it is fired
-	public int calculateMove(double angle, int initialSpeed) {
+	public Point calculateMove(double angle, int initialSpeed) {
 		
 		angle += 90;
+		double flightTime = (2 * initialSpeed * Math.sin(angle)) / (9.8);
 		
-		System.out.println("angle: " + angle);
-		System.out.println("i s: " + initialSpeed);
+		//System.out.println("angle: " + angle);
+		//System.out.println("i s: " + initialSpeed);
 		
 		double changeX = -(initialSpeed * Math.cos(Math.toRadians(angle)));
 	
 		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle)));
 		
-		System.out.println("ch x " + changeX);
-		System.out.println("ch y " + changeY);
+		//System.out.println("ch x " + changeX);
+		//System.out.println("ch y " + changeY);
 		
 		Point newPoint = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
 		
-		System.out.println(isOnScreen(newPoint));
-		
-		if(isOnScreen(newPoint)) {
+		//System.out.println("ananýn pointi " + newPoint);
+					
 			
-			//setCurrentLocation(newPoint);
-			
-			context.getBulletsOnScreen().get(index - 1).setCurrentLocation(newPoint);
-			
-			return RETURN_SUCCESS;
-			
-		}
-		
-		return RETURN_FAIL;
-
+			return	newPoint;
 	}
 
 	// Function that gives how many degrees the bullet fired by this weapon should rotate 
@@ -122,6 +121,13 @@ public class Bullet extends ImageIcon {
 		double flightTime = (2 * weapon.getFireSpeed() * Math.sin(aimAngle)) / gravity;
 		return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
 
+	}
+	
+	public void makeMove(Point nextP) {
+		context.getBulletsOnScreen().get(index).setCurrentLocation(nextP);
+		//context.getBulletsOnScreen().get(index).currentLocation.x = nextP.x;
+		//context.getBulletsOnScreen().get(index).currentLocation.y = nextP.y;
+		//System.out.println(context.getBulletsOnScreen().get(index - 1).getCurrentLocation());
 	}
 
 
@@ -133,10 +139,14 @@ public class Bullet extends ImageIcon {
 	}
 
 	public boolean isOnScreen(Point p) {
-
+		
 		return ((context.getScreenWidth() > p.x) && (p.x > 0)
 				&& (context.getScreenHeight() > p.y) && (p.y > 0));
 
 	}
+
+
+	
+
 
 }

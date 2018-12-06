@@ -35,7 +35,10 @@ public class MainFrame extends JFrame {
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 	
+	private int sa = 0;
+	
 	private int finalCountdown = 0;
+	private boolean isBulletDrawn = false;
 	
 	private ArrayList<Bullet> bulletsOnScreen;
 	Iterator bulletIterator;
@@ -345,7 +348,13 @@ public class MainFrame extends JFrame {
 		
 		// int size = bulletsOnScreen.size();
 		
-		bullet.setCurrentLocation(new Point(bulletX, bulletY));
+		if(!isBulletDrawn) {
+			
+			bullet.setCurrentLocation(new Point(bulletX, bulletY));
+			isBulletDrawn = true;
+			
+		}
+		
 		
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 			
@@ -381,18 +390,29 @@ public class MainFrame extends JFrame {
 		*/
 		
 		g2d.setTransform(backup);
-		
+	
 		for(bulletIterator = bulletsOnScreen.iterator(); bulletIterator.hasNext();) {
+			//sa++;
 			
 			bullet = (Bullet) bulletIterator.next();
 			
-			System.out.println("bw fs:" + baseWeapon.getFireSpeed());
+			//System.out.println("count:" +sa);
 			
-			if(bullet.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) == Bullet.RETURN_SUCCESS) {
+			//System.out.println(bullet.getCurrentLocation().x);
+			
+			//System.out.println(bullet.getCurrentLocation().y);
+			
+			
+			if(bullet.isOnScreen()) {
 				
+				System.out.println("makemovedan önce: " + bullet.getCurrentLocation().x);
+				
+				bullet.makeMove(bullet.calculateMove(baseWeapon.getAngle(),baseWeapon.getFireSpeed()));
+				
+				System.out.println("makemovedan sonra: " + bullet.getCurrentLocation().x);
 				g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, bullet.getCurrentLocation().y, null);
 				
-			} else {
+				} else {
 				
 				bulletIterator.remove();
 				
