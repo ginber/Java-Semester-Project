@@ -19,6 +19,9 @@ public class Bullet extends ImageIcon {
 	
 	
 	private boolean moving = false;
+	private long timeFired=0;
+	
+	private double firedAngle;
 
 	private MainFrame context = null;
 	private BaseWeapon weapon = null;
@@ -84,7 +87,7 @@ public class Bullet extends ImageIcon {
 			
 			System.out.println("deðiþtirdikten sonra: " + currentLocation);
 			
-		}
+		}else context.getBulletsOnScreen().remove(this.getIndex());
 		
 		
 
@@ -94,17 +97,16 @@ public class Bullet extends ImageIcon {
 	public Point calculateMove(double angle, int initialSpeed) {
 		
 		angle += 90;
-		double flightTime = (2 * initialSpeed * Math.sin(angle)) / (9.8);
+		long time = (System.currentTimeMillis() - getTimeFired())/(100);
 		
 		//System.out.println("angle: " + angle);
 		//System.out.println("i s: " + initialSpeed);
 		
 		double changeX = -(initialSpeed * Math.cos(Math.toRadians(angle)));
 	
-		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle)));
+		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle))) - time * 9.8;
 		
 		//System.out.println("ch x " + changeX);
-		//System.out.println("ch y " + changeY);
 		
 		Point newPoint = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
 		
@@ -145,6 +147,23 @@ public class Bullet extends ImageIcon {
 
 	}
 
+	protected long getTimeFired() {
+		return timeFired;
+	}
+
+	protected void setTimeFired(long timeFired) {
+		this.timeFired = timeFired;
+	}
+
+	public double getFiredAngle() {
+		return firedAngle;
+	}
+
+	public void setFiredAngle(double firedAngle) {
+		this.firedAngle = firedAngle;
+	}
+
+	
 
 	
 

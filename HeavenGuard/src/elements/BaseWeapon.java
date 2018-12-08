@@ -76,7 +76,6 @@ public abstract class BaseWeapon extends ImageIcon {
 	}
 	
 	public abstract void fire();
-
 	public int getFireSpeed() {
 		return fireSpeed;
 	}
