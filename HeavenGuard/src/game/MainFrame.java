@@ -64,7 +64,7 @@ public class MainFrame extends JFrame {
 	
 	BufferedImage bulletImage, weaponImage, enemyImage;
 	
-	private int refreshRate = 50; // Refresh rate of the screen in milliseconds
+	private int refreshRate = 70; // Refresh rate of the screen in milliseconds
 	
 	private class BulletFireTask extends TimerTask {
 
