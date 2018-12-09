@@ -34,12 +34,12 @@ public class MainFrame extends JFrame {
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
-	
-	private int sa = 0;
-	
-	private int finalCountdown = 0;
+
+	//private int sa = 0;
+
+	//private int finalCountdown = 0;
 	private boolean isBulletDrawn = false;
-	
+
 	private ArrayList<Bullet> bulletsOnScreen;
 	Iterator bulletIterator;
 
@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
 	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
-	
+
 	JProgressBar cannonBar = null;
 
 	// Width and height of the final screen in terms of pixels
@@ -61,20 +61,12 @@ public class MainFrame extends JFrame {
 
 	// X and Y coordinates of weapon and bullets
 	private int weaponX, weaponY, bulletX ,bulletY;
-	
-	BufferedImage bulletImage, weaponImage, enemyImage;
-	
-	private int refreshRate = 70; // Refresh rate of the screen in milliseconds
-	
-	private class BulletFireTask extends TimerTask {
 
-		@Override
-		public void run() {
-			
-			
-		}
-		
-	}
+	BufferedImage bulletImage, weaponImage, enemyImage;
+
+
+	private int refreshRate = 20; // Refresh rate of the screen in milliseconds
+
 
 	// Methods to initialize BufferedImages and JLabels
 	public void createBackground() {
@@ -103,7 +95,7 @@ public class MainFrame extends JFrame {
 
 		baseWeapon = new WeaponBuilder(30, this).build(tag);
 		bullet = baseWeapon.getBullet();
-		
+
 		weaponImage = (BufferedImage) baseWeapon.getImage();
 		bulletImage = (BufferedImage) bullet.getImage();
 
@@ -111,13 +103,13 @@ public class MainFrame extends JFrame {
 		bulletContainer = new JLabel(bullet);
 
 	}
-	
+
 	public void createEnemy(String tag) {
-		
+
 		enemyShip = new EnemyShipBuilder(this).build(tag);
-		
+
 		enemyImage = (BufferedImage) enemyShip.getImage();
-		
+
 	}
 
 	public void createBase() {
@@ -182,27 +174,27 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				finalCountdown++;
-				
+
+				//finalCountdown++;
+
 				repaint();
 
 			}
 		});
-		
+
 		bulletsOnScreen = new ArrayList<>();
-		
+
 		cannonBar = new JProgressBar(0, 100);
-		
+
 		// Creating the environment
 		createBackground();
 		createBase();
 		createHouse();
 		createWeapon("cannon");
 		createEnemy("BES");
-		
+
 		//baseWeapon.setFireSpeed(10);
-		
+
 		timer.start();
 
 		backgroundContainer.setLayout(new GridBagLayout());
@@ -235,13 +227,13 @@ public class MainFrame extends JFrame {
 
 		constraints.gridx = 4;
 		backgroundContainer.add(houseContainers[3], constraints);
-		
+
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.weightx = 0.0;
 		constraints.weighty = 0.5;
 		constraints.anchor = GridBagConstraints.SOUTH;
-		
+
 		backgroundContainer.add(bulletContainer, constraints);
 
 		constraints.gridx = 2;
@@ -251,22 +243,22 @@ public class MainFrame extends JFrame {
 		constraints.anchor = GridBagConstraints.PAGE_END;
 
 		backgroundContainer.add(firstWeaponContainer, constraints);
-		
+
 		if(baseWeapon.getType().equals(CannonWeapon.TYPE)) {
-			
+
 			constraints.gridx = 3;
 			constraints.weightx = 1.0;
 			constraints.anchor = GridBagConstraints.SOUTHWEST;
-			
+
 			backgroundContainer.add(cannonBar, constraints);
-			
+
 		}
 
 		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
 		//bulletContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-	
+
 		getContentPane().add(backgroundContainer);
-		
+
 		pack();
 
 		// Adding listeners
@@ -290,17 +282,17 @@ public class MainFrame extends JFrame {
 		 * RenderingHint(s)
 		 * 
 		 */
-		
+
 		BufferedImage resizedImage = new BufferedImage(width, height, 
 				BufferedImage.TYPE_INT_ARGB);
-		
+
 		Graphics2D g = resizedImage.createGraphics();
 
 		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, 
 				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		
+
 		g.drawImage(image, 0, 0, width, height, null);
-		
+
 		g.dispose();
 
 		return resizedImage;
@@ -322,7 +314,7 @@ public class MainFrame extends JFrame {
 		// How many degrees should the weapon rotate in terms of degrees
 		double rotationAngle = baseWeapon.aimAngle(listener.getX(), listener.getY(), screenWidth / 2,
 				screenHeight - baseContainer.getHeight());
-		
+
 		baseWeapon.setAngle(rotationAngle);
 
 		Graphics2D g2d = (Graphics2D) getGraphics();
@@ -336,118 +328,120 @@ public class MainFrame extends JFrame {
 		AffineTransform backup = g2d.getTransform();
 
 		g2d.setTransform(transform);
-		
+
 		firstWeaponContainer.setVisible(false);
 		bulletContainer.setVisible(false);
-		
+
 		weaponX = firstWeaponContainer.getX();
 		weaponY = firstWeaponContainer.getY();
-		
+
 		bulletX = bulletContainer.getX();
 		bulletY = bulletContainer.getY();
-		
+
 		// int size = bulletsOnScreen.size();
-		
+
 		if(!isBulletDrawn) {
-			
+
 			bullet.setCurrentLocation(new Point(bulletX, bulletY));
 			isBulletDrawn = true;
-			
+
 		}
-		
-		
+
+
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
-			
+
 		if(baseWeapon.isFiring()) {
-						
+
 			baseWeapon.fire();
-			
+
 			//System.out.println(bulletsOnScreen.size());
-			
+
 		}	
-		
+
 		/*
-		
+
 		for(Bullet b : bulletsOnScreen) {
-			
+
 			if(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) != null) {
-			
+
 				b.setCurrentLocation(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()));
-				
+
 				System.out.println("x: " + b.getCurrentLocation().x + "\ny: " + b.getCurrentLocation().y);
-				
+
 				g2d.drawImage(bulletImage, b.getCurrentLocation().x, b.getCurrentLocation().y, null);
-			
+
 			} else {
-				
+
 				System.out.println("Move is not calculated");
-				
+
 			}
-			
-			
+
+
 		}
-		
-		*/
-		
+
+		 */
+
 		g2d.setTransform(backup);
 
 		for(bulletIterator = bulletsOnScreen.iterator(); bulletIterator.hasNext();) {
 			//sa++;
-			
-			
+
+
 			bullet = (Bullet) bulletIterator.next();
-			
+
 			//System.out.println("count:" +sa);
-			
+
 			//System.out.println(bullet.getCurrentLocation().x);
-			
+
 			//System.out.println(bullet.getCurrentLocation().y);
-			
-			
-			if(bullet.isOnScreen()) {
-				
-				System.out.println("makemovedan önce: " + bullet.getCurrentLocation().x);
-				
-				bullet.makeMove(bullet.calculateMove(baseWeapon.getAngle(),baseWeapon.getFireSpeed()));
-				
-				System.out.println("makemovedan sonra: " + bullet.getCurrentLocation().x);
+
+
+
+
+			System.out.println("bu açý: " + bullet.getFiredAngle());
+
+
+			bullet.makeMove(bullet.calculateMove(bullet.getFiredAngle(),baseWeapon.getFireSpeed()));
+
+			System.out.println("makemovedan sonra: " + bullet.getCurrentLocation().x);
+
+
 				g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, bullet.getCurrentLocation().y, null);
-				
-				} else {
-				
-				bulletIterator.remove();
-				
-			}
-			
+
+
+				//bulletIterator.remove();
+
+
 		}
 
 		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
-		
+
+
 		/*
-		
+
 		THE TRUTH
-		
+
 		---------------------------------------------------------------------------------------------------------------
-		
+
 		AffineTransform newTransform = new AffineTransform();
 		newTransform.scale(1.2, 1.2);
-		
+
 		g2d.setTransform(newTransform);
 		g2d.setColor(Color.RED);
-		
+
 		g2d.drawString("Enver Paþa did nothing wrong", enemyShip.getxPosition() + 300, enemyShip.getyPosition());
-		
+
 		---------------------------------------------------------------------------------------------------------------
-		
-		*/
-		
-		
+
+		 */
+
+
 	}
-	
+
 	public JLabel getWeaponContainer() {
-		
+
 		return firstWeaponContainer;
-		
+
 	}
 
 	public ArrayList<Bullet> getBulletsOnScreen() {
@@ -457,12 +451,12 @@ public class MainFrame extends JFrame {
 	public void setBulletsOnScreen(ArrayList<Bullet> bulletsOnScreen) {
 		this.bulletsOnScreen = bulletsOnScreen;
 	}
-	
+
 	public int getRefreshRate() {
 		return refreshRate;
 	}
-	
-	
-	
+
+
+
 }
 
