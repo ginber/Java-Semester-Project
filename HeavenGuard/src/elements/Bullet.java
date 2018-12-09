@@ -94,7 +94,7 @@ public class Bullet extends ImageIcon {
 	}
 
 	// Returns the new position of Bullet after it is fired
-	public Point calculateMove(double angle, int initialSpeed) {
+	public void move(double angle, int initialSpeed) {
 		
 		angle += 90;
 		long time = (System.currentTimeMillis() - getTimeFired())/(100);
@@ -112,8 +112,8 @@ public class Bullet extends ImageIcon {
 		
 		//System.out.println("ananýn pointi " + newPoint);
 					
-			
-			return	newPoint;
+		context.getBulletsOnScreen().get(index).setCurrentLocation(newPoint);
+		
 	}
 
 	// Function that gives how many degrees the bullet fired by this weapon should rotate 
@@ -124,14 +124,6 @@ public class Bullet extends ImageIcon {
 		return (2 * aimAngle) * ((System.currentTimeMillis() - initialTime) / flightTime);
 
 	}
-	
-	public void makeMove(Point nextP) {
-		context.getBulletsOnScreen().get(index).setCurrentLocation(nextP);
-		//context.getBulletsOnScreen().get(index).currentLocation.x = nextP.x;
-		//context.getBulletsOnScreen().get(index).currentLocation.y = nextP.y;
-		//System.out.println(context.getBulletsOnScreen().get(index - 1).getCurrentLocation());
-	}
-
 
 	public boolean isOnScreen() {
 

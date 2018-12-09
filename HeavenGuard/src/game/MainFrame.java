@@ -401,7 +401,7 @@ public class MainFrame extends JFrame {
 			System.out.println("bu açý: " + bullet.getFiredAngle());
 
 
-			bullet.makeMove(bullet.calculateMove(bullet.getFiredAngle(),baseWeapon.getFireSpeed()));
+			bullet.move(bullet.getFiredAngle(),baseWeapon.getFireSpeed());
 
 			System.out.println("makemovedan sonra: " + bullet.getCurrentLocation().x);
 
