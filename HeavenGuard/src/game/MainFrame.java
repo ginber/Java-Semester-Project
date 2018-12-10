@@ -12,6 +12,11 @@ import java.util.Iterator;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
@@ -25,23 +30,24 @@ import elements.*;
 
 public class MainFrame extends JFrame {
 
-	// Path for images that are used in environment
+	// Path for resources
 	private final String BG_PATH = "HeavenGuard/res/images/misc/background.png";
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
+	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 
 	// Weapon of the Base in this frame and its Bullet
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 
-	//private int sa = 0;
-
-	//private int finalCountdown = 0;
 	private boolean isBulletDrawn = false;
+	private boolean isMusicPlaying = false;
+	
+	private Clip clip = null;
 
 	private ArrayList<Bullet> bulletsOnScreen;
-	Iterator bulletIterator;
+	Iterator<Bullet> bulletIterator;
 
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
@@ -91,6 +97,48 @@ public class MainFrame extends JFrame {
 
 	}
 
+	public void playBackgroundMusic() {
+
+		File musicPath = new File(BGMUSIC_PATH);
+		AudioInputStream audioInput = null;
+
+		try {
+
+			audioInput = AudioSystem.getAudioInputStream(musicPath);
+			clip = AudioSystem.getClip();
+			clip.open(audioInput);
+
+		} catch (LineUnavailableException e) {
+
+			System.out.println("Could not retrieve the audio system line");
+
+		} catch (IOException e) {
+
+			System.out.println("Could not load music from audio file");
+
+		} catch (UnsupportedAudioFileException e) {
+
+			System.out.println("Audio file is not supported in your system");
+
+		}
+		
+		System.out.println("isMusicPlaying " + isMusicPlaying);
+
+		if(isMusicPlaying) {
+			
+			clip.stop(); System.out.println("clip.stop() has been called");
+			clip.close(); System.out.println("clip.close() has been called");
+			
+		} else {
+			System.out.println("else");
+			clip.setFramePosition(0);
+			clip.start();
+			
+		}
+		
+
+	}
+	
 	public void createWeapon(String tag) {
 
 		baseWeapon = new WeaponBuilder(30, this).build(tag);
@@ -175,8 +223,6 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				//finalCountdown++;
-
 				repaint();
 
 			}
@@ -186,14 +232,13 @@ public class MainFrame extends JFrame {
 
 		cannonBar = new JProgressBar(0, 100);
 
-		// Creating the environment
+		// Creating the environment & playing the music
 		createBackground();
 		createBase();
 		createHouse();
 		createWeapon("cannon");
 		createEnemy("BES");
-
-		//baseWeapon.setFireSpeed(10);
+		playBackgroundMusic();
 
 		timer.start();
 
@@ -264,7 +309,7 @@ public class MainFrame extends JFrame {
 		// Adding listeners
 		addMouseListener(new HGMouseListener(this));
 		addMouseMotionListener(listener);
-		addKeyListener(new HGKeyListener());
+		addKeyListener(new HGKeyListener(this));
 
 		// Making the frame visible
 		setVisible(true);
@@ -384,33 +429,13 @@ public class MainFrame extends JFrame {
 		g2d.setTransform(backup);
 
 		for(bulletIterator = bulletsOnScreen.iterator(); bulletIterator.hasNext();) {
-			//sa++;
-
 
 			bullet = (Bullet) bulletIterator.next();
 
-			//System.out.println("count:" +sa);
-
-			//System.out.println(bullet.getCurrentLocation().x);
-
-			//System.out.println(bullet.getCurrentLocation().y);
-
-
-
-
-			System.out.println("bu açý: " + bullet.getFiredAngle());
-
-
 			bullet.move(bullet.getFiredAngle(),baseWeapon.getFireSpeed());
 
-			System.out.println("makemovedan sonra: " + bullet.getCurrentLocation().x);
-
-
-				g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, bullet.getCurrentLocation().y, null);
-
-
-				//bulletIterator.remove();
-
+			g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, 
+					bullet.getCurrentLocation().y, null);
 
 		}
 
@@ -454,6 +479,14 @@ public class MainFrame extends JFrame {
 
 	public int getRefreshRate() {
 		return refreshRate;
+	}
+
+	public boolean isMusicPlaying() {
+		return isMusicPlaying;
+	}
+
+	public void setMusicPlaying(boolean isMusicPlaying) {
+		this.isMusicPlaying = isMusicPlaying;
 	}
 
 

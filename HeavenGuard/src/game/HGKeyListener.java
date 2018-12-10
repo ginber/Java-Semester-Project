@@ -6,6 +6,14 @@ import java.awt.event.KeyListener;
 // Custom KeyListener to handle key presses
 
 public class HGKeyListener implements KeyListener {
+	
+	MainFrame context = null;
+	
+	public  HGKeyListener(MainFrame context) {
+		
+		this.context = context;
+		
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -13,6 +21,13 @@ public class HGKeyListener implements KeyListener {
 		if(e.getKeyCode() == KeyEvent.VK_Q) {
 			
 			System.exit(0);
+			
+		} 
+		
+		if(e.getKeyCode() == KeyEvent.VK_M) {
+			
+			context.setMusicPlaying(!context.isMusicPlaying());
+			context.playBackgroundMusic();
 			
 		}
 		

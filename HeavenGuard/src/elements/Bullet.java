@@ -81,13 +81,13 @@ public class Bullet extends ImageIcon {
 
 		if(isOnScreen(newLocation)) {
 			
-			System.out.println("deðiþtirmeden önce: " + currentLocation);
-			
 			currentLocation = newLocation;
 			
-			System.out.println("deðiþtirdikten sonra: " + currentLocation);
+		} else {
 			
-		}else context.getBulletsOnScreen().remove(this.getIndex());
+			context.getBulletsOnScreen().remove(this.getIndex());
+			
+		}
 		
 		
 
@@ -97,20 +97,13 @@ public class Bullet extends ImageIcon {
 	public void move(double angle, int initialSpeed) {
 		
 		angle += 90;
-		long time = (System.currentTimeMillis() - getTimeFired())/(100);
-		
-		//System.out.println("angle: " + angle);
-		//System.out.println("i s: " + initialSpeed);
+		long time = (System.currentTimeMillis() - getTimeFired()) / 100;
 		
 		double changeX = -(initialSpeed * Math.cos(Math.toRadians(angle)));
 	
 		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle))) - time * 9.8;
 		
-		//System.out.println("ch x " + changeX);
-		
 		Point newPoint = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
-		
-		//System.out.println("ananýn pointi " + newPoint);
 					
 		context.getBulletsOnScreen().get(index).setCurrentLocation(newPoint);
 		
