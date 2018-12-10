@@ -14,13 +14,8 @@ public class Bullet extends ImageIcon {
 
 	private String path;
 	private int index = 0; // index of the bullet in the ArrayList in MainFrame
-	private int firedSpeed;
 	private Point currentLocation;
-	
-	
-	private boolean moving = false;
 	private long timeFired=0;
-	
 	private double firedAngle;
 
 	private MainFrame context = null;

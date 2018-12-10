@@ -36,29 +36,33 @@ public class MainFrame extends JFrame {
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 
-	// Weapon of the Base in this frame and its Bullet
+	// Weapon of the Base in this frame, its Bullet and an EnemyShip object to create enemy ships
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 
 	private boolean isBulletDrawn = false;
-	private boolean isMusicPlaying = false;
+	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
 	
+	// A Clip object to play audio files
 	private Clip clip = null;
 
+	// An ArrayList to store Bullet objects that are on the screen
 	private ArrayList<Bullet> bulletsOnScreen;
-	Iterator<Bullet> bulletIterator;
 
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
 
 	// Containers for images	
+	// firstWeaponContainer and bulletContainer will be invisible, but they will determine the
+	// locations of images when paint() method is called
 	JLabel backgroundContainer = null;
 	JLabel baseContainer = null;
 	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
 
+	// If the weapon is a CannonWeapon, this JProgressBar will be shown when loading the bullet
 	JProgressBar cannonBar = null;
 
 	// Width and height of the final screen in terms of pixels
@@ -68,6 +72,7 @@ public class MainFrame extends JFrame {
 	// X and Y coordinates of weapon and bullets
 	private int weaponX, weaponY, bulletX ,bulletY;
 
+	// BuuferedImages for the main elements of the game
 	BufferedImage bulletImage, weaponImage, enemyImage;
 
 
@@ -94,48 +99,6 @@ public class MainFrame extends JFrame {
 		ImageIcon background = new ImageIcon(scaledImage);
 
 		backgroundContainer = new JLabel(background);
-
-	}
-
-	public void playBackgroundMusic() {
-
-		File musicPath = new File(BGMUSIC_PATH);
-		AudioInputStream audioInput = null;
-
-		try {
-
-			audioInput = AudioSystem.getAudioInputStream(musicPath);
-			clip = AudioSystem.getClip();
-			clip.open(audioInput);
-
-		} catch (LineUnavailableException e) {
-
-			System.out.println("Could not retrieve the audio system line");
-
-		} catch (IOException e) {
-
-			System.out.println("Could not load music from audio file");
-
-		} catch (UnsupportedAudioFileException e) {
-
-			System.out.println("Audio file is not supported in your system");
-
-		}
-		
-		System.out.println("isMusicPlaying " + isMusicPlaying);
-
-		if(isMusicPlaying) {
-			
-			clip.stop(); System.out.println("clip.stop() has been called");
-			clip.close(); System.out.println("clip.close() has been called");
-			
-		} else {
-			System.out.println("else");
-			clip.setFramePosition(0);
-			clip.start();
-			
-		}
-		
 
 	}
 	
@@ -207,6 +170,23 @@ public class MainFrame extends JFrame {
 		}
 
 	}
+	
+	// Method to toggle music on/off
+	public void playBackgroundMusic() {
+
+		if(isMusicPlaying) {
+			
+			clip.setFramePosition(0); // Rewinding the audio to its beginning
+			clip.start();
+			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			
+		} else {
+		
+			clip.stop();
+			
+		}
+
+	}
 
 	public MainFrame(String title) {
 
@@ -232,6 +212,32 @@ public class MainFrame extends JFrame {
 
 		cannonBar = new JProgressBar(0, 100);
 
+		// Getting the audio file ready to play 
+		// This shouldn't be in playBackgroundMusic(), otherwise it will change the object
+		// that clip points out each time the method is called
+		File musicPath = new File(BGMUSIC_PATH);
+		AudioInputStream audioInput = null;
+	
+		try {
+
+			audioInput = AudioSystem.getAudioInputStream(musicPath);
+			clip = AudioSystem.getClip();
+			clip.open(audioInput);
+
+		} catch (LineUnavailableException e) {
+
+			System.out.println("Could not retrieve the audio system line");
+
+		} catch (IOException e) {
+
+			System.out.println("Could not load music from audio file");
+
+		} catch (UnsupportedAudioFileException e) {
+
+			System.out.println("Audio file is not supported in your system");
+
+		}
+		
 		// Creating the environment & playing the music
 		createBackground();
 		createBase();
@@ -240,8 +246,10 @@ public class MainFrame extends JFrame {
 		createEnemy("BES");
 		playBackgroundMusic();
 
-		timer.start();
+		timer.start(); // Self explanatory
 
+		// GridBagLayout is useful when adding many objects that are positioned 
+		// relative to each other
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
 
@@ -251,8 +259,10 @@ public class MainFrame extends JFrame {
 		constraints.weighty = 1.0;
 		constraints.fill = GridBagConstraints.BOTH;
 
+		// Should have added everything to Content Pane instead of a container image, but too late
 		backgroundContainer.add(Box.createGlue(), constraints); // Dummy object for GridBagLayout
 
+		// Adding houses
 		constraints.gridy = 2;
 		constraints.weighty = 0;
 		constraints.anchor = GridBagConstraints.PAGE_END;
@@ -299,9 +309,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		//firstWeaponContainer.setBorder(BorderFactory.createLineBorder(Color.RED, 5));
-		//bulletContainer.setBorder(BorderFactory.createLineBorder(Color.BLUE, 5));
-
+		// Kind of added everything into Content Pane, well, at least technically
 		getContentPane().add(backgroundContainer);
 
 		pack();
@@ -324,7 +332,7 @@ public class MainFrame extends JFrame {
 		 * Create a BufferedImage container to draw the image into
 		 * 
 		 * Draw the image into it by getting its Graphics2D object and setting appropriate
-		 * RenderingHint(s)
+		 * algorithms to use while drawing it by using RenderingHints
 		 * 
 		 */
 
@@ -383,8 +391,6 @@ public class MainFrame extends JFrame {
 		bulletX = bulletContainer.getX();
 		bulletY = bulletContainer.getY();
 
-		// int size = bulletsOnScreen.size();
-
 		if(!isBulletDrawn) {
 
 			bullet.setCurrentLocation(new Point(bulletX, bulletY));
@@ -399,40 +405,19 @@ public class MainFrame extends JFrame {
 
 			baseWeapon.fire();
 
-			//System.out.println(bulletsOnScreen.size());
-
 		}	
 
-		/*
-
-		for(Bullet b : bulletsOnScreen) {
-
-			if(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()) != null) {
-
-				b.setCurrentLocation(b.calculateMove(rotationAngle, baseWeapon.getFireSpeed()));
-
-				System.out.println("x: " + b.getCurrentLocation().x + "\ny: " + b.getCurrentLocation().y);
-
-				g2d.drawImage(bulletImage, b.getCurrentLocation().x, b.getCurrentLocation().y, null);
-
-			} else {
-
-				System.out.println("Move is not calculated");
-
-			}
-
-
-		}
-
-		 */
+		
 
 		g2d.setTransform(backup);
+		
+		Iterator<Bullet> bulletIterator = bulletsOnScreen.iterator();
 
-		for(bulletIterator = bulletsOnScreen.iterator(); bulletIterator.hasNext();) {
+		while(bulletIterator.hasNext()) {
 
-			bullet = (Bullet) bulletIterator.next();
+			bullet = bulletIterator.next();
 
-			bullet.move(bullet.getFiredAngle(),baseWeapon.getFireSpeed());
+			bullet.move(bullet.getFiredAngle(), baseWeapon.getFireSpeed());
 
 			g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, 
 					bullet.getCurrentLocation().y, null);
