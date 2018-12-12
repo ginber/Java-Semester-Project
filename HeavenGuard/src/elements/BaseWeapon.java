@@ -23,21 +23,21 @@ public abstract class BaseWeapon extends ImageIcon {
 
 	// Canonical paths of image files
 
-	static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
-	static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
-	static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
-	static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
+	public static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	public static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
+	public static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
+	public static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
 
-	static final String CANNONBULLET_PATH = "HeavenGuard/res/images/cannongun/cannonbullet.png";
-	static final String MGBULLET_PATH = "HeavenGuard/res/images/machinegun/machinegunammo.png";
-	static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
-	static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
+	public static final String CANNONBULLET_PATH = "HeavenGuard/res/images/cannongun/cannonbullet.png";
+	public static final String MGBULLET_PATH = "HeavenGuard/res/images/machinegun/machinegunammo.png";
+	public static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
+	public static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
 
 	private String weaponPath, type;
 	private BufferedImage weaponImage = null;	
 	private WeaponBuilder weaponBuilder = null;
 
-	private Bullet bulletType;
+	private Bullet bullet;
 
 	public BaseWeapon(WeaponBuilder builder) {
 		
@@ -48,7 +48,7 @@ public abstract class BaseWeapon extends ImageIcon {
 		this.fireSpeed = builder.fireSpeed;
 		this.weaponLevel = builder.weaponLevel;
 		this.weaponPath = builder.weaponPath;
-		this.bulletType = builder.bullet;
+		this.bullet = builder.bullet;
 		this.weaponImage = builder.weaponImage;
 		this.type = builder.type;
 
@@ -56,7 +56,7 @@ public abstract class BaseWeapon extends ImageIcon {
 
 	public Bullet getBullet() {
 
-		return this.bulletType;
+		return bullet;
 
 	}
 
@@ -116,5 +116,18 @@ public abstract class BaseWeapon extends ImageIcon {
 		return weaponBuilder;
 	}
 
+	
+	public Bullet createBullet(String path) {
+		
+		if(type.equals(CannonWeapon.TYPE)) {
+			
+			return new Bullet(CANNONBULLET_PATH, getBuilder().context);
+			
+		}
+		
+		return null;
+		
+	}
+	
 }
 

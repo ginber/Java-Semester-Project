@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 public class HGKeyListener implements KeyListener {
 	
 	MainFrame context = null;
+	private boolean isPaused = false;
 	
 	public  HGKeyListener(MainFrame context) {
 		
@@ -28,6 +29,22 @@ public class HGKeyListener implements KeyListener {
 			
 			context.setMusicPlaying(!context.isMusicPlaying());
 			context.playBackgroundMusic();
+			
+		}
+		
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			
+			if(!isPaused) {
+				
+				context.getTimer().stop();
+				isPaused = true;
+				
+			} else {
+				
+				context.getTimer().start();
+				isPaused = false;
+				
+			}
 			
 		}
 		

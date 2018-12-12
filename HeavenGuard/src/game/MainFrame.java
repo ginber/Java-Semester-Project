@@ -41,11 +41,13 @@ public class MainFrame extends JFrame {
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 
-	private boolean isBulletDrawn = false;
+	private boolean isFired = false;
 	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
-	
+
 	// A Clip object to play audio files
 	private Clip clip = null;
+
+	private Timer timer;
 
 	// An ArrayList to store Bullet objects that are on the screen
 	private ArrayList<Bullet> bulletsOnScreen;
@@ -76,7 +78,7 @@ public class MainFrame extends JFrame {
 	BufferedImage bulletImage, weaponImage, enemyImage;
 
 
-	private int refreshRate = 20; // Refresh rate of the screen in milliseconds
+	private int refreshRate = 30; // Refresh rate of the screen in milliseconds
 
 
 	// Methods to initialize BufferedImages and JLabels
@@ -101,7 +103,7 @@ public class MainFrame extends JFrame {
 		backgroundContainer = new JLabel(background);
 
 	}
-	
+
 	public void createWeapon(String tag) {
 
 		baseWeapon = new WeaponBuilder(30, this).build(tag);
@@ -170,20 +172,20 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	
+
 	// Method to toggle music on/off
 	public void playBackgroundMusic() {
 
 		if(isMusicPlaying) {
-			
+
 			clip.setFramePosition(0); // Rewinding the audio to its beginning
 			clip.start();
 			clip.loop(Clip.LOOP_CONTINUOUSLY);
-			
+
 		} else {
-		
+
 			clip.stop();
-			
+
 		}
 
 	}
@@ -198,7 +200,7 @@ public class MainFrame extends JFrame {
 		setUndecorated(true);
 
 		// A Timer object to refresh the screen at every refreshRate milliseconds
-		Timer timer = new Timer(refreshRate, new ActionListener() {
+		timer = new Timer(refreshRate, new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -217,7 +219,7 @@ public class MainFrame extends JFrame {
 		// that clip points out each time the method is called
 		File musicPath = new File(BGMUSIC_PATH);
 		AudioInputStream audioInput = null;
-	
+
 		try {
 
 			audioInput = AudioSystem.getAudioInputStream(musicPath);
@@ -237,7 +239,7 @@ public class MainFrame extends JFrame {
 			System.out.println("Audio file is not supported in your system");
 
 		}
-		
+
 		// Creating the environment & playing the music
 		createBackground();
 		createBase();
@@ -390,61 +392,64 @@ public class MainFrame extends JFrame {
 
 		bulletX = bulletContainer.getX();
 		bulletY = bulletContainer.getY();
-
-		if(!isBulletDrawn) {
-
-			bullet.setCurrentLocation(new Point(bulletX, bulletY));
-			isBulletDrawn = true;
-
-		}
-
-
+		
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 
 		if(baseWeapon.isFiring()) {
-
+			
+			bullet = baseWeapon.createBullet(CannonWeapon.TYPE);
+			bullet.setCurrentLocation(new Point(bulletX, bulletY));
 			baseWeapon.fire();
-
+			
 		}	
 
+		for(Bullet b : bulletsOnScreen) {
+			
+			System.out.println(b + " " + b.getCurrentLocation());
+			
+		}
 		
-
 		g2d.setTransform(backup);
-		
-		Iterator<Bullet> bulletIterator = bulletsOnScreen.iterator();
 
+		//Iterator<Bullet> bulletIterator = bulletsOnScreen.iterator();
+		
+		//System.out.println(bulletsOnScreen.size());
+		
+		System.out.println("Size: " + bulletsOnScreen.size());
+		
+		for(Bullet b : bulletsOnScreen) {
+			
+			b.move(b.getFiredAngle(), baseWeapon.getFireSpeed());
+			
+			g2d.drawImage(b.getImage(), b.getCurrentLocation().x, 
+					b.getCurrentLocation().y, null);
+			
+		}
+		
+		/*
+		
 		while(bulletIterator.hasNext()) {
 
 			bullet = bulletIterator.next();
 
-			bullet.move(bullet.getFiredAngle(), baseWeapon.getFireSpeed());
+			//System.out.println("isOnScreen ? " + bullet.isOnScreen(bullet.getCurrentLocation()));
+			
+			if(!bullet.isOnScreen()) {
 
-			g2d.drawImage(bullet.getImage(), bullet.getCurrentLocation().x, 
-					bullet.getCurrentLocation().y, null);
+				if(bulletIterator != null) {
+
+					bulletIterator.remove();
+
+				}
+
+			}  
 
 		}
+		
+		*/
+
 
 		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
-
-
-		/*
-
-		THE TRUTH
-
-		---------------------------------------------------------------------------------------------------------------
-
-		AffineTransform newTransform = new AffineTransform();
-		newTransform.scale(1.2, 1.2);
-
-		g2d.setTransform(newTransform);
-		g2d.setColor(Color.RED);
-
-		g2d.drawString("Enver Paþa did nothing wrong", enemyShip.getxPosition() + 300, enemyShip.getyPosition());
-
-		---------------------------------------------------------------------------------------------------------------
-
-		 */
-
 
 	}
 
@@ -474,6 +479,40 @@ public class MainFrame extends JFrame {
 		this.isMusicPlaying = isMusicPlaying;
 	}
 
+	public Timer getTimer() {
+		return timer;
+	}
+
+	public void setTimer(Timer timer) {
+		this.timer = timer;
+	}
+
+	public JLabel getFirstWeaponContainer() {
+		return firstWeaponContainer;
+	}
+
+	public void setFirstWeaponContainer(JLabel firstWeaponContainer) {
+		this.firstWeaponContainer = firstWeaponContainer;
+	}
+
+	public JLabel getBulletContainer() {
+		return bulletContainer;
+	}
+
+	public void setBulletContainer(JLabel bulletContainer) {
+		this.bulletContainer = bulletContainer;
+	}
+
+	public Bullet getBullet() {
+		return bullet;
+	}
+
+	public void setBullet(Bullet bullet) {
+		this.bullet = bullet;
+	}
+	
+	
+	
 
 
 }

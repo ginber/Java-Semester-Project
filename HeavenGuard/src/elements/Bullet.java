@@ -17,6 +17,7 @@ public class Bullet extends ImageIcon {
 	private Point currentLocation;
 	private long timeFired=0;
 	private double firedAngle;
+	private boolean isFired = false;
 
 	private MainFrame context = null;
 	private BaseWeapon weapon = null;
@@ -43,6 +44,14 @@ public class Bullet extends ImageIcon {
 	
 	public void setIndex(int index) {
 		this.index = index;
+	}
+
+	public boolean isFired() {
+		return isFired;
+	}
+
+	public void setFired(boolean isFired) {
+		this.isFired = isFired;
 	}
 
 	public Bullet(String path, MainFrame context) {
@@ -73,19 +82,9 @@ public class Bullet extends ImageIcon {
 	}
 
 	public void setCurrentLocation(Point newLocation) {
-
-		if(isOnScreen(newLocation)) {
 			
-			currentLocation = newLocation;
+		currentLocation = newLocation;
 			
-		} else {
-			
-			context.getBulletsOnScreen().remove(this.getIndex());
-			
-		}
-		
-		
-
 	}
 
 	// Returns the new position of Bullet after it is fired
@@ -94,13 +93,14 @@ public class Bullet extends ImageIcon {
 		angle += 90;
 		long time = (System.currentTimeMillis() - getTimeFired()) / 100;
 		
+		System.out.println("iþlem yapýyoring: " + getIndex());
+		
 		double changeX = -(initialSpeed * Math.cos(Math.toRadians(angle)));
 	
 		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle))) - time * 9.8;
 		
-		Point newPoint = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
-					
-		context.getBulletsOnScreen().get(index).setCurrentLocation(newPoint);
+		currentLocation = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
+	//	return new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
 		
 	}
 
