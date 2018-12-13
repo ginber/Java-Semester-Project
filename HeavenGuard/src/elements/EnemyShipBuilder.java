@@ -60,6 +60,8 @@ public class EnemyShipBuilder {
 		createImage(imgPath);
 		hellBringers.setImage(shipImage);
 		
+	
+		
 		// Burasý düzeltilmeli
 		xPosition = new Random().nextInt(context.getScreenWidth() - shipImage.getWidth());
 		yPosition = new Random().nextInt(context.getScreenHeight() / 3 - shipImage.getHeight());

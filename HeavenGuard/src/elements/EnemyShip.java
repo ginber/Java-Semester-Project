@@ -1,7 +1,10 @@
 package elements;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import game.MainFrame;
@@ -12,7 +15,9 @@ public abstract class EnemyShip extends ImageIcon{
 	private int health, damage, speed, level;
 	private int xPosition,yPosition;
 	private MainFrame context = null;
-	private String tag, imgPath;
+	private String tag, imgPath, explodedImgPath;
+	
+	final static String EXPLODED_PATH = "HeavenGuard/res/images/spaceship1/boom.png";
 	
 	public EnemyShip(EnemyShipBuilder builder) {
 		
@@ -21,7 +26,7 @@ public abstract class EnemyShip extends ImageIcon{
 		speed = builder.speed;
 		level = builder.lvl;
 		tag = builder.tag;
-		imgPath = builder.imgPath;
+		imgPath = builder.imgPath;	
 		
 	}
 
@@ -93,9 +98,41 @@ public abstract class EnemyShip extends ImageIcon{
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
+	
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
+	public String getExplodedImgPath() {
+		return explodedImgPath;
+	}
+
+	public void setExplodedImgPath(String explodedImgPath) {
+		this.explodedImgPath = explodedImgPath;
+	}
 
 	public abstract void fire();
-	public abstract void move(int xDir, int yDir);
-	
+	public abstract void move();
+
+	public void die() {
+		
+		imgPath = EXPLODED_PATH;
+		
+		try {
+			setImage(ImageIO.read(new File(EXPLODED_PATH)));
+			//Thread.sleep(1000);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} //catch(InterruptedException e) {
+			//e.printStackTrace();
+		//}
+		
+		
+	}
 
 }

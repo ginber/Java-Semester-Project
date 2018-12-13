@@ -32,6 +32,17 @@ public class HGKeyListener implements KeyListener {
 			
 		}
 		
+		if(e.getKeyCode() == KeyEvent.VK_N) {
+			if (context.isSfx()) {
+				context.setSfx(false);
+			}
+			else if (!context.isSfx()) {
+				context.setSfx(true);
+			}
+			
+			
+		}
+		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			
 			if(!isPaused) {

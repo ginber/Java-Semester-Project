@@ -17,7 +17,7 @@ public class Bullet extends ImageIcon {
 	private Point currentLocation;
 	private long timeFired=0;
 	private double firedAngle;
-	private boolean isFired = false;
+	private boolean isFired = false, isHit = false;
 
 	private MainFrame context = null;
 	private BaseWeapon weapon = null;
@@ -102,6 +102,14 @@ public class Bullet extends ImageIcon {
 		currentLocation = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
 	//	return new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
 		
+		if((context.getEnemyShip().getxPosition()+context.getEnemyImage().getWidth()/2) > currentLocation.getX() && (context.getEnemyShip().getxPosition()-context.getEnemyImage().getWidth()/2) < currentLocation.getX() && 
+				(context.getEnemyShip().getyPosition()-context.getEnemyImage().getHeight()/2) < currentLocation.getY() &&  (context.getEnemyShip().getyPosition()+context.getEnemyImage().getHeight()/2) > currentLocation.getY() ) {
+			
+			isHit = true;
+			
+		}
+		
+		
 	}
 
 	// Function that gives how many degrees the bullet fired by this weapon should rotate 
@@ -141,6 +149,14 @@ public class Bullet extends ImageIcon {
 
 	public void setFiredAngle(double firedAngle) {
 		this.firedAngle = firedAngle;
+	}
+
+	public boolean isHit() {
+		return isHit;
+	}
+
+	public void setHit(boolean isHit) {
+		this.isHit = isHit;
 	}
 
 	
