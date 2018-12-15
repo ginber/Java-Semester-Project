@@ -126,18 +126,46 @@ public abstract class EnemyShip extends ImageIcon{
 
 	public abstract void fire();
 	public abstract void move();
+	
+	private class ExplosionAnimation implements Runnable {
+		
+		EnemyShip ship = null;
+		
+		public ExplosionAnimation(EnemyShip ship) {
+			
+			this.ship = ship;
+			
+		}
+		
+		@Override
+		public void run() {
+			
+			try {
+				
+				ship.setImage(MainFrame.getScaledImage(ImageIO.read(new File(EXPLODED_PATH)), 
+						ship.getImage().getWidth(null), ship.getImage().getHeight(null)));
+				
+				Thread.sleep(500);
+				
+			} catch (IOException e) {		
+				
+				e.printStackTrace();
+				
+			} catch(InterruptedException e) {
+				
+				e.printStackTrace();
+				
+			}
+			
+		}
+		
+	}
 
 	public void die() {
 		
 		imgPath = EXPLODED_PATH;
 		
-		try {
-			setImage(ImageIO.read(new File(EXPLODED_PATH)));
-			
-		} catch (IOException e) {		
-			e.printStackTrace();
-		} 
-		
+		new Thread(new ExplosionAnimation(this)).start();
 		
 	}
 

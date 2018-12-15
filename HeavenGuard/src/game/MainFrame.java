@@ -421,12 +421,6 @@ public class MainFrame extends JFrame {
 			
 			b.move(b.getFiredAngle(), baseWeapon.getFireSpeed());
 			
-			if(b.isHit()) {
-				
-				enemyShip.die();
-				
-			}
-			
 			g2d.drawImage(b.getImage(), b.getCurrentLocation().x, 
 					b.getCurrentLocation().y, null);
 			
@@ -544,6 +538,14 @@ public class MainFrame extends JFrame {
 
 	public void setSfx(boolean sfx) {
 		this.sfx = sfx;
+	}
+
+	public ArrayList<EnemyShip> getShipsOnScreen() {
+		return shipsOnScreen;
+	}
+
+	public void setShipsOnScreen(ArrayList<EnemyShip> shipsOnScreen) {
+		this.shipsOnScreen = shipsOnScreen;
 	}
 	
 	

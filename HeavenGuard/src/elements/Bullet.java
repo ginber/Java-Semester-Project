@@ -89,8 +89,6 @@ public class Bullet extends ImageIcon {
 
 		if(collision()) {
 			
-			isHit = true;
-			
 			System.out.println("Enemy eliminated");
 			
 		}
@@ -181,13 +179,26 @@ public class Bullet extends ImageIcon {
 	
 	public boolean collision() {
 		
-		boolean xCheck = (currentLocation.x < context.getEnemyShip().getxPosition() + context.getEnemyImage().getWidth())
-				&& (currentLocation.x > context.getEnemyShip().getxPosition());
+		boolean xCheck = false, yCheck = false;
 		
-		boolean yCheck = (currentLocation.y < context.getEnemyShip().getyPosition() + context.getEnemyImage().getHeight())
-				&& (currentLocation.y > context.getEnemyShip().getyPosition());
+		for(EnemyShip e : context.getShipsOnScreen()) {
+			
+			xCheck = (currentLocation.x < e.getxPosition() + e.getImage().getWidth(null))
+			&& (currentLocation.x > e.getxPosition());
+			
+			yCheck = (currentLocation.y < e.getyPosition() + e.getImage().getHeight(null))
+					&& (currentLocation.y > e.getyPosition());
+			
+			if(xCheck && yCheck) {
+				
+				e.die();
+				context.getBulletsOnScreen().remove(index);
+				return true;
+			}
+			
+		} 
 		
-		return (xCheck && yCheck);
+		return false;
 		
 	}
 
