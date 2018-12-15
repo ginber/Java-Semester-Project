@@ -16,10 +16,13 @@ public abstract class EnemyShip extends ImageIcon{
 	private int xPosition,yPosition;
 	private MainFrame context = null;
 	private String tag, imgPath, explodedImgPath;
+	private EnemyShipBuilder builder = null;
 	
 	final static String EXPLODED_PATH = "HeavenGuard/res/images/spaceship1/boom.png";
 	
 	public EnemyShip(EnemyShipBuilder builder) {
+		
+		this.builder = builder;
 		
 		health = builder.health;
 		damage = builder.damage;
@@ -114,6 +117,12 @@ public abstract class EnemyShip extends ImageIcon{
 	public void setExplodedImgPath(String explodedImgPath) {
 		this.explodedImgPath = explodedImgPath;
 	}
+	
+	public EnemyShipBuilder getBuilder() {
+		
+		return builder;
+		
+	}
 
 	public abstract void fire();
 	public abstract void move();
@@ -124,13 +133,10 @@ public abstract class EnemyShip extends ImageIcon{
 		
 		try {
 			setImage(ImageIO.read(new File(EXPLODED_PATH)));
-			//Thread.sleep(1000);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
+		} catch (IOException e) {		
 			e.printStackTrace();
-		} //catch(InterruptedException e) {
-			//e.printStackTrace();
-		//}
+		} 
 		
 		
 	}

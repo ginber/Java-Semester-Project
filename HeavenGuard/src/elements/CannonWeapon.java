@@ -6,12 +6,22 @@ import java.awt.Point;
 public class CannonWeapon extends BaseWeapon {
 
 	private static final long serialVersionUID = 1L;
-	public final static String TYPE = "cannon";
+	
+	final public static String TYPE = "cannon";
+	final public static String PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
+	final public static String BULLET_PATH = "HeavenGuard/res/images/cannongun/cannonbullet.png";
+	
 	private int maxPower;
 
 	public CannonWeapon(WeaponBuilder builder) {
 
 		super(builder);
+
+	}
+	
+	public CannonWeapon() {
+
+		
 
 	}
 
@@ -48,6 +58,5 @@ public class CannonWeapon extends BaseWeapon {
 		setFiring(false);
 
 	}
-
 
 }

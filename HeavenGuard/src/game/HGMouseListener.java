@@ -113,7 +113,7 @@ public class HGMouseListener implements MouseListener {
 			context.getBaseWeapon().setFireSpeed(barFill);
 			barFill = 0;		
 			context.cannonBar.setValue(barFill);
-			context.playCannonFire();
+			//context.playCannonFire();
 		
 			
 		} else {

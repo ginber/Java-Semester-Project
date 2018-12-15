@@ -9,11 +9,19 @@ public class MachineGun extends BaseWeapon {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public final static String TYPE = "mg";
-
+	final public static String TYPE = "mg";
+	final public static String PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
+	final public static String BULLET_PATH = "HeavenGuard/res/images/machinegun/machinegunammo.png";
+	
 	public MachineGun (WeaponBuilder builder) {
 
 		super(builder);
+
+	}
+	
+	public MachineGun () {
+
+		
 
 	}
 

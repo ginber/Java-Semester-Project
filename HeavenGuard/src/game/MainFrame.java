@@ -37,7 +37,6 @@ public class MainFrame extends JFrame {
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 	private final String SFXFIRE_PATH = "HeavenGuard/res/music/cannonfire.wav";
 	private final String SFXONHIT_PATH = "HeavenGuard/res/music/laserhit.wav";
-	private final String EXPLOSION_PATH = "HeavenGuard/res/music/explosion.wav";
 	// Weapon of the Base in this frame, its Bullet and an EnemyShip object to create enemy ships
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
@@ -53,9 +52,11 @@ public class MainFrame extends JFrame {
 
 	private Timer timer;
 
-	// An ArrayList to store Bullet objects that are on the screen
+	// An ArrayList to store Bullet objects on the screen
 	private ArrayList<Bullet> bulletsOnScreen;
-
+	// Another one to store EnemyShip objects on the screen
+	private ArrayList<EnemyShip> shipsOnScreen;
+	
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
 
@@ -79,7 +80,7 @@ public class MainFrame extends JFrame {
 	private int weaponX, weaponY, bulletX ,bulletY;
 
 	// BuuferedImages for the main elements of the game
-	BufferedImage bulletImage, weaponImage, enemyImage;
+	BufferedImage bulletImage, weaponImage;
 
 
 	private int refreshRate = 30; // Refresh rate of the screen in milliseconds
@@ -121,11 +122,14 @@ public class MainFrame extends JFrame {
 
 	}
 
-	public void createEnemy(String tag) {
-
-		enemyShip = new EnemyShipBuilder(this).level(1).build(tag);
-
-		enemyImage = (BufferedImage) enemyShip.getImage();
+	public void createEnemy(String tag, int howMany) {
+		
+		for(int i = 0; i < howMany; i++) {
+			
+			enemyShip = new EnemyShipBuilder(this).level(1).build(tag);
+			shipsOnScreen.add(enemyShip);
+			
+		}
 
 	}
 
@@ -193,44 +197,6 @@ public class MainFrame extends JFrame {
 		}
 
 	}
-	private Clip sfxfire = null;
-	File musicPath2 = new File(SFXFIRE_PATH);
-	AudioInputStream audioInput2 = null;
-	private Clip sfxonhit = null;
-	File musicPath3 = new File(SFXONHIT_PATH);
-	AudioInputStream audioInput3 = null;
-	private Clip explosion = null;
-	File musicPath4 = new File(EXPLOSION_PATH);
-	AudioInputStream audioInput4 = null;
-
-	public void playCannonFire() {
-			if (sfx) {
-				sfxfire.start();
-				sfxfire.setMicrosecondPosition(0);
-				
-			}
-		
-	
-	}
-
-	public void playOnHitSFX() {
-
-		if (sfx) {
-			sfxonhit.start();
-			sfxonhit.setMicrosecondPosition(0);
-			
-		}
-		
-
-}
-	public void playExplosion() {
-		if (sfx) {
-			explosion.start();
-			explosion.setMicrosecondPosition(0);
-		}
-		
-	}
-
 
 	public MainFrame(String title) {
 
@@ -254,6 +220,7 @@ public class MainFrame extends JFrame {
 		});
 
 		bulletsOnScreen = new ArrayList<>();
+		shipsOnScreen = new ArrayList<>();
 
 		cannonBar = new JProgressBar(0, 100);
 
@@ -282,48 +249,13 @@ public class MainFrame extends JFrame {
 			System.out.println("Audio file is not supported in your system");
 
 		}
-		try {
-
-			audioInput2 = AudioSystem.getAudioInputStream(musicPath2);
-			sfxfire = AudioSystem.getClip();
-			sfxfire.open(audioInput2);
-
-		} catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-
-			System.out.println("ERROR BABE");
-
-		}
-		
-		try {
-
-			audioInput3 = AudioSystem.getAudioInputStream(musicPath3);
-			sfxonhit = AudioSystem.getClip();
-			sfxonhit.open(audioInput3);
-
-		} catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-
-			System.out.println("ERROR BABE");
-
-		}
-		
-		try {
-
-			audioInput4 = AudioSystem.getAudioInputStream(musicPath4);
-			explosion = AudioSystem.getClip();
-			explosion.open(audioInput4);
-
-		} catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
-
-			System.out.println("ERROR BABE");
-
-		}
 
 		// Creating the environment & playing the music
 		createBackground();
 		createBase();
 		createHouse();
 		createWeapon("cannon");
-		createEnemy("BES");
+		createEnemy("BES", 3);
 		playBackgroundMusic();
 
 		timer.start(); // Self explanatory
@@ -475,25 +407,15 @@ public class MainFrame extends JFrame {
 
 		if(baseWeapon.isFiring()) {
 			
-			bullet = baseWeapon.createBullet(CannonWeapon.TYPE);
+			bullet = baseWeapon.createBullet();
 			bullet.setCurrentLocation(new Point(bulletX, bulletY));
 			baseWeapon.fire();
 			
 		}	
-
-		for(Bullet b : bulletsOnScreen) {
-			
-			System.out.println(b + " " + b.getCurrentLocation());
-			
-		}
 		
 		g2d.setTransform(backup);
 
 		Iterator<Bullet> bulletIterator = bulletsOnScreen.iterator();
-		
-		//System.out.println(bulletsOnScreen.size());
-		
-		System.out.println("Size: " + bulletsOnScreen.size());
 		
 		for(Bullet b : bulletsOnScreen) {
 			
@@ -501,7 +423,6 @@ public class MainFrame extends JFrame {
 			
 			if(b.isHit()) {
 				
-				playExplosion();
 				enemyShip.die();
 				
 			}
@@ -516,8 +437,6 @@ public class MainFrame extends JFrame {
 		while(bulletIterator.hasNext()) {
 
 			bullet = bulletIterator.next();
-
-			//System.out.println("isOnScreen ? " + bullet.isOnScreen(bullet.getCurrentLocation()));
 			
 			if(!bullet.isOnScreen() || bullet.isHit()) {
 
@@ -531,10 +450,13 @@ public class MainFrame extends JFrame {
 
 		}
 		
-
-		if(enemyMove % 4 == 0) enemyShip.move();
-		
-		g2d.drawImage(enemyImage, enemyShip.getxPosition(), enemyShip.getyPosition(), null);
+		for(EnemyShip ship : shipsOnScreen) {
+			
+			if(enemyMove % 4 == 0) ship.move(); // each 120 milliseconds
+			
+			g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
+			
+		}
 
 	}
 
@@ -603,6 +525,8 @@ public class MainFrame extends JFrame {
 	public void setEnemyShip(EnemyShip enemyShip) {
 		this.enemyShip = enemyShip;
 	}
+	
+	/*
 
 	public BufferedImage getEnemyImage() {
 		return enemyImage;
@@ -611,6 +535,8 @@ public class MainFrame extends JFrame {
 	public void setEnemyImage(BufferedImage enemyImage) {
 		this.enemyImage = enemyImage;
 	}
+	
+	*/
 
 	public boolean isSfx() {
 		return sfx;

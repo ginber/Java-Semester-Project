@@ -14,7 +14,7 @@ import game.MainFrame;
 public class WeaponBuilder {
 
 	int reloadTime, fireSpeed, weaponLevel, maxPower, damage;
-	String weaponPath, type;
+	String weaponPath, type, bulletPath;
 	Bullet bullet;
 	MainFrame context = null;
 
@@ -55,36 +55,40 @@ public class WeaponBuilder {
 
 		if(tag.equals(CannonWeapon.TYPE)) {
 
-			weaponPath = BaseWeapon.CANNON_PATH;
+			weaponPath = CannonWeapon.PATH;
 			type = CannonWeapon.TYPE;
-			bullet = new Bullet(BaseWeapon.CANNONBULLET_PATH, context);
+			bullet = new Bullet(CannonWeapon.BULLET_PATH, context);
+			bulletPath = CannonWeapon.BULLET_PATH;
 			weaponToReturn = new CannonWeapon(this);
 
 		}
 
 		else if(tag.equals(MachineGun.TYPE)) {
 
-			weaponPath = BaseWeapon.MACHINEGUN_PATH;
+			weaponPath = MachineGun.PATH;
 			type = MachineGun.TYPE;
-			bullet = new Bullet(BaseWeapon.MGBULLET_PATH, context);
+			bullet = new Bullet(MachineGun.BULLET_PATH, context);
+			bulletPath = MachineGun.BULLET_PATH;
 			weaponToReturn = new MachineGun(this);
 
 		}
 
 		else if(tag.equals(LaserGun.TYPE)) {
 
-			weaponPath = BaseWeapon.LASERGUN_PATH;
+			weaponPath = LaserGun.PATH;
 			type = LaserGun.TYPE;
-			bullet = new Bullet(BaseWeapon.LASERBULLET_PATH, context);
+			bullet = new Bullet(LaserGun.BULLET_PATH, context);
+			bulletPath = LaserGun.BULLET_PATH;
 			weaponToReturn = new LaserGun(this);
 
 		}
 
 		else if(tag.equals(ShieldGun.TYPE)) {
 
-			weaponPath = BaseWeapon.SHIELDGUN_PATH;
+			weaponPath = ShieldGun.PATH;
 			type = ShieldGun.TYPE;
-			bullet = new Bullet(BaseWeapon.SHIELDBULLET_PATH, context);
+			bullet = new Bullet(ShieldGun.BULLET_PATH, context);
+			bulletPath = ShieldGun.BULLET_PATH;
 			weaponToReturn = new ShieldGun(this);
 
 		}

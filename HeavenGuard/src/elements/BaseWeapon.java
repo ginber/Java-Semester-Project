@@ -5,8 +5,13 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -16,24 +21,14 @@ import game.MainFrame;
 public abstract class BaseWeapon extends ImageIcon {
 
 	private int fireSpeed, weaponLevel,  reloadTime;
-	
 	private boolean isFiring = false;
 	
 	private double angle, damage;
+	
+	private Clip clip = null;
+	private AudioInputStream sfxInput = null;
 
-	// Canonical paths of image files
-
-	public static final String CANNON_PATH = "HeavenGuard/res/images/cannongun/weapon_cannon_0.png";
-	public static final String MACHINEGUN_PATH = "HeavenGuard/res/images/machinegun/weapon_machinegun_0.png";
-	public static final String LASERGUN_PATH = "HeavenGuard/res/images/misc/lasergun_0.png";
-	public static final String SHIELDGUN_PATH = "HeavenGuard/res/images/misc/shieldgunammoready.png";
-
-	public static final String CANNONBULLET_PATH = "HeavenGuard/res/images/cannongun/cannonbullet.png";
-	public static final String MGBULLET_PATH = "HeavenGuard/res/images/machinegun/machinegunammo.png";
-	public static final String LASERBULLET_PATH = "HeavenGuard/res/images/LaserGun/lasergunammo.png";
-	public static final String SHIELDBULLET_PATH = "HeavenGuard/res/images/shieldgun/shieldgunammo.png";
-
-	private String weaponPath, type;
+	private String weaponPath, type, bulletPath, musicPath;
 	private BufferedImage weaponImage = null;	
 	private WeaponBuilder weaponBuilder = null;
 
@@ -51,7 +46,22 @@ public abstract class BaseWeapon extends ImageIcon {
 		this.bullet = builder.bullet;
 		this.weaponImage = builder.weaponImage;
 		this.type = builder.type;
+		this.bulletPath = builder.bulletPath;
+		
+		try {
+			
+			clip = AudioSystem.getClip();
+			
+		} catch (LineUnavailableException e) {
+			
+			e.printStackTrace();
+			
+		}
 
+	}
+	
+	public BaseWeapon() {
+		
 	}
 
 	public Bullet getBullet() {
@@ -76,6 +86,13 @@ public abstract class BaseWeapon extends ImageIcon {
 	}
 	
 	public abstract void fire();
+	
+	public void playFireSound() {
+		
+		
+		
+	}
+	
 	public int getFireSpeed() {
 		return fireSpeed;
 	}
@@ -117,17 +134,21 @@ public abstract class BaseWeapon extends ImageIcon {
 	}
 
 	
-	public Bullet createBullet(String path) {
+	public Bullet createBullet() {
 		
-		if(type.equals(CannonWeapon.TYPE)) {
-			
-			return new Bullet(CANNONBULLET_PATH, getBuilder().context);
-			
-		}
-		
-		return null;
+		return new Bullet(bulletPath, getBuilder().context);
 		
 	}
+
+	public Clip getClip() {
+		return clip;
+	}
+
+	public void setClip(Clip clip) {
+		this.clip = clip;
+	}
+	
+	
 	
 }
 
