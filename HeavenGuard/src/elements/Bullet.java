@@ -89,6 +89,7 @@ public class Bullet extends ImageIcon {
 
 		if(collision()) {
 			
+			isHit = true;
 			System.out.println("Enemy eliminated");
 			
 		}
@@ -192,7 +193,6 @@ public class Bullet extends ImageIcon {
 			if(xCheck && yCheck) {
 				
 				e.die();
-				context.getBulletsOnScreen().remove(index);
 				return true;
 			}
 			

@@ -20,27 +20,27 @@ public class HGMouseListener implements MouseListener {
 	BaseWeapon weapon;
 	CannonWeapon cannonWeapon;
 	Timer timer;
-	
+
 	class HGCannonTimerTask extends TimerTask {
-		
+
 		int maxPower;
-		
+
 		public HGCannonTimerTask(CannonWeapon cw) {
-			
+
 			if(cw != null)
 				maxPower = cw.getMaxPower();		
-							
+
 		}
 
 		@Override
 		public void run() {
-			
+
 			barFill++;		
 			//System.out.println("bf:" + barFill);
 			context.cannonBar.setValue(barFill);	
-			
+
 		}
-		
+
 	}
 
 	public int getX() {
@@ -85,18 +85,22 @@ public class HGMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 
-		if(weapon.getType().equals(CannonWeapon.TYPE)) {
-
-			cannonWeapon = (CannonWeapon) weapon;
+		if(!e.isMetaDown()) {
 			
-			timer = new Timer();
-				
-			timer.scheduleAtFixedRate(new HGCannonTimerTask(cannonWeapon), 0, 20);
+			if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
-					
-		} else {
+				cannonWeapon = (CannonWeapon) weapon;
 
-			weapon.setFiring(true);
+				timer = new Timer();
+
+				timer.scheduleAtFixedRate(new HGCannonTimerTask(cannonWeapon), 0, 20);
+
+
+			} else {
+
+				weapon.setFiring(true);
+
+			}
 
 		}
 
@@ -105,20 +109,24 @@ public class HGMouseListener implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
-		if(weapon.getType().equals(CannonWeapon.TYPE)) {
-
-			context.getBaseWeapon().setFiring(true);
-			timer.cancel();
+		if(e.isMetaDown()) {
 			
-			context.getBaseWeapon().setFireSpeed(barFill);
-			barFill = 0;		
-			context.cannonBar.setValue(barFill);
-			//context.playCannonFire();
-		
-			
-		} else {
+			if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
-			weapon.setFiring(false);
+				context.getBaseWeapon().setFiring(true);
+				timer.cancel();
+
+				context.getBaseWeapon().setFireSpeed(barFill);
+				barFill = 0;		
+				context.cannonBar.setValue(barFill);
+				//context.playCannonFire();
+
+
+			} else {
+
+				weapon.setFiring(false);
+
+			}
 
 		}
 
