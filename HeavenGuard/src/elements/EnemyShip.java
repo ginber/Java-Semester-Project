@@ -16,7 +16,9 @@ public abstract class EnemyShip extends ImageIcon{
 	private int xPosition,yPosition;
 	private MainFrame context = null;
 	private String tag, imgPath, explodedImgPath;
+	private boolean isDead = false;
 	private EnemyShipBuilder builder = null;
+	private int index = 0;
 	
 	final static String EXPLODED_PATH = "HeavenGuard/res/images/spaceship1/boom.png";
 	
@@ -124,48 +126,43 @@ public abstract class EnemyShip extends ImageIcon{
 		
 	}
 
+	public int getIndex() {
+		return index;
+	}
+
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
+	
+
+	public boolean isDead() {
+		return isDead;
+	}
+
+	public void setDead(boolean isDead) {
+		this.isDead = isDead;
+	}
+
 	public abstract void fire();
 	public abstract void move();
-	
-	private class ExplosionAnimation implements Runnable {
-		
-		EnemyShip ship = null;
-		
-		public ExplosionAnimation(EnemyShip ship) {
-			
-			this.ship = ship;
-			
-		}
-		
-		@Override
-		public void run() {
-			
-			try {
-				
-				ship.setImage(MainFrame.getScaledImage(ImageIO.read(new File(EXPLODED_PATH)), 
-						ship.getImage().getWidth(null), ship.getImage().getHeight(null)));
-				
-				Thread.sleep(500);
-				
-			} catch (IOException e) {		
-				
-				e.printStackTrace();
-				
-			} catch(InterruptedException e) {
-				
-				e.printStackTrace();
-				
-			}
-			
-		}
-		
-	}
 
 	public void die() {
 		
 		imgPath = EXPLODED_PATH;
 		
-		new Thread(new ExplosionAnimation(this)).start();
+		try {
+			
+			setImage(context.getScaledImage(ImageIO.read(new File(imgPath)), getImage().getWidth(null),
+					getImage().getHeight(null)));
+			
+		}  catch(IOException e) {
+			
+			e.printStackTrace();
+			
+		}
+	
+		isDead = true;
 		
 	}
 

@@ -8,6 +8,8 @@ import java.awt.event.MouseListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.SwingUtilities;
+
 import elements.BaseWeapon;
 import elements.CannonWeapon;
 
@@ -20,27 +22,30 @@ public class HGMouseListener implements MouseListener {
 	BaseWeapon weapon;
 	CannonWeapon cannonWeapon;
 	Timer timer;
-	
+
 	class HGCannonTimerTask extends TimerTask {
-		
+
 		int maxPower;
-		
+
 		public HGCannonTimerTask(CannonWeapon cw) {
-			
+
 			if(cw != null)
 				maxPower = cw.getMaxPower();		
-							
+
 		}
 
 		@Override
 		public void run() {
-			
-			barFill++;		
-			//System.out.println("bf:" + barFill);
-			context.cannonBar.setValue(barFill);	
-			
+
+			if (barFill < context.cannonBar.getMaximum()) {
+				barFill+=2;		
+				//System.out.println("bf:" + barFill);
+				context.cannonBar.setValue(barFill);	
+			}
+
+
 		}
-		
+
 	}
 
 	public int getX() {
@@ -84,20 +89,28 @@ public class HGMouseListener implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
-		if(weapon.getType().equals(CannonWeapon.TYPE)) {
-
-			cannonWeapon = (CannonWeapon) weapon;
+		
+		if(SwingUtilities.isLeftMouseButton(e)) {
 			
-			timer = new Timer();
-				
-			timer.scheduleAtFixedRate(new HGCannonTimerTask(cannonWeapon), 0, 20);
+			if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
-					
+				cannonWeapon = (CannonWeapon) weapon;
+
+				timer = new Timer();
+
+				timer.scheduleAtFixedRate(new HGCannonTimerTask(cannonWeapon), 0, 20);
+
+
+			} else {
+
+				weapon.setFiring(true);
+
+			}
+			
 		} else {
-
-			weapon.setFiring(true);
-
+			
+			
+			
 		}
 
 	}
@@ -105,22 +118,31 @@ public class HGMouseListener implements MouseListener {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
-		if(weapon.getType().equals(CannonWeapon.TYPE)) {
+		if(SwingUtilities.isLeftMouseButton(e)) {
 
-			context.getBaseWeapon().setFiring(true);
-			timer.cancel();
-			
-			context.getBaseWeapon().setFireSpeed(barFill);
-			barFill = 0;		
-			context.cannonBar.setValue(barFill);
-			//context.playCannonFire();
-		
-			
+			if(weapon.getType().equals(CannonWeapon.TYPE)) {
+
+				context.getBaseWeapon().setFiring(true);
+				timer.cancel();
+
+				context.getBaseWeapon().setFireSpeed(barFill);
+				barFill = 0;		
+				context.cannonBar.setValue(barFill);
+				//context.playCannonFire();
+
+
+			} else {
+
+				weapon.setFiring(false);
+
+			}
+
 		} else {
-
-			weapon.setFiring(false);
-
+			
+			
+			
 		}
+
 
 	}
 

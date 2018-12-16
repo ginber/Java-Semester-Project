@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.TimerTask;
 
@@ -36,19 +37,25 @@ public class MainFrame extends JFrame {
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 	private final String SFXFIRE_PATH = "HeavenGuard/res/music/cannonfire.wav";
-	private final String SFXONHIT_PATH = "HeavenGuard/res/music/laserhit.wav";
+	private final String SFXONHIT_PATH = "HeavenGuard/res/music/explosion.wav";
 	// Weapon of the Base in this frame, its Bullet and an EnemyShip object to create enemy ships
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
-	
+
 	private int enemyMove = 1;
+	private int score = 0;
+	private int baseHP = 100;
+	
+	private Graphics2D g2d = null;
 
 	private boolean isFired = false;
-	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
+	private boolean isMusicPlaying = false; // Music will play when the game starts as default 
 	private boolean sfx = true;
-	// A Clip object to play audio files
+	// Clip object to play audio files
 	private Clip clip = null;
+	private Clip fireClip = null;
+	private Clip collisionClip = null;
 
 	private Timer timer;
 
@@ -56,6 +63,10 @@ public class MainFrame extends JFrame {
 	private ArrayList<Bullet> bulletsOnScreen;
 	// Another one to store EnemyShip objects on the screen
 	private ArrayList<EnemyShip> shipsOnScreen;
+	// Another one to store scores for the leaderboard
+	private ArrayList<Integer> scoreList;
+	
+	private int[] houseHP = {100,100,100,100};
 	
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
@@ -68,6 +79,8 @@ public class MainFrame extends JFrame {
 	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
+
+	private MenuBar menu = null;
 
 	// If the weapon is a CannonWeapon, this JProgressBar will be shown when loading the bullet
 	JProgressBar cannonBar = null;
@@ -123,12 +136,13 @@ public class MainFrame extends JFrame {
 	}
 
 	public void createEnemy(String tag, int howMany) {
-		
+
 		for(int i = 0; i < howMany; i++) {
-			
+
 			enemyShip = new EnemyShipBuilder(this).level(1).build(tag);
+			enemyShip.setIndex(shipsOnScreen.size());
 			shipsOnScreen.add(enemyShip);
-			
+
 		}
 
 	}
@@ -198,6 +212,36 @@ public class MainFrame extends JFrame {
 
 	}
 
+	public void playFireSFX() {
+
+		if(sfx) {
+
+			fireClip.setFramePosition(0);
+			fireClip.start();
+
+		}
+
+	}
+
+	public void playCollisionSFX() {
+
+		if(sfx) {
+
+			collisionClip.setFramePosition(0);
+			collisionClip.start();
+
+		}
+
+	}
+
+	public void warning(Graphics2D g2d) {
+
+		Graphics2D graphics = g2d;
+
+		graphics.drawString("O tuþ deðil aq malý", screenWidth / 2, screenHeight / 2);
+
+	}
+
 	public MainFrame(String title) {
 
 		super(title);
@@ -221,20 +265,35 @@ public class MainFrame extends JFrame {
 
 		bulletsOnScreen = new ArrayList<>();
 		shipsOnScreen = new ArrayList<>();
+		System.out.println("ships size: " + shipsOnScreen.size());
+		menu = new MenuBar(this);
 
-		cannonBar = new JProgressBar(0, 100);
+		cannonBar = new JProgressBar(0, 110);
 
 		// Getting the audio file ready to play 
 		// This shouldn't be in playBackgroundMusic(), otherwise it will change the object
 		// that clip points out each time the method is called
 		File musicPath = new File(BGMUSIC_PATH);
-		AudioInputStream audioInput = null;
+		File fireMusicPath = new File(SFXFIRE_PATH);
+		File collisionMusicPath = new File(SFXONHIT_PATH);
+
+		AudioInputStream bgInput = null;
+		AudioInputStream fireInput = null;
+		AudioInputStream collisionInput = null;
 
 		try {
 
-			audioInput = AudioSystem.getAudioInputStream(musicPath);
+			bgInput = AudioSystem.getAudioInputStream(musicPath);
+			fireInput = AudioSystem.getAudioInputStream(fireMusicPath);
+			collisionInput = AudioSystem.getAudioInputStream(collisionMusicPath);
+
 			clip = AudioSystem.getClip();
-			clip.open(audioInput);
+			fireClip = AudioSystem.getClip();
+			collisionClip = AudioSystem.getClip();
+
+			clip.open(bgInput);
+			fireClip.open(fireInput);
+			collisionClip.open(collisionInput);
 
 		} catch (LineUnavailableException e) {
 
@@ -382,7 +441,7 @@ public class MainFrame extends JFrame {
 
 		baseWeapon.setAngle(rotationAngle);
 
-		Graphics2D g2d = (Graphics2D) getGraphics();
+		g2d = (Graphics2D) getGraphics();
 
 		// AffineTansform object to set the rotation of the Graphics object
 		AffineTransform transform = new AffineTransform();
@@ -402,36 +461,50 @@ public class MainFrame extends JFrame {
 
 		bulletX = bulletContainer.getX();
 		bulletY = bulletContainer.getY();
-		
+
 		g2d.drawImage(weaponImage, weaponX, weaponY, null);
 
 		if(baseWeapon.isFiring()) {
-			
+
 			bullet = baseWeapon.createBullet();
 			bullet.setCurrentLocation(new Point(bulletX, bulletY));
 			baseWeapon.fire();
-			
+			playFireSFX();
+
 		}	
-		
+
 		g2d.setTransform(backup);
 
 		Iterator<Bullet> bulletIterator = bulletsOnScreen.iterator();
-		
-		for(Bullet b : bulletsOnScreen) {
+
+		try {
 			
-			b.move(b.getFiredAngle(), baseWeapon.getFireSpeed());
+			for(Bullet b : bulletsOnScreen) {
+
+				if(b != null) {
+
+
+					b.move(b.getFiredAngle(), baseWeapon.getFireSpeed());
+
+					g2d.drawImage(b.getImage(), b.getCurrentLocation().x, 
+							b.getCurrentLocation().y, null);
+
+				}
+
+			}
 			
-			g2d.drawImage(b.getImage(), b.getCurrentLocation().x, 
-					b.getCurrentLocation().y, null);
-			
+		} catch(ConcurrentModificationException e) {
+
+			System.out.println("Böyle biþey yok ki");
+
 		}
-		
-		
-		
+
+
+
 		while(bulletIterator.hasNext()) {
 
 			bullet = bulletIterator.next();
-			
+
 			if(!bullet.isOnScreen() || bullet.isHit()) {
 
 				if(bulletIterator != null) {
@@ -443,14 +516,38 @@ public class MainFrame extends JFrame {
 			}  
 
 		}
-		
+
 		for(EnemyShip ship : shipsOnScreen) {
-			
+
 			if(enemyMove % 4 == 0) ship.move(); // each 120 milliseconds
-			
+
 			g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
-			
+
 		}
+
+		Iterator<EnemyShip> shipIterator = shipsOnScreen.iterator();
+
+		while(shipIterator.hasNext()) {
+
+			enemyShip = shipIterator.next();
+
+			if(enemyShip.isDead()) {
+
+				shipIterator.remove();
+				score += 50;
+			}
+
+		}
+		
+		g.setColor(Color.YELLOW);
+		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
+		g.drawString("Current Score: " + score, 1650, 30);
+		
+		for (int i = 0 ; i < houseContainers.length ; i ++ ) {
+			g.drawString("HP: %" + houseHP[i],houseContainers[i].getLocation().x + 75
+					, houseContainers[i].getLocation().y + 75);
+		}
+		
 
 	}
 
@@ -519,7 +616,7 @@ public class MainFrame extends JFrame {
 	public void setEnemyShip(EnemyShip enemyShip) {
 		this.enemyShip = enemyShip;
 	}
-	
+
 	/*
 
 	public BufferedImage getEnemyImage() {
@@ -529,11 +626,19 @@ public class MainFrame extends JFrame {
 	public void setEnemyImage(BufferedImage enemyImage) {
 		this.enemyImage = enemyImage;
 	}
-	
-	*/
+
+	 */
 
 	public boolean isSfx() {
 		return sfx;
+	}
+
+	public JLabel[] getHouseContainers() {
+		return houseContainers;
+	}
+
+	public void setHouseContainers(JLabel[] houseContainers) {
+		this.houseContainers = houseContainers;
 	}
 
 	public void setSfx(boolean sfx) {
@@ -547,8 +652,45 @@ public class MainFrame extends JFrame {
 	public void setShipsOnScreen(ArrayList<EnemyShip> shipsOnScreen) {
 		this.shipsOnScreen = shipsOnScreen;
 	}
-	
-	
+
+	public MenuBar getMenu() {
+
+		return menu;
+
+	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
+	public ArrayList<Integer> getScoreList() {
+		return scoreList;
+	}
+
+	public void setScoreList(ArrayList<Integer> scoreList) {
+		this.scoreList = scoreList;
+	}
+
+	public int getBaseHP() {
+		return baseHP;
+	}
+
+	public void setBaseHP(int baseHP) {
+		this.baseHP = baseHP;
+	}
+
+	public int[] getHouseHP() {
+		return houseHP;
+	}
+
+	public void setHouseHP(int[] houseHP) {
+		this.houseHP = houseHP;
+	}
+
 
 
 }

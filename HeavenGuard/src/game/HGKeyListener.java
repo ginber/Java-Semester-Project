@@ -45,12 +45,25 @@ public class HGKeyListener implements KeyListener {
 		
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
 			
+			MenuBar gui = context.getMenu();
+			gui.setSize(20,70);
+		
+			gui.setName("CONSOLE");
+			
+			context.requestFocus();
+			
 			if(!isPaused) {
+							
+				gui.setVisible(true);
 				
+			
 				context.getTimer().stop();
 				isPaused = true;
 				
 			} else {
+				
+				gui.dispose();
+				gui.setVisible(false);
 				
 				context.getTimer().start();
 				isPaused = false;

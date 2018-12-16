@@ -14,8 +14,8 @@ import javax.swing.ImageIcon;
 public class Bullet extends ImageIcon {
 
 	private String path;
-	private int index = 0; // index of the bullet in the ArrayList in MainFrame
-	private Point currentLocation;
+	protected int index = 0; // index of the bullet in the ArrayList in MainFrame
+	protected Point currentLocation;
 	private long timeFired=0;
 	private double firedAngle;
 	private boolean isFired = false, isHit = false;
@@ -24,7 +24,7 @@ public class Bullet extends ImageIcon {
 	private File musicPath = null;
 	private AudioInputStream audioInput = null;
 
-	private MainFrame context = null;
+	protected MainFrame context = null;
 	private BaseWeapon weapon = null;
 	private BufferedImage image = null;
 
@@ -90,14 +90,9 @@ public class Bullet extends ImageIcon {
 		if(collision()) {
 			
 			System.out.println("Enemy eliminated");
+			context.playCollisionSFX();
 			
 		}
-
-	}
-
-	public void playHitSound() {
-
-
 
 	}
 
@@ -113,7 +108,7 @@ public class Bullet extends ImageIcon {
 	public boolean isOnScreen() {
 
 		return ((context.getScreenWidth() > currentLocation.x) && (currentLocation.x > 0)
-				&& (context.getScreenHeight() > currentLocation.y) && (currentLocation.y > 0));
+				&& (context.getScreenHeight() > currentLocation.y)  );
 
 	}
 
