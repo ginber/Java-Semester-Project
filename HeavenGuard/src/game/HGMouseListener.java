@@ -37,6 +37,7 @@ public class HGMouseListener implements MouseListener {
 		@Override
 		public void run() {
 
+
 			if (barFill < context.cannonBar.getMaximum()) {
 				barFill+=2;		
 				//System.out.println("bf:" + barFill);
@@ -102,7 +103,7 @@ public class HGMouseListener implements MouseListener {
 
 
 			} else {
-
+				
 				weapon.setFiring(true);
 
 			}
@@ -117,6 +118,7 @@ public class HGMouseListener implements MouseListener {
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+
 
 		if(SwingUtilities.isLeftMouseButton(e)) {
 
