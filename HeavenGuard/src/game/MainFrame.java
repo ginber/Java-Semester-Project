@@ -38,7 +38,9 @@ public class MainFrame extends JFrame {
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 	private final String SFXFIRE_PATH = "HeavenGuard/res/music/cannonfire.wav";
 	private final String SFXONHIT_PATH = "HeavenGuard/res/music/explosion.wav";
-	// Weapon of the Base in this frame, its Bullet and an EnemyShip object to create enemy ships
+
+	// Weapon of the Base in this frame, its Bullet and an EnemyShip 
+	// object to create enemy ships
 	private BaseWeapon baseWeapon = null;
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
@@ -46,11 +48,9 @@ public class MainFrame extends JFrame {
 	private int enemyMove = 1;
 	private int score = 0;
 	private int baseHP = 100;
-	
-	private Graphics2D g2d = null;
 
-	private boolean isFired = false;
-	private boolean isMusicPlaying = false; // Music will play when the game starts as default 
+	private Graphics2D g2d = null;
+	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
 	private boolean sfx = true;
 	// Clip object to play audio files
 	private Clip clip = null;
@@ -65,9 +65,11 @@ public class MainFrame extends JFrame {
 	private ArrayList<EnemyShip> shipsOnScreen;
 	// Another one to store scores for the leaderboard
 	private ArrayList<Integer> scoreList;
-	
+
 	private int[] houseHP = {100,100,100,100};
-	
+
+	private int movingFactor = 4;
+
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
 
@@ -79,6 +81,9 @@ public class MainFrame extends JFrame {
 	JLabel firstWeaponContainer = null; // initial weapon, blueprint object for other draws
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
+	JProgressBar[] houseHealthBars = new JProgressBar[4];
+
+	JLabel scoreLabel = null;
 
 	private MenuBar menu = null;
 
@@ -190,6 +195,10 @@ public class MainFrame extends JFrame {
 		for(int i = 0; i < houseContainers.length; i++) {
 
 			houseContainers[i] = new JLabel(house);
+			houseHealthBars[i] = new JProgressBar();
+			houseHealthBars[i].setValue(houseHP[i]);
+			houseHealthBars[i].setPreferredSize(new Dimension(100, 10));
+			houseHealthBars[i].setForeground(Color.RED);
 
 		}
 
@@ -265,10 +274,16 @@ public class MainFrame extends JFrame {
 
 		bulletsOnScreen = new ArrayList<>();
 		shipsOnScreen = new ArrayList<>();
-		System.out.println("ships size: " + shipsOnScreen.size());
+		
+		scoreLabel = new JLabel();
+		scoreLabel.setForeground(Color.RED);
+		scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
+
 		menu = new MenuBar(this);
 
-		cannonBar = new JProgressBar(0, 110);
+		cannonBar = new JProgressBar(0, 100);
+		cannonBar.setPreferredSize(new Dimension(100, 8));
+		cannonBar.setForeground(Color.BLUE);
 
 		// Getting the audio file ready to play 
 		// This shouldn't be in playBackgroundMusic(), otherwise it will change the object
@@ -314,8 +329,14 @@ public class MainFrame extends JFrame {
 		createBase();
 		createHouse();
 		createWeapon("cannon");
-		createEnemy("BES", 3);
+		createEnemy("BES", 4);
 		playBackgroundMusic();
+		
+		for(EnemyShip es : shipsOnScreen) {
+			
+			backgroundContainer.add(es);
+			
+		}
 
 		timer.start(); // Self explanatory
 
@@ -335,9 +356,10 @@ public class MainFrame extends JFrame {
 
 		// Adding houses
 		constraints.gridy = 2;
-		constraints.weighty = 0;
+		constraints.weighty = 0.0;
+		constraints.weightx = 0.0;
 		constraints.anchor = GridBagConstraints.PAGE_END;
-		constraints.fill = GridBagConstraints.NONE;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 
 		constraints.gridx = 2;
 		backgroundContainer.add(baseContainer, constraints);
@@ -354,6 +376,29 @@ public class MainFrame extends JFrame {
 		constraints.gridx = 4;
 		backgroundContainer.add(houseContainers[3], constraints);
 
+		constraints.gridy = 1;
+		constraints.fill = GridBagConstraints.NONE;
+
+		for(int i = 0; i < houseHealthBars.length + 1; i++) {
+
+			if(i == 2) {
+				continue;
+			}
+
+			constraints.gridx = i;
+			
+			if(i < 2) {
+				
+				backgroundContainer.add(houseHealthBars[i], constraints);
+				
+			} else if(i > 2) {
+				
+				backgroundContainer.add(houseHealthBars[i - 1], constraints);
+				
+			}
+
+		}
+
 		constraints.gridx = 2;
 		constraints.gridy = 1;
 		constraints.weightx = 0.0;
@@ -364,7 +409,7 @@ public class MainFrame extends JFrame {
 
 		constraints.gridx = 2;
 		constraints.gridy = 1;
-		constraints.weightx = 0.5;
+		constraints.weightx = 1.0;
 		constraints.weighty = 0.5;
 		constraints.anchor = GridBagConstraints.PAGE_END;
 
@@ -372,14 +417,27 @@ public class MainFrame extends JFrame {
 
 		if(baseWeapon.getType().equals(CannonWeapon.TYPE)) {
 
-			constraints.gridx = 3;
-			constraints.weightx = 1.0;
-			constraints.anchor = GridBagConstraints.SOUTHWEST;
-
+			constraints.gridy = 1;
+			constraints.weighty = 0.4;
+			constraints.anchor = GridBagConstraints.NORTH;
 			backgroundContainer.add(cannonBar, constraints);
 
 		}
 
+		constraints.gridx = 4;
+		constraints.gridy = 0;
+		constraints.weighty = 1.0;
+		constraints.anchor = GridBagConstraints.NORTH;
+
+		backgroundContainer.add(scoreLabel, constraints);
+
+		/*
+		for(EnemyShip enemyShip : shipsOnScreen) {
+
+			backgroundContainer.add(enemyShip);
+
+		}
+		 */
 		// Kind of added everything into Content Pane, well, at least technically
 		getContentPane().add(backgroundContainer);
 
@@ -478,7 +536,7 @@ public class MainFrame extends JFrame {
 		Iterator<Bullet> bulletIterator = bulletsOnScreen.iterator();
 
 		try {
-			
+
 			for(Bullet b : bulletsOnScreen) {
 
 				if(b != null) {
@@ -492,7 +550,7 @@ public class MainFrame extends JFrame {
 				}
 
 			}
-			
+
 		} catch(ConcurrentModificationException e) {
 
 			System.out.println("Böyle biþey yok ki");
@@ -519,13 +577,18 @@ public class MainFrame extends JFrame {
 
 		for(EnemyShip ship : shipsOnScreen) {
 
-			if(enemyMove % 4 == 0) ship.move(); // each 120 milliseconds
+			if(enemyMove % movingFactor == 0 && !ship.isDead()) {
 
-			g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
+				ship.move(); // each 120 milliseconds
+
+			}
+
+			//g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
 
 		}
 
 		Iterator<EnemyShip> shipIterator = shipsOnScreen.iterator();
+
 
 		while(shipIterator.hasNext()) {
 
@@ -535,19 +598,13 @@ public class MainFrame extends JFrame {
 
 				shipIterator.remove();
 				score += 50;
+
 			}
 
 		}
 		
-		g.setColor(Color.YELLOW);
-		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
-		g.drawString("Current Score: " + score, 1650, 30);
-		
-		for (int i = 0 ; i < houseContainers.length ; i ++ ) {
-			g.drawString("HP: %" + houseHP[i],houseContainers[i].getLocation().x + 75
-					, houseContainers[i].getLocation().y + 75);
-		}
-		
+		scoreLabel.setText("Current Score: " + score);
+
 
 	}
 
@@ -616,18 +673,6 @@ public class MainFrame extends JFrame {
 	public void setEnemyShip(EnemyShip enemyShip) {
 		this.enemyShip = enemyShip;
 	}
-
-	/*
-
-	public BufferedImage getEnemyImage() {
-		return enemyImage;
-	}
-
-	public void setEnemyImage(BufferedImage enemyImage) {
-		this.enemyImage = enemyImage;
-	}
-
-	 */
 
 	public boolean isSfx() {
 		return sfx;

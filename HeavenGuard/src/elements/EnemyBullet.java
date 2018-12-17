@@ -1,14 +1,21 @@
 package elements;
 
+import java.awt.Point;
+
 import javax.swing.JLabel;
 
 import game.MainFrame;
 
 public class EnemyBullet extends Bullet {
+	
+	private int startingX, startingY;
 
 	public EnemyBullet(String path, MainFrame context) {
+		
 		super(path, context);
-		// TODO Auto-generated constructor stub
+		
+		setCurrentLocation(new Point(startingX, startingY));
+		
 	}
 
 	@Override
@@ -18,18 +25,23 @@ public class EnemyBullet extends Bullet {
 
 		for (JLabel h : context.getHouseContainers()) {
 
-			xCheck = ((h.getLocation().getX() + h.getWidth()) < getCurrentLocation().getX()
-					&& (h.getLocation().getX()) > getCurrentLocation().getX());
+			xCheck = ((h.getLocation().getX() + h.getWidth()) > getCurrentLocation().getX()
+					&& (h.getLocation().getX()) < getCurrentLocation().getX());
 
 			yCheck = ((h.getLocation().getY()) <= getCurrentLocation().getY());
+			
 		}
 
 		return xCheck && yCheck;
 	}
 
-	public void move() {
-		super.move(180, 10);
+	@Override
+	public void move(double angle, int initialSpeed) {
+		
+		double yChange = initialSpeed + getTimeFired() * 9.8;
+		
 	}
+	
 }
 
 

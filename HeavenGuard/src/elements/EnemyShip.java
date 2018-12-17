@@ -5,13 +5,15 @@ import java.io.IOException;
 import java.util.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 import game.MainFrame;
 
-public abstract class EnemyShip extends ImageIcon{
+public abstract class EnemyShip extends JLabel {
 
-	
+
 	private int health, damage, speed, level;
 	private int xPosition,yPosition;
 	private MainFrame context = null;
@@ -19,20 +21,21 @@ public abstract class EnemyShip extends ImageIcon{
 	private boolean isDead = false;
 	private EnemyShipBuilder builder = null;
 	private int index = 0;
-	
+
 	final static String EXPLODED_PATH = "HeavenGuard/res/images/spaceship1/boom.png";
-	
+
 	public EnemyShip(EnemyShipBuilder builder) {
-		
+
 		this.builder = builder;
-		
+
 		health = builder.health;
 		damage = builder.damage;
 		speed = builder.speed;
 		level = builder.lvl;
 		tag = builder.tag;
 		imgPath = builder.imgPath;	
-		
+		context = builder.context;
+
 	}
 
 	public int getHealth() {
@@ -62,16 +65,16 @@ public abstract class EnemyShip extends ImageIcon{
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	
+
 	public String getTag() {
 		return tag;
 	}
-	
+
 	public void setPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
-	
-	
+
+
 	public int getxPosition() {
 		return xPosition;
 	}
@@ -103,7 +106,7 @@ public abstract class EnemyShip extends ImageIcon{
 	public void setImgPath(String imgPath) {
 		this.imgPath = imgPath;
 	}
-	
+
 	public int getLevel() {
 		return level;
 	}
@@ -119,11 +122,11 @@ public abstract class EnemyShip extends ImageIcon{
 	public void setExplodedImgPath(String explodedImgPath) {
 		this.explodedImgPath = explodedImgPath;
 	}
-	
+
 	public EnemyShipBuilder getBuilder() {
-		
+
 		return builder;
-		
+
 	}
 
 	public int getIndex() {
@@ -133,8 +136,8 @@ public abstract class EnemyShip extends ImageIcon{
 	public void setIndex(int index) {
 		this.index = index;
 	}
-	
-	
+
+
 
 	public boolean isDead() {
 		return isDead;
@@ -148,22 +151,48 @@ public abstract class EnemyShip extends ImageIcon{
 	public abstract void move();
 
 	public void die() {
-		
+
 		imgPath = EXPLODED_PATH;
-		
-		try {
+
+
+
+		Thread explosionThread = new Thread(new Runnable() {
 			
-			setImage(context.getScaledImage(ImageIO.read(new File(imgPath)), getImage().getWidth(null),
-					getImage().getHeight(null)));
-			
-		}  catch(IOException e) {
-			
-			e.printStackTrace();
-			
-		}
-	
-		isDead = true;
-		
+			@Override
+			public void run() {
+
+				try {
+
+					if(!isDead) {
+
+						setIcon(new ImageIcon(MainFrame.getScaledImage(
+								ImageIO.read(new File(imgPath)),
+								getWidth(),
+								getHeight())));
+
+						isDead = true;
+						
+						Thread.sleep(350);
+						
+						setIcon(null);
+						
+					}
+
+				}  catch(IOException e) {
+
+					e.printStackTrace();
+
+				} catch(InterruptedException e) {
+
+					e.printStackTrace();
+
+				}
+
+			}
+		});
+
+		explosionThread.start();
+
 	}
 
 }

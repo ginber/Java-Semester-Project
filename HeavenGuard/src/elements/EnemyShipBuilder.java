@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import game.MainFrame;
 
@@ -58,7 +59,8 @@ public class EnemyShipBuilder {
 		}	
 		
 		createImage(imgPath);
-		hellBringers.setImage(shipImage);
+		//hellBringers.setImage(shipImage);
+		hellBringers.setIcon(new ImageIcon(shipImage));
 		
 	
 		

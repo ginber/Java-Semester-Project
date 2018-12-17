@@ -16,7 +16,7 @@ public class Bullet extends ImageIcon {
 	private String path;
 	protected int index = 0; // index of the bullet in the ArrayList in MainFrame
 	protected Point currentLocation;
-	private long timeFired=0;
+	private long timeFired = 0;
 	private double firedAngle;
 	private boolean isFired = false, isHit = false;
 
@@ -27,10 +27,6 @@ public class Bullet extends ImageIcon {
 	protected MainFrame context = null;
 	private BaseWeapon weapon = null;
 	private BufferedImage image = null;
-
-	public final static int RETURN_SUCCESS = 1;
-	public final static int RETURN_FAIL = 0;
-
 
 	public Bullet(String path, MainFrame context) {
 
@@ -75,7 +71,8 @@ public class Bullet extends ImageIcon {
 
 		double changeY = (initialSpeed * Math.sin(Math.toRadians(angle))) - time * 9.8;
 
-		currentLocation = new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
+		currentLocation = new Point((int) (getCurrentLocation().x + changeX), 
+				(int) (getCurrentLocation().y - changeY));
 		//	return new Point((int) (getCurrentLocation().x + changeX), (int) (getCurrentLocation().y - changeY));
 
 		/*
@@ -179,16 +176,17 @@ public class Bullet extends ImageIcon {
 		
 		for(EnemyShip e : context.getShipsOnScreen()) {
 			
-			xCheck = (currentLocation.x < e.getxPosition() + e.getImage().getWidth(null))
+			xCheck = (currentLocation.x < e.getLocation().getX() + e.getWidth())
 			&& (currentLocation.x > e.getxPosition());
 			
-			yCheck = (currentLocation.y < e.getyPosition() + e.getImage().getHeight(null))
+			yCheck = (currentLocation.y < e.getLocation().getY() + e.getHeight())
 					&& (currentLocation.y > e.getyPosition());
 			
 			if(xCheck && yCheck) {
 				
 				e.die();
 				return true;
+				
 			}
 			
 		} 

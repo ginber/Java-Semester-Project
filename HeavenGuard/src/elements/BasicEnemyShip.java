@@ -6,6 +6,7 @@ public class BasicEnemyShip extends EnemyShip {
 
 	final static String TAG = "BES";
 	final static String IMG_PATH = "HeavenGuard/res/images/spaceship1/enemy0frame0.png";
+	final static String BULLET_PATH = CannonWeapon.BULLET_PATH;
 
 
 	public BasicEnemyShip(EnemyShipBuilder builder) {
@@ -18,7 +19,7 @@ public class BasicEnemyShip extends EnemyShip {
 	@Override
 	public void fire() {
 
-
+		Bullet b = new EnemyBullet(BULLET_PATH, getBuilder().context);
 
 	}
 
@@ -29,10 +30,15 @@ public class BasicEnemyShip extends EnemyShip {
 		boolean right = (Math.random() < 0.5) ? true : false;
 		boolean up = (Math.random() < 0.5) ? true : false;
 
-		int changeX = (int) (Math.random()+1)*(getLevel()*20);
+		int changeX = (int) (Math.random() + 1) * (getLevel() * 20);
+		int changeY = (int) (Math.random() + 1) * (getLevel() * 20);
 
 		if(!right) {
 			changeX = -changeX;
+		}
+		
+		if(!up) {
+			changeY = -changeY;
 		}
 		
 		
@@ -46,7 +52,20 @@ public class BasicEnemyShip extends EnemyShip {
 			setxPosition(getxPosition() - changeX);
 			
 		}
+		
+		if(getyPosition() + changeY > 0
+				&& getyPosition() + changeY < getBuilder().context.getScreenHeight()
+				- getBuilder().context.getHouseContainers()[0].getHeight()) {
+			
+			setyPosition(getyPosition() + changeY);
+			
+		} else {
+			
+			setyPosition(getyPosition() - changeY); 
+			
+		}
 
+		setLocation(getxPosition(), getyPosition());
 
 	}
 
