@@ -5,7 +5,7 @@ import java.util.Random;
 public class BasicEnemyShip extends EnemyShip {
 
 	final static String TAG = "BES";
-	final static String IMG_PATH = "HeavenGuard/res/images/spaceship1/enemy0frame0.png";
+	final static String IMG_PATH = "HeavenGuard/res/images/spaceship1/enemy2.png";
 	final static String BULLET_PATH = CannonWeapon.BULLET_PATH;
 
 
@@ -32,7 +32,8 @@ public class BasicEnemyShip extends EnemyShip {
 
 		int changeX = (int) (Math.random() + 1) * (getLevel() * 20);
 		int changeY = (int) (Math.random() + 1) * (getLevel() * 20);
-
+		
+	
 		if(!right) {
 			changeX = -changeX;
 		}
@@ -68,8 +69,5 @@ public class BasicEnemyShip extends EnemyShip {
 		setLocation(getxPosition(), getyPosition());
 
 	}
-
-
-
 
 }

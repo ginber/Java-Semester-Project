@@ -1,8 +1,10 @@
 package game;
 
+import java.awt.Cursor;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Timer;
@@ -62,7 +64,11 @@ public class HGMouseListener implements MouseListener {
 		this.context = context;
 		weapon = context.getBaseWeapon();
 		timer = new Timer();
-
+		
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("HeavenGuard/res/images/misc/cross.png");
+		Cursor c = toolkit.createCustomCursor(image, new Point(0, 0), "img");
+		context.setCursor(c);
 	}
 
 	@Override

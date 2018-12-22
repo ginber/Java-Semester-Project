@@ -38,6 +38,7 @@ public class MainFrame extends JFrame {
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 	private final String SFXFIRE_PATH = "HeavenGuard/res/music/cannonfire.wav";
 	private final String SFXONHIT_PATH = "HeavenGuard/res/music/explosion.wav";
+	private final String CURSOR_PATH = "HeavenGuard/res/images/misc/cross.png";
 
 	// Weapon of the Base in this frame, its Bullet and an EnemyShip 
 	// object to create enemy ships
@@ -52,6 +53,8 @@ public class MainFrame extends JFrame {
 	private Graphics2D g2d = null;
 	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
 	private boolean sfx = true;
+	
+	public boolean isPaused = false;
 	// Clip object to play audio files
 	private Clip clip = null;
 	private Clip fireClip = null;
@@ -146,6 +149,8 @@ public class MainFrame extends JFrame {
 
 			enemyShip = new EnemyShipBuilder(this).level(1).build(tag);
 			enemyShip.setIndex(shipsOnScreen.size());
+			//enemyShip.setVisible(false);
+			//enemyShip.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
 			shipsOnScreen.add(enemyShip);
 
 		}
@@ -246,8 +251,9 @@ public class MainFrame extends JFrame {
 	public void warning(Graphics2D g2d) {
 
 		Graphics2D graphics = g2d;
-
-		graphics.drawString("O tuþ deðil aq malý", screenWidth / 2, screenHeight / 2);
+		graphics.setFont(new Font("Comic Sans MS", Font.PLAIN, 60));
+		graphics.setColor(Color.GREEN);
+		graphics.drawString("O tuþ deðil caným kardeþim benim", screenWidth / 2, screenHeight / 2);
 
 	}
 
@@ -274,16 +280,16 @@ public class MainFrame extends JFrame {
 
 		bulletsOnScreen = new ArrayList<>();
 		shipsOnScreen = new ArrayList<>();
-		
+
 		scoreLabel = new JLabel();
 		scoreLabel.setForeground(Color.RED);
 		scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
 
 		menu = new MenuBar(this);
 
-		cannonBar = new JProgressBar(0, 100);
+		cannonBar = new JProgressBar(0, 120);
 		cannonBar.setPreferredSize(new Dimension(100, 8));
-		cannonBar.setForeground(Color.BLUE);
+		cannonBar.setForeground(Color.CYAN);
 
 		// Getting the audio file ready to play 
 		// This shouldn't be in playBackgroundMusic(), otherwise it will change the object
@@ -331,12 +337,6 @@ public class MainFrame extends JFrame {
 		createWeapon("cannon");
 		createEnemy("BES", 4);
 		playBackgroundMusic();
-		
-		for(EnemyShip es : shipsOnScreen) {
-			
-			backgroundContainer.add(es);
-			
-		}
 
 		timer.start(); // Self explanatory
 
@@ -344,6 +344,13 @@ public class MainFrame extends JFrame {
 		// relative to each other
 		backgroundContainer.setLayout(new GridBagLayout());
 		GridBagConstraints constraints = new GridBagConstraints();
+		
+		for(EnemyShip es : shipsOnScreen) {
+
+			backgroundContainer.add(es);
+			System.out.println("EnemyShip is created at \nx = "+ es.getX() + "\ny = " + es.getY());
+
+		}
 
 		constraints.gridx = 0;
 		constraints.gridy = 0;
@@ -379,6 +386,7 @@ public class MainFrame extends JFrame {
 		constraints.gridy = 1;
 		constraints.fill = GridBagConstraints.NONE;
 
+		// Adding healthbars for houses
 		for(int i = 0; i < houseHealthBars.length + 1; i++) {
 
 			if(i == 2) {
@@ -386,15 +394,15 @@ public class MainFrame extends JFrame {
 			}
 
 			constraints.gridx = i;
-			
+
 			if(i < 2) {
-				
+
 				backgroundContainer.add(houseHealthBars[i], constraints);
-				
+
 			} else if(i > 2) {
-				
+
 				backgroundContainer.add(houseHealthBars[i - 1], constraints);
-				
+
 			}
 
 		}
@@ -418,8 +426,9 @@ public class MainFrame extends JFrame {
 		if(baseWeapon.getType().equals(CannonWeapon.TYPE)) {
 
 			constraints.gridy = 1;
-			constraints.weighty = 0.4;
-			constraints.anchor = GridBagConstraints.NORTH;
+			constraints.weightx = 0.1;
+			constraints.weighty = 0.15;
+			constraints.anchor = GridBagConstraints.EAST;
 			backgroundContainer.add(cannonBar, constraints);
 
 		}
@@ -427,6 +436,7 @@ public class MainFrame extends JFrame {
 		constraints.gridx = 4;
 		constraints.gridy = 0;
 		constraints.weighty = 1.0;
+		constraints.weightx = 1.0;
 		constraints.anchor = GridBagConstraints.NORTH;
 
 		backgroundContainer.add(scoreLabel, constraints);
@@ -575,20 +585,7 @@ public class MainFrame extends JFrame {
 
 		}
 
-		for(EnemyShip ship : shipsOnScreen) {
-
-			if(enemyMove % movingFactor == 0 && !ship.isDead()) {
-
-				ship.move(); // each 120 milliseconds
-
-			}
-
-			//g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
-
-		}
-
 		Iterator<EnemyShip> shipIterator = shipsOnScreen.iterator();
-
 
 		while(shipIterator.hasNext()) {
 
@@ -596,6 +593,7 @@ public class MainFrame extends JFrame {
 
 			if(enemyShip.isDead()) {
 
+				//backgroundContainer.remove(shipsOnScreen.get(enemyShip.getIndex()));
 				shipIterator.remove();
 				score += 50;
 
@@ -603,6 +601,19 @@ public class MainFrame extends JFrame {
 
 		}
 		
+		for(EnemyShip ship : shipsOnScreen) {
+
+			if(enemyMove % movingFactor == 0 && !ship.isDead() ) {
+
+				ship.move(); // each 120 milliseconds
+				//backgroundContainer.add(ship);
+
+			} 
+
+			//g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
+
+		}
+
 		scoreLabel.setText("Current Score: " + score);
 
 

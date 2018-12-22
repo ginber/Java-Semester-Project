@@ -36,7 +36,7 @@ public class CannonWeapon extends BaseWeapon {
 	@Override
 	public void setFireSpeed(int fireSpeed) {
 		// Fire speed was too much
-		super.setFireSpeed(fireSpeed*2/3);
+		super.setFireSpeed(fireSpeed*75/100);
 
 	}
 

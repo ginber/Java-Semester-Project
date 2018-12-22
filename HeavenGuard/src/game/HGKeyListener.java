@@ -1,5 +1,8 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -8,7 +11,6 @@ import java.awt.event.KeyListener;
 public class HGKeyListener implements KeyListener {
 	
 	MainFrame context = null;
-	private boolean isPaused = false;
 	
 	public  HGKeyListener(MainFrame context) {
 		
@@ -52,13 +54,20 @@ public class HGKeyListener implements KeyListener {
 			
 			context.requestFocus();
 			
-			if(!isPaused) {
+			if(!context.isPaused) {
 							
 				gui.setVisible(true);
 				
 			
 				context.getTimer().stop();
-				isPaused = true;
+				context.isPaused = true;
+				
+				Graphics g = context.getGraphics();
+				context.requestFocus();
+				g.setFont(new Font("Cracked Code", Font.PLAIN, context.getScreenWidth() / 12));
+				g.setColor(Color.RED);
+				
+				g.drawString("PAUSED", context.getScreenWidth() / 2 - context.getScreenWidth() / 5, context.getScreenHeight() / 2);
 				
 			} else {
 				
@@ -66,7 +75,7 @@ public class HGKeyListener implements KeyListener {
 				gui.setVisible(false);
 				
 				context.getTimer().start();
-				isPaused = false;
+				context.isPaused = false;
 				
 			}
 			

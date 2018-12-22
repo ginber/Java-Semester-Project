@@ -1,12 +1,12 @@
 package elements;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 
 import javax.imageio.ImageIO;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import game.MainFrame;
@@ -137,8 +137,6 @@ public abstract class EnemyShip extends JLabel {
 		this.index = index;
 	}
 
-
-
 	public boolean isDead() {
 		return isDead;
 	}
@@ -151,10 +149,16 @@ public abstract class EnemyShip extends JLabel {
 	public abstract void move();
 
 	public void die() {
+		
+		
 
 		imgPath = EXPLODED_PATH;
 
-
+		//move();
+		
+		System.out.println("x: " + getxPosition());
+		
+		
 
 		Thread explosionThread = new Thread(new Runnable() {
 			
@@ -164,17 +168,47 @@ public abstract class EnemyShip extends JLabel {
 				try {
 
 					if(!isDead) {
-
+						
+						System.out.println("EnemyShip position when it died: \nx = " + getX() + "\ny = " + getY());
+						
+						Point currentLocation = new Point(getxPosition(), getyPosition());				
+						
+						isDead = true;
+						
+						Image explosionImage = MainFrame.getScaledImage(
+								ImageIO.read(new File(imgPath)),
+								getWidth(),
+								getHeight());
+						
+						/*
+						
 						setIcon(new ImageIcon(MainFrame.getScaledImage(
 								ImageIO.read(new File(imgPath)),
 								getWidth(),
 								getHeight())));
-
-						isDead = true;
+								
+								
 						
-						Thread.sleep(350);
+						setIcon(getIcon());
 						
+						System.out.println("EnemyShip position after icon: \nx = " + getX() + "\ny = " + getY());
+						
+						*/
+						
+						setLocation(currentLocation);
 						setIcon(null);
+						Graphics2D g2d = (Graphics2D) context.getGraphics();
+						
+						for(int i = 0; i < 700; i++) {
+							
+							g2d.drawImage(explosionImage, currentLocation.x, currentLocation.y, null);
+							Thread.sleep(1);
+							
+						}
+						d
+						System.out.println("EnemyShip position after sleeping: \nx = " + getX() + "\ny = " + getY());
+						
+						
 						
 					}
 

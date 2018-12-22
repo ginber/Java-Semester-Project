@@ -62,12 +62,8 @@ public class EnemyShipBuilder {
 		//hellBringers.setImage(shipImage);
 		hellBringers.setIcon(new ImageIcon(shipImage));
 		
-	
-		
-		// Burasý düzeltilmeli
 		xPosition = new Random().nextInt(context.getScreenWidth() - shipImage.getWidth());
-		yPosition = new Random().nextInt(context.getScreenHeight() / 3 - shipImage.getHeight());
-		// -----------------------------------------------------------------------------------
+		yPosition = new Random().nextInt(context.getScreenHeight() / 3  - shipImage.getHeight());
 		
 		hellBringers.setxPosition(xPosition);
 		hellBringers.setyPosition(yPosition);

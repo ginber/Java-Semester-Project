@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +28,12 @@ public class MenuBar extends JFrame{
 		setAutoRequestFocus(false);
 		
 		setLayout(new FlowLayout());
+		
+		setPreferredSize(new Dimension(context.getScreenWidth() / 5, context.getScreenHeight() / 5));
+		
+		//setUndecorated(true);
+		
+		setResizable(false);
 		menubar = new JMenuBar();
 		
 		addKeyListener(new HGKeyListener(context));
@@ -117,7 +124,7 @@ public class MenuBar extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent J) {
 			
-			JOptionPane.showMessageDialog(null, "ne demek nasi oynuyoz dusmanlari vurcan iste mk");
+			JOptionPane.showMessageDialog(null, "ne demek nasi oynuyoz dusmanlari vurcan iste ");
 		}
 		
 }
