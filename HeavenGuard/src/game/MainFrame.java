@@ -32,7 +32,7 @@ import elements.*;
 public class MainFrame extends JFrame {
 
 	// Path for resources
-	private final String BG_PATH = "HeavenGuard/res/images/misc/background.png";
+	private final String BG_PATH = "HeavenGuard/res/images/misc/menu.png";
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
