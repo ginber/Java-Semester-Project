@@ -23,6 +23,7 @@ import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
@@ -53,7 +54,7 @@ public class MainFrame extends JFrame {
 	private Graphics2D g2d = null;
 	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
 	private boolean sfx = true;
-	
+
 	public boolean isPaused = false;
 	// Clip object to play audio files
 	private Clip clip = null;
@@ -85,6 +86,8 @@ public class MainFrame extends JFrame {
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
 	JProgressBar[] houseHealthBars = new JProgressBar[4];
+
+	ArrayList<JLabel> enemyBullets = new ArrayList<>();
 
 	JLabel scoreLabel = null;
 
@@ -127,6 +130,8 @@ public class MainFrame extends JFrame {
 		ImageIcon background = new ImageIcon(scaledImage);
 
 		backgroundContainer = new JLabel(background);
+
+		//backgroundContainer = new JLayeredPane();
 
 	}
 
@@ -257,209 +262,217 @@ public class MainFrame extends JFrame {
 
 	}
 
-	public MainFrame(String title) {
+	public MainFrame(String title, boolean start) {
 
-		super(title);
+		if(start) {
 
-		// Making the frame full screen
-		setExtendedState(MAXIMIZED_BOTH);
-		// Removing system buttons
-		setUndecorated(true);
 
-		// A Timer object to refresh the screen at every refreshRate milliseconds
-		timer = new Timer(refreshRate, new ActionListener() {
+			setTitle(title);
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			// Making the frame full screen
+			setExtendedState(MAXIMIZED_BOTH);
+			// Removing system buttons
+			setUndecorated(true);
 
-				repaint();
-				enemyMove++;
+			// A Timer object to refresh the screen at every refreshRate milliseconds
+			timer = new Timer(refreshRate, new ActionListener() {
 
-			}
-		});
+				@Override
+				public void actionPerformed(ActionEvent e) {
 
-		bulletsOnScreen = new ArrayList<>();
-		shipsOnScreen = new ArrayList<>();
+					repaint();
+					enemyMove++;
 
-		scoreLabel = new JLabel();
-		scoreLabel.setForeground(Color.RED);
-		scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
+				}
+			});
 
-		menu = new MenuBar(this);
+			bulletsOnScreen = new ArrayList<>();
+			shipsOnScreen = new ArrayList<>();
 
-		cannonBar = new JProgressBar(0, 120);
-		cannonBar.setPreferredSize(new Dimension(100, 8));
-		cannonBar.setForeground(Color.CYAN);
+			scoreLabel = new JLabel();
+			scoreLabel.setForeground(Color.RED);
+			scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
 
-		// Getting the audio file ready to play 
-		// This shouldn't be in playBackgroundMusic(), otherwise it will change the object
-		// that clip points out each time the method is called
-		File musicPath = new File(BGMUSIC_PATH);
-		File fireMusicPath = new File(SFXFIRE_PATH);
-		File collisionMusicPath = new File(SFXONHIT_PATH);
+			menu = new MenuBar(this);
 
-		AudioInputStream bgInput = null;
-		AudioInputStream fireInput = null;
-		AudioInputStream collisionInput = null;
+			cannonBar = new JProgressBar(0, 120);
+			cannonBar.setPreferredSize(new Dimension(100, 8));
+			cannonBar.setForeground(Color.CYAN);
 
-		try {
+			// Getting the audio file ready to play 
+			// This shouldn't be in playBackgroundMusic(), otherwise it will change the object
+			// that clip points out each time the method is called
+			File musicPath = new File(BGMUSIC_PATH);
+			File fireMusicPath = new File(SFXFIRE_PATH);
+			File collisionMusicPath = new File(SFXONHIT_PATH);
 
-			bgInput = AudioSystem.getAudioInputStream(musicPath);
-			fireInput = AudioSystem.getAudioInputStream(fireMusicPath);
-			collisionInput = AudioSystem.getAudioInputStream(collisionMusicPath);
+			AudioInputStream bgInput = null;
+			AudioInputStream fireInput = null;
+			AudioInputStream collisionInput = null;
 
-			clip = AudioSystem.getClip();
-			fireClip = AudioSystem.getClip();
-			collisionClip = AudioSystem.getClip();
+			try {
 
-			clip.open(bgInput);
-			fireClip.open(fireInput);
-			collisionClip.open(collisionInput);
+				bgInput = AudioSystem.getAudioInputStream(musicPath);
+				fireInput = AudioSystem.getAudioInputStream(fireMusicPath);
+				collisionInput = AudioSystem.getAudioInputStream(collisionMusicPath);
 
-		} catch (LineUnavailableException e) {
+				clip = AudioSystem.getClip();
+				fireClip = AudioSystem.getClip();
+				collisionClip = AudioSystem.getClip();
 
-			System.out.println("Could not retrieve the audio system line");
+				clip.open(bgInput);
+				fireClip.open(fireInput);
+				collisionClip.open(collisionInput);
 
-		} catch (IOException e) {
+			} catch (LineUnavailableException e) {
 
-			System.out.println("Could not load music from audio file");
+				System.out.println("Could not retrieve the audio system line");
 
-		} catch (UnsupportedAudioFileException e) {
+			} catch (IOException e) {
 
-			System.out.println("Audio file is not supported in your system");
+				System.out.println("Could not load music from audio file");
 
-		}
+			} catch (UnsupportedAudioFileException e) {
 
-		// Creating the environment & playing the music
-		createBackground();
-		createBase();
-		createHouse();
-		createWeapon("cannon");
-		createEnemy("BES", 4);
-		playBackgroundMusic();
-
-		timer.start(); // Self explanatory
-
-		// GridBagLayout is useful when adding many objects that are positioned 
-		// relative to each other
-		backgroundContainer.setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		
-		for(EnemyShip es : shipsOnScreen) {
-
-			backgroundContainer.add(es);
-			System.out.println("EnemyShip is created at \nx = "+ es.getX() + "\ny = " + es.getY());
-
-		}
-
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		constraints.weightx = 1.0;
-		constraints.weighty = 1.0;
-		constraints.fill = GridBagConstraints.BOTH;
-
-		// Should have added everything to Content Pane instead of a container image, but too late
-		backgroundContainer.add(Box.createGlue(), constraints); // Dummy object for GridBagLayout
-
-		// Adding houses
-		constraints.gridy = 2;
-		constraints.weighty = 0.0;
-		constraints.weightx = 0.0;
-		constraints.anchor = GridBagConstraints.PAGE_END;
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-
-		constraints.gridx = 2;
-		backgroundContainer.add(baseContainer, constraints);
-
-		constraints.gridx = 0;
-		backgroundContainer.add(houseContainers[0], constraints);
-
-		constraints.gridx = 1;
-		backgroundContainer.add(houseContainers[1], constraints);
-
-		constraints.gridx = 3;
-		backgroundContainer.add(houseContainers[2], constraints);
-
-		constraints.gridx = 4;
-		backgroundContainer.add(houseContainers[3], constraints);
-
-		constraints.gridy = 1;
-		constraints.fill = GridBagConstraints.NONE;
-
-		// Adding healthbars for houses
-		for(int i = 0; i < houseHealthBars.length + 1; i++) {
-
-			if(i == 2) {
-				continue;
-			}
-
-			constraints.gridx = i;
-
-			if(i < 2) {
-
-				backgroundContainer.add(houseHealthBars[i], constraints);
-
-			} else if(i > 2) {
-
-				backgroundContainer.add(houseHealthBars[i - 1], constraints);
+				System.out.println("Audio file is not supported in your system");
 
 			}
 
-		}
+			// Creating the environment & playing the music
+			createBackground();
+			createBase();
+			createHouse();
+			createWeapon("cannon");
+			createEnemy("BES", 4);
+			playBackgroundMusic();
 
-		constraints.gridx = 2;
-		constraints.gridy = 1;
-		constraints.weightx = 0.0;
-		constraints.weighty = 0.5;
-		constraints.anchor = GridBagConstraints.SOUTH;
+			timer.start(); // Self explanatory
 
-		backgroundContainer.add(bulletContainer, constraints);
+			// GridBagLayout is useful when adding many objects that are positioned 
+			// relative to each other
+			backgroundContainer.setLayout(new GridBagLayout());
 
-		constraints.gridx = 2;
-		constraints.gridy = 1;
-		constraints.weightx = 1.0;
-		constraints.weighty = 0.5;
-		constraints.anchor = GridBagConstraints.PAGE_END;
 
-		backgroundContainer.add(firstWeaponContainer, constraints);
+			GridBagConstraints constraints = new GridBagConstraints();
 
-		if(baseWeapon.getType().equals(CannonWeapon.TYPE)) {
+			for(EnemyShip es : shipsOnScreen) {
+
+				backgroundContainer.add(es);
+
+				System.out.println("EnemyShip is created at \nx = "+ es.getX() + "\ny = " + es.getY());
+
+			}
+
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			constraints.weightx = 1.0;
+			constraints.weighty = 1.0;
+			constraints.fill = GridBagConstraints.BOTH;
+
+			// Should have added everything to Content Pane instead of a container image, but too late
+			backgroundContainer.add(Box.createGlue(), constraints); // Dummy object for GridBagLayout
+
+			// Adding houses
+			constraints.gridy = 2;
+			constraints.weighty = 0.0;
+			constraints.weightx = 0.0;
+			constraints.anchor = GridBagConstraints.PAGE_END;
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+
+			constraints.gridx = 2;
+			backgroundContainer.add(baseContainer, constraints);
+
+			constraints.gridx = 0;
+			backgroundContainer.add(houseContainers[0], constraints);
+
+			constraints.gridx = 1;
+			backgroundContainer.add(houseContainers[1], constraints);
+
+			constraints.gridx = 3;
+			backgroundContainer.add(houseContainers[2], constraints);
+
+			constraints.gridx = 4;
+			backgroundContainer.add(houseContainers[3], constraints);
 
 			constraints.gridy = 1;
-			constraints.weightx = 0.1;
-			constraints.weighty = 0.15;
-			constraints.anchor = GridBagConstraints.EAST;
-			backgroundContainer.add(cannonBar, constraints);
+			constraints.fill = GridBagConstraints.NONE;
 
-		}
+			// Adding healthbars for houses
+			for(int i = 0; i < houseHealthBars.length + 1; i++) {
 
-		constraints.gridx = 4;
-		constraints.gridy = 0;
-		constraints.weighty = 1.0;
-		constraints.weightx = 1.0;
-		constraints.anchor = GridBagConstraints.NORTH;
+				if(i == 2) {
+					continue;
+				}
 
-		backgroundContainer.add(scoreLabel, constraints);
+				constraints.gridx = i;
 
-		/*
+				if(i < 2) {
+
+					backgroundContainer.add(houseHealthBars[i], constraints);
+
+				} else if(i > 2) {
+
+					backgroundContainer.add(houseHealthBars[i - 1], constraints);
+
+				}
+
+			}
+
+			constraints.gridx = 2;
+			constraints.gridy = 1;
+			constraints.weightx = 0.0;
+			constraints.weighty = 0.5;
+			constraints.anchor = GridBagConstraints.SOUTH;
+
+			backgroundContainer.add(bulletContainer, constraints);
+
+			constraints.gridx = 2;
+			constraints.gridy = 1;
+			constraints.weightx = 1.0;
+			constraints.weighty = 0.5;
+			constraints.anchor = GridBagConstraints.PAGE_END;
+
+			backgroundContainer.add(firstWeaponContainer, constraints);
+
+			if(baseWeapon.getType().equals(CannonWeapon.TYPE)) {
+
+				constraints.gridy = 1;
+				constraints.weightx = 0.1;
+				constraints.weighty = 0.15;
+				constraints.anchor = GridBagConstraints.EAST;
+				backgroundContainer.add(cannonBar, constraints);
+
+			}
+
+			constraints.gridx = 4;
+			constraints.gridy = 0;
+			constraints.weighty = 1.0;
+			constraints.weightx = 1.0;
+			constraints.anchor = GridBagConstraints.NORTH;
+
+			backgroundContainer.add(scoreLabel, constraints);
+
+			/*
 		for(EnemyShip enemyShip : shipsOnScreen) {
 
 			backgroundContainer.add(enemyShip);
 
 		}
-		 */
-		// Kind of added everything into Content Pane, well, at least technically
-		getContentPane().add(backgroundContainer);
+			 */
+			// Kind of added everything into Content Pane, well, at least technically
+			getContentPane().add(backgroundContainer);
 
-		pack();
+			pack();
 
-		// Adding listeners
-		addMouseListener(new HGMouseListener(this));
-		addMouseMotionListener(listener);
-		addKeyListener(new HGKeyListener(this));
+			// Adding listeners
+			addMouseListener(new HGMouseListener(this));
+			addMouseMotionListener(listener);
+			addKeyListener(new HGKeyListener(this));
 
-		// Making the frame visible
-		setVisible(true);
+			// Making the frame visible
+			setVisible(true);
+
+		}
 
 	}
 
@@ -569,6 +582,8 @@ public class MainFrame extends JFrame {
 
 
 
+
+
 		while(bulletIterator.hasNext()) {
 
 			bullet = bulletIterator.next();
@@ -599,18 +614,31 @@ public class MainFrame extends JFrame {
 
 			}
 
+			if(enemyMove % 20 == 0) {
+
+				enemyShip.fire();
+
+			}
+
 		}
-		
+
 		for(EnemyShip ship : shipsOnScreen) {
 
 			if(enemyMove % movingFactor == 0 && !ship.isDead() ) {
 
 				ship.move(); // each 120 milliseconds
+				//System.out.println("EnemyShip moved");
 				//backgroundContainer.add(ship);
 
 			} 
 
 			//g2d.drawImage(ship.getImage(), ship.getxPosition(), ship.getyPosition(), null);
+
+		}
+
+		for(JLabel eb : enemyBullets) {
+
+
 
 		}
 
@@ -746,6 +774,24 @@ public class MainFrame extends JFrame {
 	public void setHouseHP(int[] houseHP) {
 		this.houseHP = houseHP;
 	}
+
+	public JLabel getBackgroundContainer() {
+		return backgroundContainer;
+	}
+
+	public void setBackgroundContainer(JLabel backgroundContainer) {
+		this.backgroundContainer = backgroundContainer;
+	}
+
+	public ArrayList<JLabel> getEnemyBullets() {
+		return enemyBullets;
+	}
+
+	public void setEnemyBullets(ArrayList<JLabel> enemyBullets) {
+		this.enemyBullets = enemyBullets;
+	}
+
+
 
 
 

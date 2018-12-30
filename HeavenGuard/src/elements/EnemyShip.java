@@ -1,12 +1,15 @@
 package elements;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import game.MainFrame;
@@ -169,16 +172,32 @@ public abstract class EnemyShip extends JLabel {
 
 					if(!isDead) {
 						
+						/*
 						System.out.println("EnemyShip position when it died: \nx = " + getX() + "\ny = " + getY());
 						
-						Point currentLocation = new Point(getxPosition(), getyPosition());				
+										
+						
+						
+						*/
+						
+						
 						
 						isDead = true;
 						
-						Image explosionImage = MainFrame.getScaledImage(
+						Point currentLocation = new Point(getxPosition(), getyPosition());
+						
+						
+						
+						//mmmmmsetSize(new Dimension(0, 0));
+						
+						BufferedImage explosionImage = (BufferedImage) MainFrame.getScaledImage(
 								ImageIO.read(new File(imgPath)),
 								getWidth(),
 								getHeight());
+						
+						setIcon(new ImageIcon(explosionImage));
+						
+						setLocation(currentLocation);
 						
 						/*
 						
@@ -194,9 +213,11 @@ public abstract class EnemyShip extends JLabel {
 						System.out.println("EnemyShip position after icon: \nx = " + getX() + "\ny = " + getY());
 						
 						*/
+						/*
 						
-						setLocation(currentLocation);
-						setIcon(null);
+						//setSize(new Dimension(0, 0));
+						 
+						 
 						Graphics2D g2d = (Graphics2D) context.getGraphics();
 						
 						for(int i = 0; i < 700; i++) {
@@ -205,9 +226,13 @@ public abstract class EnemyShip extends JLabel {
 							Thread.sleep(1);
 							
 						}
-						d
-						System.out.println("EnemyShip position after sleeping: \nx = " + getX() + "\ny = " + getY());
 						
+						System.out.println("EnemyShip position after sleeping: \nx = " + getX() + "\ny = " + getY());
+						*/
+						
+						Thread.sleep(500);
+						
+						setIcon(null);
 						
 						
 					}

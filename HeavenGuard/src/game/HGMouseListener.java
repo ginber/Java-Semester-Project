@@ -97,7 +97,7 @@ public class HGMouseListener implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
-		if(SwingUtilities.isLeftMouseButton(e) && !SwingUtilities.isRightMouseButton(e)) {
+		if(SwingUtilities.isLeftMouseButton(e) && !SwingUtilities.isRightMouseButton(e) && !context.isPaused) {
 			
 			if(weapon.getType().equals(CannonWeapon.TYPE)) {
 
@@ -126,7 +126,7 @@ public class HGMouseListener implements MouseListener {
 	public void mouseReleased(MouseEvent e) {
 
 
-		if(SwingUtilities.isLeftMouseButton(e) && !SwingUtilities.isRightMouseButton(e)) {
+		if(SwingUtilities.isLeftMouseButton(e) && !SwingUtilities.isRightMouseButton(e) && !context.isPaused) {
 
 			if(weapon.getType().equals(CannonWeapon.TYPE)) {
 

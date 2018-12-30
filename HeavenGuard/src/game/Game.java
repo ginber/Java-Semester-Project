@@ -14,7 +14,7 @@ public class Game {
 			@Override
 			public void run() {
 				
-				new MainFrame(NAME);
+				new MainMenu(new MainFrame(NAME, false), NAME);
 				
 			}
 			
