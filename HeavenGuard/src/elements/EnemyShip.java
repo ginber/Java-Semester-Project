@@ -226,7 +226,10 @@ public abstract class EnemyShip extends JLabel {
 							Thread.sleep(1);
 							
 						}
+<<<<<<< HEAD
 						
+=======
+>>>>>>> fbf8728e2123a7d4f6ed81f34ba358f3ce77b414
 						System.out.println("EnemyShip position after sleeping: \nx = " + getX() + "\ny = " + getY());
 						*/
 						
