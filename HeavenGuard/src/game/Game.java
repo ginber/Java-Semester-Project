@@ -20,7 +20,7 @@ public class Game {
 			public void run() {
 				
 				
-				new MainMenu();
+				new MainMenu(new MainFrame(NAME),NAME);
 				//new MainFrame(NAME);
 				
 			}

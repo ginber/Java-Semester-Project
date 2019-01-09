@@ -114,7 +114,7 @@ public class MainMenu extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				newGame = new MainFrame(title, true);
+				newGame = new MainFrame(title);
 				
 			}
 		});
