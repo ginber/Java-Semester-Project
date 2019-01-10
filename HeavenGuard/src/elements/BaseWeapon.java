@@ -1,21 +1,13 @@
 package elements;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
-import javax.imageio.ImageIO;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
-import game.MainFrame;
+import javax.swing.JLabel;
 
 
 public abstract class BaseWeapon extends ImageIcon {

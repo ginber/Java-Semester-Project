@@ -1,5 +1,6 @@
 package elements;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 
@@ -22,16 +23,29 @@ public class BasicEnemyShip extends EnemyShip {
 	@Override
 	public void fire() {
 		
-		System.out.println("Enemy firing!!!");
-		
-		Graphics2D g2d = (Graphics2D) getBuilder().context.getGraphics();
-		int xPos, yPos;
+		System.out.println("Enemy firing!!!");		
 		
 		Thread enemyFireThread = new Thread(new Runnable() {
 			
+			Graphics2D g2d = (Graphics2D) getBuilder().context.getGraphics();
+			int xPos, yPos, changeY = 0;
+			int bulletCount = 0;
+			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
+				
+				xPos = getxPosition();
+				yPos = getyPosition() + 10 + changeY;
+				g2d.setColor(Color.CYAN);
+				g2d.fillOval(xPos, yPos, 10, 10);
+				
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				changeY++;
 				
 			}
 		});

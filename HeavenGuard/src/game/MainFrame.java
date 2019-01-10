@@ -145,7 +145,7 @@ public class MainFrame extends JFrame {
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 		bulletContainer = new JLabel(bullet);
-
+		
 	}
 
 	public void createEnemy(String tag, int howMany) {
