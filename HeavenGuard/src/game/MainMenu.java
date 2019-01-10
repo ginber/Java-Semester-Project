@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,9 +31,16 @@ public class MainMenu extends JFrame {
 	private JLabel Exit = null;
 	private MainFrame Context = null;
 	
-	private final String NEWGAME_PATH = "HeavenGuard/res/images/misc/bring 'em on.jpg";
+	private final String NEWGAME_PATH = "HeavenGuard/res/images/misc/play.png";
+	private final String LEADERBOARD_PATH = "HeavenGuard/res/images/misc/leaderboard.png";
+	private final String SETTINGS_PATH = "HeavenGuard/res/images/misc/settings.png";
+	private final String EXIT_PATH = "HeavenGuard/res/images/misc/exit.png";
+	private final String NEWGAME_FOCUSED = "HeavenGuard/res/images/misc/playF.png";
+	private final String LEADERBOARD_FOCUSED = "HeavenGuard/res/images/misc/leaderboardF.png";
+	private final String SETTINGS_FOCUSED = "HeavenGuard/res/images/misc/settingsF.png";
+	private final String EXIT_FOCUSED = "HeavenGuard/res/images/misc/exitF.png";
 	
-	private final String MenuBG_PATH = "HeavenGuard/res/images/misc/background.png";
+	private final String MenuBG_PATH = "HeavenGuard/res/images/misc/menu.png";
 
 	JLabel backgroundContainer = null;
 
@@ -81,11 +89,12 @@ public class MainMenu extends JFrame {
 
 		ImageIcon newGameIcon = new ImageIcon(scaledImage);
 
-		JLabel NewGame = new JLabel(newGameIcon);
+		NewGame = new JLabel(newGameIcon);
 		
 		NewGame.addMouseListener(new MouseListener() {
 			
-			MainFrame newGame;
+			MainFrame game;
+			BufferedImage newImage;
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -102,42 +111,112 @@ public class MainMenu extends JFrame {
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
+				try {
+
+					newImage = ImageIO.read(new File(NEWGAME_PATH));
+
+				} catch(IOException e1) {
+
+					System.out.println("Could not load background");
+
+				}
+
+				Image scaledImage = getScaledImage(newImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+				ImageIcon newGameIcon = new ImageIcon(scaledImage);
+
+				NewGame.setIcon(newGameIcon);
 				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
+				try {
+
+					newImage = ImageIO.read(new File(NEWGAME_FOCUSED));
+
+				} catch(IOException el) {
+
+					System.out.println("Could not load background");
+
+				}
+
+				Image scaledImage = getScaledImage(newImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+				ImageIcon newGameIcon = new ImageIcon(scaledImage);
+
+				NewGame.setIcon(newGameIcon);
 				
 			}
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				newGame = new MainFrame(title);
+
+				game = new MainFrame(title, true);
+
 				
 			}
 		});
 
-		Settings = new JLabel("Settings");
-		Settings.setForeground(Color.GREEN);
-		Settings.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
-		Settings.setOpaque(true);
-		Settings.setBackground(Color.RED);
+		BufferedImage settingsImage = null;
 
-		Leaderboard =  new JLabel("Better than you-list");
-		Leaderboard.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
-		Leaderboard.setForeground(Color.MAGENTA);
-		Leaderboard.setOpaque(true);
-		Leaderboard.setBackground(Color.RED);
+		try {
 
-		Exit = new JLabel("Abandon your people");
-		Exit.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
-		Exit.setForeground(Color.RED);
-		Exit.setOpaque(true);
-		Exit.setBackground(Color.RED);
+			settingsImage = ImageIO.read(new File(SETTINGS_PATH));
+
+		} catch(IOException e) {
+
+			System.out.println("Could not load background");
+
+		}
+
+		scaledImage = getScaledImage(settingsImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+		ImageIcon settingsIcon = new ImageIcon(scaledImage);
+		
+		Settings = new JLabel(settingsIcon);
+
+		BufferedImage leaderboardImage = null;
+
+		try {
+
+			leaderboardImage = ImageIO.read(new File(LEADERBOARD_PATH));
+
+		} catch(IOException e) {
+
+			System.out.println("Could not load background");
+
+		}
+
+		scaledImage = getScaledImage(leaderboardImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+		ImageIcon leaderboardIcon = new ImageIcon(scaledImage);
+		
+		Leaderboard =  new JLabel(leaderboardIcon);
+		
+		BufferedImage exitImage = null;
+		
+		try {
+
+			exitImage = ImageIO.read(new File(EXIT_PATH));
+
+		} catch(IOException el) {
+
+			System.out.println("Could not load background");
+
+		}
+
+		scaledImage = getScaledImage(exitImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+		ImageIcon exitIcon = new ImageIcon(scaledImage);
+
+		Exit = new JLabel(exitIcon);
 		
 		Exit.addMouseListener(new MouseListener() {
+			
+			BufferedImage newImage = null;
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -153,13 +232,43 @@ public class MainMenu extends JFrame {
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
+				try {
+
+					newImage = ImageIO.read(new File(EXIT_PATH));
+
+				} catch(IOException el) {
+
+					System.out.println("Could not load background");
+
+				}
+
+				Image scaledImage = getScaledImage(newImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+				ImageIcon newGameIcon = new ImageIcon(scaledImage);
+
+				Exit.setIcon(newGameIcon);
 				
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
+				
+				try {
+
+					newImage = ImageIO.read(new File(EXIT_FOCUSED));
+
+				} catch(IOException el) {
+
+					System.out.println("Could not load background");
+
+				}
+
+				Image newScaledImage = getScaledImage(newImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+				ImageIcon exitIcon = new ImageIcon(newScaledImage);
+
+				Exit.setIcon(exitIcon);
 				
 			}
 			

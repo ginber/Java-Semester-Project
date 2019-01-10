@@ -1,6 +1,9 @@
 package elements;
 
-import java.util.Random;
+import java.awt.Graphics2D;
+import java.awt.Point;
+
+import javax.swing.JLabel;
 
 public class BasicEnemyShip extends EnemyShip {
 
@@ -18,8 +21,28 @@ public class BasicEnemyShip extends EnemyShip {
 
 	@Override
 	public void fire() {
+		
+		System.out.println("Enemy firing!!!");
+		
+		Graphics2D g2d = (Graphics2D) getBuilder().context.getGraphics();
+		int xPos, yPos;
+		
+		Thread enemyFireThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		enemyFireThread.start();
 
-		Bullet b = new EnemyBullet(BULLET_PATH, getBuilder().context);
+		
+		
+		
+		
+		//g2d.drawOval(xPos, yPos, 3, 10);
 
 	}
 
@@ -33,7 +56,6 @@ public class BasicEnemyShip extends EnemyShip {
 		int changeX = (int) (Math.random() + 1) * (getLevel() * 20);
 		int changeY = (int) (Math.random() + 1) * (getLevel() * 20);
 		
-	
 		if(!right) {
 			changeX = -changeX;
 		}
