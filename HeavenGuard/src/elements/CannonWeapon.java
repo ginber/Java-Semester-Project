@@ -36,7 +36,7 @@ public class CannonWeapon extends BaseWeapon {
 	@Override
 	public void setFireSpeed(int fireSpeed) {
 		// Fire speed was too much
-		super.setFireSpeed(fireSpeed*75/100);
+		super.setFireSpeed(fireSpeed * 3 / 4);
 
 	}
 
@@ -53,7 +53,7 @@ public class CannonWeapon extends BaseWeapon {
 
 		getBuilder().context.getBulletsOnScreen().add(bullet);
 
-		System.out.println("ateþleme açýsý: " + getAngle());
+		//System.out.println("ateþleme açýsý: " + getAngle());
 
 		setFiring(false);
 

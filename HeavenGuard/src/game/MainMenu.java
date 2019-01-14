@@ -155,6 +155,8 @@ public class MainMenu extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 
 				game = new MainFrame(title, true);
+				
+				dispose();
 
 				
 			}
@@ -274,6 +276,8 @@ public class MainMenu extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
+				dispose();
 				System.exit(0);
 				
 			}

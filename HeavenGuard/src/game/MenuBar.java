@@ -17,9 +17,10 @@ import javax.swing.JOptionPane;
 
 public class MenuBar extends JFrame{
 	JMenuBar menubar;
-	JMenu file;
-	JMenuItem exit, leaderboards, mutesfx, mutemusic, howtoplay;
+	JMenu file, asd,bo;
+	JMenuItem exit, leaderboards, mutesfx, mutemusic, howtoplay, upgrade1, upgrade2, upgrade3, ayylmao, asdasd;
 	MainFrame context = null;
+	
 	
 	public MenuBar(MainFrame context) {
 		
@@ -29,7 +30,7 @@ public class MenuBar extends JFrame{
 		
 		setLayout(new FlowLayout());
 		
-		setPreferredSize(new Dimension(context.getScreenWidth() / 5, context.getScreenHeight() / 5));
+		setPreferredSize(new Dimension(context.getScreenWidth() / 4, context.getScreenHeight() / 5));
 		
 		//setUndecorated(true);
 		
@@ -43,16 +44,30 @@ public class MenuBar extends JFrame{
 		
 		file = new JMenu("Options");
 		menubar.add(file);
+		asd = new JMenu("Upgrades");
+		menubar.add(asd);
+		bo = new JMenu("Weapons");
+		menubar.add(bo);
+		
+		upgrade1 = new JMenuItem("Upgrade Weapon");
+		upgrade2 = new JMenuItem("Upgrade Houses");
+		upgrade3 = new JMenuItem("Upgrade Base");
+		ayylmao = new JMenuItem("Show Status");
+		
+		asd.add(ayylmao);
+		asd.add(upgrade1);
+		asd.add(upgrade2);
+		asd.add(upgrade3);
 		
 		
 		
-		leaderboards = new JMenuItem("LeaderBoards");
+		leaderboards = new JMenuItem("High Score");
 		file.add(leaderboards);
 		
-		mutemusic = new JMenuItem("Mute Music");
+		mutemusic = new JMenuItem("Toggle Music");
 		file.add(mutemusic);
 		
-		mutesfx = new JMenuItem("Mute SFX");
+		mutesfx = new JMenuItem("Toggle SFX");
 		file.add(mutesfx);
 		
 		
@@ -78,6 +93,32 @@ public class MenuBar extends JFrame{
 		event5 J = new event5();
 		howtoplay.addActionListener(J);
 		
+		event6 k = new event6();
+		upgrade1.addActionListener(k);
+		
+		event7 l = new event7();
+		upgrade2.addActionListener(l);
+		
+		event8 m = new event8();
+		upgrade3.addActionListener(m);
+		
+		event10 z = new event10();
+		ayylmao.addActionListener(z);
+		
+		
+		asdasd = new JMenuItem(context.getCurrent());
+		bo.add(asdasd);
+		event11 b = new event11();
+		asdasd.addActionListener(b);
+		
+		
+	}
+	
+	public void editmenu() {
+		if (!context.getCurrent().equals("Buy Machine Gun")) {
+			menubar.remove(bo);
+			menubar.revalidate();
+		}
 	}
 	
 
@@ -96,7 +137,7 @@ public class MenuBar extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent f) {
 			
-			JOptionPane.showMessageDialog(null, "dogukan birinci ne sandin bebek");
+			JOptionPane.showMessageDialog(null, "Highest Score: " + context.berkaysinirlenme);
 		}
 		
 }
@@ -105,7 +146,12 @@ public class MenuBar extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent g) {
 			
-			//closesfx
+			if (context.isSfx()) {
+				context.setSfx(false);
+			}
+			else if (!context.isSfx()) {
+				context.setSfx(true);
+			}
 		
 		}
 		
@@ -115,7 +161,8 @@ public class MenuBar extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent h) {
 			
-			//closemusic
+			context.setMusicPlaying(!context.isMusicPlaying());
+			context.playBackgroundMusic();
 		}
 		
 }
@@ -124,7 +171,86 @@ public class MenuBar extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent J) {
 			
-			JOptionPane.showMessageDialog(null, "ne demek nasi oynuyoz dusmanlari vurcan iste ");
+			JOptionPane.showMessageDialog(null, "Aim with mouse, shoot with left click");
+		}
+		
+}
+	public class event6 implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent k) {
+			int upgradecost = (int) ((context.weaponlevel*300)/(context.weaponlevel + 3));
+			int input = JOptionPane.showConfirmDialog(null, "Upgrade weapon for " + upgradecost + " kebaboins?" );
+			if (input == 0 && context.kebaboins >= upgradecost ) {
+				context.kebaboins -= upgradecost;
+				context.weaponlevel++;
+			}
+			else if (input == 0 && context.kebaboins < upgradecost ) {
+				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
+			}
+		
+			
+		}
+		
+}
+	public class event7 implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent l) {
+			
+			int upgradecost = (int) ((context.houselevel*200)/(context.houselevel + 3));
+			int input = JOptionPane.showConfirmDialog(null, "Upgrade houses for " + upgradecost + " kebaboins?" );
+			if (input == 0 && context.kebaboins >= upgradecost ) {
+				context.kebaboins -= upgradecost;
+				context.houselevel++;
+			}
+			else if (input == 0 && context.kebaboins < upgradecost ) {
+				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
+			}
+		}
+		
+}
+	public class event8 implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent m) {
+			
+			int upgradecost = (int) ((context.baselevel*500)/(context.baselevel + 2));
+			int input = JOptionPane.showConfirmDialog(null, "Upgrade base for " + upgradecost + " kebaboins?" );
+			if (input == 0 && context.kebaboins >= upgradecost ) {
+				context.kebaboins -= upgradecost;
+				context.baselevel++;
+			}
+			else if (input == 0 && context.kebaboins < upgradecost ) {
+				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
+			}
+		}
+		
+}
+	public class event10 implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent z) {
+			
+			JOptionPane.showMessageDialog(null, "STATUS\nWeapon Level: " + context.weaponlevel 
+					+ "\nHouse Level: " + context.houselevel + "\nBase Level: " + context.baselevel);
+		}
+		
+}
+	public class event11 implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent b) {
+			
+			int upgradecost = 3000;
+			int input = JOptionPane.showConfirmDialog(null, "Buy machine gun for " + upgradecost + " kebaboins?" );
+			if (input == 0 && context.kebaboins >= upgradecost ) {
+				context.kebaboins -= upgradecost;
+				context.setCurrent("Machine Gun Sold");
+			}
+			else if (input == 0 && context.kebaboins < upgradecost ) {
+				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
+			}
 		}
 		
 }

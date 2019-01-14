@@ -6,10 +6,15 @@ import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.Random;
+import java.util.Scanner;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
@@ -40,6 +45,13 @@ public class MainFrame extends JFrame {
 	private final String SFXFIRE_PATH = "HeavenGuard/res/music/cannonfire.wav";
 	private final String SFXONHIT_PATH = "HeavenGuard/res/music/explosion.wav";
 	private final String CURSOR_PATH = "HeavenGuard/res/images/misc/cross.png";
+	private final String TRIPLEKILL_PATH = "HeavenGuard/res/music/triplekill.wav";
+	private final String QUADRAKILL_PATH = "HeavenGuard/res/music/quadrakill.wav";
+	private final String PENTAKILL_PATH = "HeavenGuard/res/music/pentakill.wav";
+	private final String LEGENDARY_PATH = "HeavenGuard/res/music/legendary.wav";
+	private final String DOUBLEKILL_PATH = "HeavenGuard/res/music/doublekill.wav";
+
+
 
 	// Weapon of the Base in this frame, its Bullet and an EnemyShip 
 	// object to create enemy ships
@@ -50,9 +62,18 @@ public class MainFrame extends JFrame {
 	private int enemyMove = 1;
 	private int score = 0;
 	private int baseHP = 100;
+	private int kebaboinadder = 0, combo = 0;
+	private int gridDetected;
+
+	public int kebaboins = 0, baselevel = 1, houselevel = 1, weaponlevel = 1,prevHighScore;
+
+	public boolean secondWeaponAvailable = false;
+
+	public String berkaysinirlenme = "";
+	public String current = "Buy Machine Gun";
 
 	private Graphics2D g2d = null;
-	private boolean isMusicPlaying = true; // Music will play when the game starts as default 
+	private boolean isMusicPlaying = false; // Music won't play when the game starts as default 
 	private boolean sfx = true;
 
 	public boolean isPaused = false;
@@ -60,6 +81,11 @@ public class MainFrame extends JFrame {
 	private Clip clip = null;
 	private Clip fireClip = null;
 	private Clip collisionClip = null;
+	private Clip doublekill = null;
+	private Clip triplekill = null;
+	private Clip quadrakill = null;
+	private Clip pentakill = null;
+	private Clip legendary = null;
 
 	private Timer timer;
 
@@ -90,6 +116,7 @@ public class MainFrame extends JFrame {
 	ArrayList<JLabel> enemyBullets = new ArrayList<>();
 
 	JLabel scoreLabel = null;
+	JLabel kebaboinlabel = null;
 
 	private MenuBar menu = null;
 
@@ -145,7 +172,7 @@ public class MainFrame extends JFrame {
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 		bulletContainer = new JLabel(bullet);
-		
+
 	}
 
 	public void createEnemy(String tag, int howMany) {
@@ -282,9 +309,21 @@ public class MainFrame extends JFrame {
 
 					repaint();
 					enemyMove++;
-
+					menu.editmenu();
+					kebaboinadder++;
+					getLeaderBoards();
+					if (kebaboinadder > 100) {
+						kebaboins += houseContainers.length * (houselevel);
+						baseHP += houseContainers.length * (houselevel);
+						kebaboinadder = 0;
+					}
+					if (baseHP > baselevel * 100) {
+						baseHP = baselevel * 100;
+					}
 				}
-			});
+
+			}
+					);
 
 			bulletsOnScreen = new ArrayList<>();
 			shipsOnScreen = new ArrayList<>();
@@ -292,6 +331,10 @@ public class MainFrame extends JFrame {
 			scoreLabel = new JLabel();
 			scoreLabel.setForeground(Color.RED);
 			scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
+			
+			kebaboinlabel = new JLabel();
+			kebaboinlabel.setForeground(Color.RED);
+			kebaboinlabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
 
 			menu = new MenuBar(this);
 
@@ -305,10 +348,56 @@ public class MainFrame extends JFrame {
 			File musicPath = new File(BGMUSIC_PATH);
 			File fireMusicPath = new File(SFXFIRE_PATH);
 			File collisionMusicPath = new File(SFXONHIT_PATH);
+			File a = new File(DOUBLEKILL_PATH);
+			File b = new File(TRIPLEKILL_PATH);
+			File c = new File(QUADRAKILL_PATH);
+			File d = new File(PENTAKILL_PATH);
+			File ef = new File(LEGENDARY_PATH);
+
+			AudioInputStream doub = null;
+			AudioInputStream trip = null;
+			AudioInputStream quad = null;
+			AudioInputStream pent = null;
+			AudioInputStream leg = null;
+
 
 			AudioInputStream bgInput = null;
 			AudioInputStream fireInput = null;
 			AudioInputStream collisionInput = null;
+			try {
+
+				doub = AudioSystem.getAudioInputStream(a);
+				trip = AudioSystem.getAudioInputStream(b);
+				quad = AudioSystem.getAudioInputStream(c);
+				pent = AudioSystem.getAudioInputStream(d);
+				leg = AudioSystem.getAudioInputStream(ef);
+
+				doublekill = AudioSystem.getClip();
+				triplekill = AudioSystem.getClip();
+				quadrakill = AudioSystem.getClip();
+				pentakill = AudioSystem.getClip();
+				legendary = AudioSystem.getClip();
+
+				doublekill.open(doub);
+				triplekill.open(trip);
+				quadrakill.open(quad);
+				pentakill.open(pent);
+				legendary.open(leg);
+
+			} catch (LineUnavailableException kk1) {
+
+				System.out.println("Could not retrieve the audio system line");
+
+			} catch (IOException kk2) {
+
+				System.out.println("Could not load music from audio file");
+
+			} catch (UnsupportedAudioFileException kk3) {
+
+				System.out.println("Audio file is not supported in your system");
+
+			}
+
 
 			try {
 
@@ -452,6 +541,10 @@ public class MainFrame extends JFrame {
 
 			backgroundContainer.add(scoreLabel, constraints);
 
+			constraints.gridy = 1;
+			
+			backgroundContainer.add(kebaboinlabel, constraints);
+
 			/*
 		for(EnemyShip enemyShip : shipsOnScreen) {
 
@@ -591,6 +684,28 @@ public class MainFrame extends JFrame {
 			if(!bullet.isOnScreen() || bullet.isHit()) {
 
 				if(bulletIterator != null) {
+					if (!bullet.isOnScreen()) {
+						combo = 0;
+					}
+					if (bullet.isHit()) {
+						combo++;
+						if (combo == 2) {
+							playDoubleKill();
+						}
+						else if (combo == 3) {
+							playTripleKill();
+						}
+						else if (combo == 4) {
+							playQuadraKill();
+						}
+						else if (combo == 5) {
+							playPentaKill();
+						}
+						else if (combo > 5) {
+							playLegendary();
+						}
+
+					}
 
 					bulletIterator.remove();
 
@@ -614,10 +729,32 @@ public class MainFrame extends JFrame {
 
 			}
 
-			if(enemyMove % 20 == 0) {
+			/*
+			if(enemyMove % 70 == 0) {
 
 				enemyShip.fire();
 
+			}
+			*/
+			
+			for(int i = 0; i < houseContainers.length; i++) {
+				
+				if(enemyShip.getLocation().getX() > houseContainers[i].getLocation().getX() && 
+						enemyShip.getLocation().getX() + enemyShip.getWidth() 
+						< houseContainers[i].getLocation().getX() + houseContainers[i].getWidth()) {
+					
+					enemyShip.setGridIn(i);
+					
+					int rng = new Random().nextInt(20);
+					// 5% chance
+					if(rng == 0) {
+						
+						enemyShip.fire();
+						
+					}
+					
+				}
+				
 			}
 
 		}
@@ -636,13 +773,8 @@ public class MainFrame extends JFrame {
 
 		}
 
-		for(JLabel eb : enemyBullets) {
-
-
-
-		}
-
 		scoreLabel.setText("Current Score: " + score);
+		kebaboinlabel.setText("Kebaboin: " + kebaboins);
 
 
 	}
@@ -790,7 +922,177 @@ public class MainFrame extends JFrame {
 	public void setEnemyBullets(ArrayList<JLabel> enemyBullets) {
 		this.enemyBullets = enemyBullets;
 	}
+	public String getCurrent() {
+		return current;
+	}
 
+	public void setCurrent(String current) {
+		this.current = current;
+	}
+
+	public void submitScore(int Score) {
+
+		File asd = new File("C:/Users/alican/Desktop/scorelist.txt");
+		asd.getParentFile().mkdirs();
+		Random rand = new Random();
+
+
+		try {
+			PrintWriter outFile = new PrintWriter(asd);
+			outFile.print("");
+			int[] store = new int[30];
+			for (int i = 0; i<20; i++) {
+				store[i]=rand.nextInt(10);
+			}
+			if ((store[3] + store[7])>9) {
+				store[26] = (store[3] + store[7])%10;
+			}
+			else {
+				store[26] = store[3] + store[7];
+			}
+			if((store[14]*3 + store[19] - 5)>9) {
+				store[27] = (store[14]*3 + store[19] - 5)%10;
+			}
+			else {
+				store[27] = (store[14]*3 + store[19] - 5);
+			}
+			if ((store[2] + store[1])>9) {
+				store[28] = (store[2] + store[1])%10;
+			}
+			else {
+				store[28] = store[1] + store[2];
+			}
+			store[29] = 0;
+			String abcd = "" + Score;
+			store[23] = Integer.parseInt(abcd.substring(0,1));
+			store[21] =  Integer.parseInt(abcd.substring(1,2));
+			store[25] = Integer.parseInt(abcd.substring(2,3));
+			store[22] =  Integer.parseInt(abcd.substring(3,4));
+			store[24] = Integer.parseInt(abcd.substring(4,5));;
+
+			for (int a = 0; a<30; a++) {
+				outFile.print(store[a]);
+			}
+
+			outFile.close();
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void getLeaderBoards() {
+		try {
+			String asd = "";
+			FileInputStream fis = new FileInputStream("C:/Users/alican/Desktop/scorelist.txt");
+			Scanner scan = new Scanner(fis);
+			while (scan.hasNextLine()) {
+				asd = scan.nextLine();
+
+			}
+			int[] decryptor = new int[30];
+			boolean test1 = false, test2 = false, test3 = false;
+			for (int i = 0; i<asd.length(); i++) {
+				decryptor[i] = Integer.parseInt(asd.substring(i, i+1));
+			}
+			if ( (decryptor[3] + decryptor[7])>9 && decryptor[26] == (decryptor[3] + decryptor[7])%10){
+				test1=true;
+			}
+			else if ( (decryptor[3] + decryptor[7])<=9 && decryptor[26] == (decryptor[3] + decryptor[7])){
+				test1=true;
+			}
+			if ( (decryptor[14]*3 + decryptor[19] - 5)>9 && decryptor[27] == (decryptor[14]*3 + decryptor[19] - 5)%10){
+				test2=true;
+			}
+			else if ( (decryptor[14]*3 + decryptor[19] - 5)<=9 && decryptor[27] == (decryptor[14]*3 + decryptor[19] - 5)){
+				test2=true;
+			}
+			if ( (decryptor[2] + decryptor[1])>9 && decryptor[28] == (decryptor[2] + decryptor[1])%10){
+				test3=true;
+			}
+			else if ( (decryptor[2] + decryptor[1])<=9 && decryptor[28] == (decryptor[2] + decryptor[1])){
+				test3=true;
+			}
+
+			if (test1 && test2 && test3) {
+				berkaysinirlenme = "" + decryptor[23] + decryptor[21] + decryptor[25] + decryptor[22] + decryptor[24];
+				prevHighScore = Integer.parseInt(berkaysinirlenme);
+			}
+			else {
+				File asdf = new File("C:/Users/alican/Desktop/scorelist.txt");
+				asdf.getParentFile().mkdirs();
+
+				PrintWriter outFile = new PrintWriter(asdf);
+				outFile.print("");
+				outFile.close();
+				berkaysinirlenme = "y u try to hack fren :(";
+			}
+
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void playDoubleKill() {
+
+		if(sfx) {
+
+			doublekill.setFramePosition(0);
+			doublekill.start();
+
+		}
+
+	}
+
+	public void playTripleKill() {
+
+		if(sfx) {
+
+			triplekill.setFramePosition(0);
+			triplekill.start();
+
+		}
+
+	}
+	public void playQuadraKill() {
+
+		if(sfx) {
+
+			quadrakill.setFramePosition(0);
+			quadrakill.start();
+
+		}
+
+	}
+	public void playPentaKill() {
+
+		if(sfx) {
+
+			pentakill.setFramePosition(0);
+			pentakill.start();
+
+		}
+
+	}
+	public void playLegendary() {
+
+		if(sfx) {
+
+			legendary.setFramePosition(0);
+			legendary.start();
+
+		}
+
+	}
+
+	public int getGridDetected() {
+		
+		return gridDetected;
+		
+	}
 
 
 

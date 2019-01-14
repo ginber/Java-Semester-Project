@@ -24,6 +24,7 @@ public abstract class EnemyShip extends JLabel {
 	private boolean isDead = false;
 	private EnemyShipBuilder builder = null;
 	private int index = 0;
+	private int gridIn;
 
 	final static String EXPLODED_PATH = "HeavenGuard/res/images/spaceship1/boom.png";
 
@@ -199,40 +200,6 @@ public abstract class EnemyShip extends JLabel {
 						
 						setLocation(currentLocation);
 						
-						/*
-						
-						setIcon(new ImageIcon(MainFrame.getScaledImage(
-								ImageIO.read(new File(imgPath)),
-								getWidth(),
-								getHeight())));
-								
-								
-						
-						setIcon(getIcon());
-						
-						System.out.println("EnemyShip position after icon: \nx = " + getX() + "\ny = " + getY());
-						
-						*/
-						/*
-						
-						//setSize(new Dimension(0, 0));
-						 
-						 
-						Graphics2D g2d = (Graphics2D) context.getGraphics();
-						
-						for(int i = 0; i < 700; i++) {
-							
-							g2d.drawImage(explosionImage, currentLocation.x, currentLocation.y, null);
-							Thread.sleep(1);
-							
-						}
-<<<<<<< HEAD
-						
-=======
->>>>>>> fbf8728e2123a7d4f6ed81f34ba358f3ce77b414
-						System.out.println("EnemyShip position after sleeping: \nx = " + getX() + "\ny = " + getY());
-						*/
-						
 						Thread.sleep(500);
 						
 						setIcon(null);
@@ -255,6 +222,18 @@ public abstract class EnemyShip extends JLabel {
 
 		explosionThread.start();
 
+	}
+	
+	public void setGridIn(int gridIn) {
+		
+		this.gridIn = gridIn;
+		
+	}
+	
+	public int getGridIn() {
+		
+		return gridIn;
+		
 	}
 
 }
