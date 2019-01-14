@@ -1,5 +1,6 @@
 package elements;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
@@ -36,7 +37,42 @@ public class BasicEnemyShip extends EnemyShip {
 		
 		BasicEnemyBullet beb = new BasicEnemyBullet(BULLET_PATH, getBuilder().context);
 		
-		JLabel bulletLabel = new JLabel(beb);
+
+		//JLabel bulletLabel = new JLabel(beb);
+
+		Thread enemyFireThread = new Thread(new Runnable() {
+			
+			Graphics2D g2d = (Graphics2D) getBuilder().context.getBackgroundContainer().getGraphics();
+			int xPos, yPos, changeY = 0;
+			int bulletCount = 0;
+			
+			@Override
+			public void run() {
+				
+				xPos = getxPosition();
+				
+				while(yPos < getBuilder().context.getScreenHeight() - 
+						getBuilder().context.getHouseContainers()[0].getHeight()) {
+					
+					
+					yPos = getyPosition() + 10 + changeY;
+					g2d.setColor(Color.CYAN);
+					g2d.fillOval(xPos, yPos, 10, 10);
+					
+					changeY++;
+					
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}	
+				
+			}
+		});
+
 		
 		bulletLabel.setLocation(getxPosition(), getyPosition() + bulletLabel.getHeight());
 		
