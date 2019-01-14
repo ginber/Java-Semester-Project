@@ -27,7 +27,7 @@ public class BasicEnemyShip extends EnemyShip {
 		
 		Thread enemyFireThread = new Thread(new Runnable() {
 			
-			Graphics2D g2d = (Graphics2D) getBuilder().context.getGraphics();
+			Graphics2D g2d = (Graphics2D) getBuilder().context.getBackgroundContainer().getGraphics();
 			int xPos, yPos, changeY = 0;
 			int bulletCount = 0;
 			
@@ -35,17 +35,25 @@ public class BasicEnemyShip extends EnemyShip {
 			public void run() {
 				
 				xPos = getxPosition();
-				yPos = getyPosition() + 10 + changeY;
-				g2d.setColor(Color.CYAN);
-				g2d.fillOval(xPos, yPos, 10, 10);
 				
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				
-				changeY++;
+				while(yPos < getBuilder().context.getScreenHeight() - 
+						getBuilder().context.getHouseContainers()[0].getHeight()) {
+					
+					
+					yPos = getyPosition() + 10 + changeY;
+					g2d.setColor(Color.CYAN);
+					g2d.fillOval(xPos, yPos, 10, 10);
+					
+					changeY++;
+					
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}	
 				
 			}
 		});

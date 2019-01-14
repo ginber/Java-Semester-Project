@@ -147,7 +147,25 @@ public class HGMouseListener implements MouseListener {
 
 		} else {
 			
-			context.warning((Graphics2D)context.getGraphics());
+			Thread warningThread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					try {
+						
+						context.warning((Graphics2D)context.getGraphics());
+						Thread.sleep(1000);
+						
+					} catch(InterruptedException e) {
+						
+						
+						
+					}
+					
+				}
+			});
+			
 			
 		}
 
