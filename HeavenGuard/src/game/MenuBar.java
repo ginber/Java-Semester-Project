@@ -135,7 +135,8 @@ public class MenuBar extends JFrame{
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.exit(0);
+			dispose();
+			new MainMenu(context, "Menu");
 			
 		}
 		
