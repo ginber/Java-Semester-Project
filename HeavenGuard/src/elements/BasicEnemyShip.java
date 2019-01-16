@@ -19,7 +19,9 @@ import game.MainFrame;
 public class BasicEnemyShip extends EnemyShip {
 
 	final static String TAG = "BES";
-	final static String IMG_PATH = "HeavenGuard/res/images/spaceship1/enemy2.png";
+	final static String IMG_PATH = "HeavenGuard/res/images/spaceship1/enemy0frame.png";
+	final static String IMG2_PATH = "HeavenGuard/res/images/spaceship1/enemy2.png";
+	final static String IMG3_PATH = "HeavenGuard/res/images/spaceship1/boss.png";
 	final static String BULLET_PATH = CannonWeapon.BULLET_PATH;
 
 	private ArrayList<Image> bulletsFired = new ArrayList<>();

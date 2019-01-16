@@ -41,7 +41,8 @@ import elements.*;
 public class MainFrame extends JFrame {
 
 	// Path for resources
-	private final String BG_PATH = "HeavenGuard/res/images/misc/menu.png";
+	private final String BG_PATH = "HeavenGuard/res/images/misc/background.png";
+	private final String NOBG_PATH = "HeavenGuard/res/images/misc/black_background.png";;
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
 	public final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
 	public final String HOUSE2_PATH = "HeavenGuard/res/images/misc/1.png";
@@ -65,8 +66,8 @@ public class MainFrame extends JFrame {
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 
-	private int[] highScores = new int[5];
-	private String[] highNames = new String[5];
+	//private int[] highScores = new int[5];
+	//private String[] highNames = new String[5];
 	public int housecount = 4;
 	private int enemyMove = 1;
 	private int score = 0;
@@ -76,7 +77,9 @@ public class MainFrame extends JFrame {
 	public int kebaboins = 0, baselevel = 1, houselevel = 1, weaponlevel = 1, enemiesLevel = 1,prevHighScore;
 
 	public boolean secondWeaponAvailable = false;
-
+	public boolean enemyCanMove = false;
+	public boolean enemyCanFire = false;
+	
 	public String berkaysinirlenme = "", playername, recordname;
 	public String current = "Buy Machine Gun";
 	public final String amelelik = "HeavenGuard/res/Scorelist.txt";
@@ -154,7 +157,7 @@ public class MainFrame extends JFrame {
 
 		try {
 
-			bgImage = ImageIO.read(new File(BG_PATH));
+			bgImage = ImageIO.read(new File(NOBG_PATH));
 
 		} catch(IOException e) {
 
@@ -346,8 +349,17 @@ public class MainFrame extends JFrame {
 					if (enemyShipAdder > 250 || shipsOnScreen.size() < 2) {
 						enemyShipAdder = 0;
 						enemyAdderCount++;
-						createEnemy("BES",1 );
+						if(enemiesLevel < 2 ) {
+							createEnemy("BES",1 );
+						} 
 						
+						else if(enemiesLevel == 2) {
+						createEnemy("MES",1 );
+						}
+						
+						else if(enemiesLevel > 2) {
+						createEnemy("AES",1 );
+						}
 						if(enemyAdderCount % 2 == 0 && enemiesLevel < 12) {
 							enemiesLevel++;
 							shipsOnScreen.get(shipsOnScreen.size()-1).setLevel(enemiesLevel);
@@ -788,7 +800,7 @@ public class MainFrame extends JFrame {
 
 				int rng = new Random().nextInt(600/enemyShip.getLevel());
 			
-				if(rng == 0) {
+				if(rng == 0 && enemyCanFire) {
 
 					enemyShip.fire();
 
@@ -801,7 +813,7 @@ public class MainFrame extends JFrame {
 
 		for(EnemyShip ship : shipsOnScreen) {
 
-			if(enemyMove % movingFactor == 0 && !ship.isDead() ) {
+			if(enemyMove % movingFactor == 0 && !ship.isDead() && enemyCanMove) {
 
 				ship.move(); // each 120 milliseconds
 				//System.out.println("EnemyShip moved");

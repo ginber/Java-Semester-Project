@@ -1,5 +1,6 @@
 package game;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -17,12 +18,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.PopupFactory;
 
 public class MainMenu extends JFrame {
 
@@ -44,6 +47,7 @@ public class MainMenu extends JFrame {
 	private final String MenuBG_PATH = "HeavenGuard/res/images/misc/menu.png";
 
 	JLabel backgroundContainer = null;
+	JPanel settingsPane = null;
 
 	public void createBackground() {
 
@@ -180,6 +184,145 @@ public class MainMenu extends JFrame {
 		ImageIcon settingsIcon = new ImageIcon(scaledImage);
 		
 		Settings = new JLabel(settingsIcon);
+		
+		///////////////////////////////////////////////////////////////
+		Settings.addMouseListener(new MouseListener() {
+			BufferedImage stImage;
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				
+			
+         
+			settingsPane = new JPanel(new BoxLayout(settingsPane, BoxLayout.Y_AXIS));
+			
+			JButton musicM = new JButton("Toggle Music");
+			musicM.addActionListener(null);
+			musicM.addActionListener(new ActionListener() { @Override
+			public void actionPerformed(ActionEvent e) {
+				mute();
+				
+			}});
+			settingsPane.add(musicM);
+			
+			JButton soundFX = new JButton("Toggle SFX");
+			soundFX.addActionListener(new ActionListener() { @Override
+			public void actionPerformed(ActionEvent e) {
+				sfx();
+				
+			}});
+			soundFX.setActionCommand("sfx");
+			settingsPane.add(soundFX);
+			
+			
+			JButton enemyMove = new JButton("Toggle Enemy Move");
+			enemyMove.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(context.enemyCanMove) {
+						context.enemyCanMove = false;
+					}else {
+						context.enemyCanMove = true;
+					}
+					
+				}
+			});
+			enemyMove.setActionCommand("enemyMove");
+			settingsPane.add(enemyMove);
+			
+			JButton enemyFire = new JButton("Toggle Enemy Fire");
+			enemyMove.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if(context.enemyCanFire) {
+						context.enemyCanFire = false;
+					}else {
+						context.enemyCanFire = true;
+					}
+					
+				}
+			});
+			enemyMove.setActionCommand("enemyFire");
+			settingsPane.add(enemyFire);
+			
+			settingsPane.setSize(Context.getWidth()/2,(Context.getHeight()/2));
+		
+			
+			
+			backgroundContainer.add(settingsPane);
+			
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent arg0) {
+
+				try {
+
+					stImage = ImageIO.read(new File(SETTINGS_FOCUSED));
+
+				} catch(IOException el) {
+
+					System.out.println("Could not load settings focused");
+
+				}
+				
+				Image scaledImage = getScaledImage(stImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+				ImageIcon settingsIcon = new ImageIcon(scaledImage);
+
+				Settings.setIcon(settingsIcon);
+
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent arg0) {
+
+				try {
+
+					stImage = ImageIO.read(new File(SETTINGS_PATH));
+
+				} catch(IOException e1) {
+
+					System.out.println("Could not load settings");
+
+				}
+
+				Image scaledImage = getScaledImage(stImage, Context.getScreenWidth() / 6, Context.getScreenHeight() / 8);
+
+				ImageIcon settingsIcon = new ImageIcon(scaledImage);
+
+				Settings.setIcon(settingsIcon);
+				
+				
+				
+				
+				
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		
+		
+		
+		
+		
+		
+		///////////////////////////////////////////////////////////////
 
 		BufferedImage leaderboardImage = null;
 
@@ -338,4 +481,29 @@ public class MainMenu extends JFrame {
 
 	}
 
+	
+	public void mute(){
+			
+			Context.setMusicPlaying(!Context.isMusicPlaying());
+			Context.playBackgroundMusic();
+		
+}
+	
+	public void sfx(){
+
+
+			
+			if (Context.isSfx()) {
+				Context.setSfx(false);
+			}
+			else if (!Context.isSfx()) {
+				Context.setSfx(true);
+			}
+		
+		
+}
+	
+	
+	
+	
 }

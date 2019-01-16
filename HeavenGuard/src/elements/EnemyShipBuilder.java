@@ -15,63 +15,73 @@ public class EnemyShipBuilder {
 
 	int health, damage, speed, lvl, xPosition, yPosition;
 	String tag, imgPath;
-	
+
 	MainFrame context = null;
-	
+
 	BufferedImage shipImage = null;
 
-	
 	public EnemyShipBuilder(MainFrame context) {
 		this.context = context;
 	}
-	
+
 	public EnemyShipBuilder damage(int damage) {
-		this.damage=damage;
+		this.damage = damage;
 		return this;
 	}
-	
+
 	public EnemyShipBuilder health(int health) {
-		this.health=health;
+		this.health = health;
 		return this;
 	}
-	
+
 	public EnemyShipBuilder speed(int speed) {
-		this.speed=speed;
+		this.speed = speed;
 		return this;
 	}
-	
+
 	public EnemyShipBuilder level(int lvl) {
-		this.lvl=lvl;
+		this.lvl = lvl;
 		return this;
 	}
 
 	public EnemyShip build(String tag) {
-		
+
 		EnemyShip hellBringers = null;
-		
-		if(tag.equals(BasicEnemyShip.TAG)) {
-			
+
+		if (tag.equals(BasicEnemyShip.TAG)) {
+
 			imgPath = BasicEnemyShip.IMG_PATH;
-			//tag = BasicEnemyShip.TAG;
-			
+			// tag = BasicEnemyShip.TAG;
+
 			hellBringers = new BasicEnemyShip(this);
-			
-		}	
+
+		} 
 		
+		else if (tag.equals("MES")) {
+			imgPath = BasicEnemyShip.IMG2_PATH;
+			hellBringers = new BasicEnemyShip(this);
+		} 
+		
+		else if (tag.equals("AES")) {
+			imgPath = BasicEnemyShip.IMG3_PATH;
+			hellBringers = new BasicEnemyShip(this);
+		}
+
 		createImage(imgPath);
-		//hellBringers.setImage(shipImage);
+		// hellBringers.setImage(shipImage);
 		hellBringers.setIcon(new ImageIcon(shipImage));
-		
+
 		xPosition = new Random().nextInt(context.getScreenWidth() - shipImage.getWidth());
-		yPosition = new Random().nextInt(context.getScreenHeight() / 3  - shipImage.getHeight());
-		
+		yPosition = new Random().nextInt(context.getScreenHeight() / 3 - shipImage.getHeight());
+
 		hellBringers.setxPosition(xPosition);
 		hellBringers.setyPosition(yPosition);
-		
-		System.out.println("Enemy Ship Created\nType: " + tag + "\nHealth: " + health + "\nDamage: " + damage + "\nLevel: " + lvl);
-		
+
+		System.out.println(
+				"Enemy Ship Created\nType: " + tag + "\nHealth: " + health + "\nDamage: " + damage + "\nLevel: " + lvl);
+
 		return hellBringers;
-		
+
 	}
 
 	private void createImage(String shipPath) {
@@ -80,16 +90,12 @@ public class EnemyShipBuilder {
 
 			shipImage = ImageIO.read(new File(shipPath));
 
-		} catch(IOException e) {
+		} catch (IOException e) {
 
 			System.out.println("Enemy image could not be found");
 
 		}
 
 	}
-
-	
-
-
 
 }
