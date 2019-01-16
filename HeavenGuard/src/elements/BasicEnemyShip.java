@@ -221,8 +221,8 @@ public class BasicEnemyShip extends EnemyShip {
 			right = (Math.random() < 0.45) ? true : false;
 		}else right = (Math.random() < 0.5) ? true : false;
 
-		int changeX = (int) (Math.random() + 1) * (getLevel() * 20);
-		int changeY = (int) (Math.random() + 1) * (getLevel() * 20);
+		int changeX = (int) (Math.random() + 1) * (getLevel() * 5);
+		int changeY = (int) (Math.random() + 1) * (getLevel() * 5);
 
 		if (!right) {
 			changeX = -changeX;

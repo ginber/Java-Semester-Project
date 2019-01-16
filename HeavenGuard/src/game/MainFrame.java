@@ -71,9 +71,9 @@ public class MainFrame extends JFrame {
 	private int enemyMove = 1;
 	private int score = 0;
 	private int baseHP = 100;
-	private int kebaboinadder = 0, combo = 0, enemyshipadder = 0, subhanallah = 1;
+	private int kebaboinadder = 0, combo = 0, enemyShipAdder = 0, enemyAdderCount = 1;
 	private int gridDetected;
-	public int kebaboins = 0, baselevel = 1, houselevel = 1, weaponlevel = 1,prevHighScore;
+	public int kebaboins = 0, baselevel = 1, houselevel = 1, weaponlevel = 1, enemiesLevel = 1,prevHighScore;
 
 	public boolean secondWeaponAvailable = false;
 
@@ -107,7 +107,7 @@ public class MainFrame extends JFrame {
 
 	private int[] houseHP = {100,100,100,100};
 
-	private int movingFactor = 4;
+	private int movingFactor = 3;
 
 	// A custom listener for tracking mouse motions
 	private final HGMouseMotionListener listener = new HGMouseMotionListener(this);
@@ -332,8 +332,7 @@ public class MainFrame extends JFrame {
 					enemyMove++;
 					menu.editmenu();
 					kebaboinadder++;
-					enemyshipadder++;
-					subhanallah++;
+					enemyShipAdder++;
 					if (kebaboinadder > 100) {
 						kebaboins += housecount * (houselevel);
 						baseHP += housecount * (houselevel);
@@ -343,13 +342,16 @@ public class MainFrame extends JFrame {
 					if (baseHP > baselevel * 100) {
 						baseHP = baselevel * 100;
 					}
-					/*if (baseHP <= 0) {
-						gameend();
-					}*/
-
-					if (enemyshipadder > 500/((subhanallah + 49999)/50000)) {
-						enemyshipadder = 0;
-						createEnemy("BES", (1* (int) (subhanallah/1000)));
+					
+					if (enemyShipAdder > 250 || shipsOnScreen.size() < 2) {
+						enemyShipAdder = 0;
+						enemyAdderCount++;
+						createEnemy("BES",1 );
+						
+						if(enemyAdderCount % 2 == 0 && enemiesLevel < 12) {
+							enemiesLevel++;
+							shipsOnScreen.get(shipsOnScreen.size()-1).setLevel(enemiesLevel);
+						}
 					}
 
 				}}
@@ -363,7 +365,7 @@ public class MainFrame extends JFrame {
 			scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
 
 			kebaboinlabel = new JLabel();
-			kebaboinlabel.setForeground(Color.RED);
+			kebaboinlabel.setForeground(Color.GREEN);
 			kebaboinlabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
 
 			menu = new MenuBar(this);
@@ -767,7 +769,8 @@ public class MainFrame extends JFrame {
 
 				//backgroundContainer.remove(shipsOnScreen.get(enemyShip.getIndex()));
 				shipIterator.remove();
-				score += 50 * (combo + 1);
+				score += 50 * (combo + 1 + enemiesLevel);
+				kebaboins += 5 * (combo + enemiesLevel);
 
 			}
 
@@ -783,8 +786,8 @@ public class MainFrame extends JFrame {
 
 				enemyShip.setGridIn(i);
 
-				int rng = new Random().nextInt(200);
-				// %2 chance
+				int rng = new Random().nextInt(600/enemyShip.getLevel());
+			
 				if(rng == 0) {
 
 					enemyShip.fire();
@@ -1202,7 +1205,7 @@ public class MainFrame extends JFrame {
 		g.drawString("GAME OVER \n YOUR SCORE IS " + score, getScreenWidth() / 2 - getScreenWidth() / 4, getScreenHeight() / 2);
 
 		try {
-			Thread.sleep(7000);
+			Thread.sleep(4500);
 		} catch(InterruptedException e) {
 			e.printStackTrace();
 		}

@@ -192,6 +192,7 @@ public class MenuBar extends JFrame{
 			if (input == 0 && context.kebaboins >= upgradecost ) {
 				context.kebaboins -= upgradecost;
 				context.weaponlevel++;
+				context.backgroundContainer.repaint();
 			}
 			else if (input == 0 && context.kebaboins < upgradecost ) {
 				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
@@ -210,6 +211,7 @@ public class MenuBar extends JFrame{
 			int input = JOptionPane.showConfirmDialog(null, "Upgrade houses for " + upgradecost + " kebaboins?" );
 			if (input == 0 && context.kebaboins >= upgradecost ) {
 				context.kebaboins -= upgradecost;
+				context.backgroundContainer.repaint();
 				context.houselevel++;
 				for ( int i = 0 ; i < 4 ; i++) {
 					if(context.getHouseHP()[i] > 0 ) {
@@ -253,6 +255,7 @@ public class MenuBar extends JFrame{
 			if (input == 0 && context.kebaboins >= upgradecost ) {
 				context.kebaboins -= upgradecost;
 				context.baselevel++;
+				context.backgroundContainer.repaint();
 			}
 			else if (input == 0 && context.kebaboins < upgradecost ) {
 				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
