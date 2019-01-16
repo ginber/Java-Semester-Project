@@ -212,8 +212,14 @@ public class BasicEnemyShip extends EnemyShip {
 
 		// Randomly decide whether the ship will move towards left or right & up and
 		// down
-		boolean right = (Math.random() < 0.5) ? true : false;
+		boolean right;
 		boolean up = (Math.random() < 0.5) ? true : false;
+		
+		if(getxPosition() < getBuilder().context.getScreenWidth() / 2 - getBuilder().context.getScreenWidth() / 5) {
+			right = (Math.random() < 0.55) ? true : false;
+		}else if(getxPosition() > getBuilder().context.getScreenWidth() / 2 + getBuilder().context.getScreenWidth() / 5) {
+			right = (Math.random() < 0.45) ? true : false;
+		}else right = (Math.random() < 0.5) ? true : false;
 
 		int changeX = (int) (Math.random() + 1) * (getLevel() * 20);
 		int changeY = (int) (Math.random() + 1) * (getLevel() * 20);

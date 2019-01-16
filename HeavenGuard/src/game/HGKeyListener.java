@@ -47,8 +47,9 @@ public class HGKeyListener implements KeyListener {
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_L) {
-			context.submitScore(52543);
+		
 			context.kebaboins = 200000;
+			context.gameend();
 		}
 
 		if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {

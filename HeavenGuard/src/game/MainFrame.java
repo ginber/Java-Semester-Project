@@ -65,6 +65,8 @@ public class MainFrame extends JFrame {
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 
+	private int[] highScores = new int[5];
+	private String[] highNames = new String[5];
 	public int housecount = 4;
 	private int enemyMove = 1;
 	private int score = 0;
@@ -78,7 +80,7 @@ public class MainFrame extends JFrame {
 	public String berkaysinirlenme = "", playername, recordname;
 	public String current = "Buy Machine Gun";
 	public final String amelelik = "HeavenGuard/res/Scorelist.txt";
-	
+
 	private Graphics2D g2d = null;
 	private boolean isMusicPlaying = false; // Music won't play when the game starts as default 
 	private boolean sfx = true;
@@ -120,7 +122,7 @@ public class MainFrame extends JFrame {
 	JLabel[] houseContainers = new JLabel[4];
 	JProgressBar[] houseHealthBars = new JProgressBar[4];
 	JProgressBar baseHealthBar = new JProgressBar();
-	
+
 	ArrayList<JLabel> enemyBullets = new ArrayList<>();
 
 	JLabel scoreLabel = null;
@@ -180,7 +182,7 @@ public class MainFrame extends JFrame {
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 		bulletContainer = new JLabel(bullet);
-		
+
 	}
 
 	public void createEnemy(String tag, int howMany) {
@@ -188,12 +190,12 @@ public class MainFrame extends JFrame {
 		for(int i = 0; i < howMany; i++) {
 
 			GridBagConstraints enemyConstraints = new GridBagConstraints();
-			
+
 			enemyConstraints.gridx = 0;
 			enemyConstraints.gridy = 0;
 			enemyConstraints.weightx = 1.0;
 			enemyConstraints.weighty = 1.0;
-			
+
 			enemyShip = new EnemyShipBuilder(this).level(1).build(tag);
 			enemyShip.setIndex(shipsOnScreen.size());
 			//enemyShip.setVisible(false);
@@ -308,6 +310,7 @@ public class MainFrame extends JFrame {
 		this.playername = playername;
 		if(start) {
 
+			getLeaderBoards();
 
 			setTitle(title);
 
@@ -323,6 +326,9 @@ public class MainFrame extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 
 					repaint();
+					if (baseHP <= 0) {
+						gameend();
+					}
 					enemyMove++;
 					menu.editmenu();
 					kebaboinadder++;
@@ -337,16 +343,16 @@ public class MainFrame extends JFrame {
 					if (baseHP > baselevel * 100) {
 						baseHP = baselevel * 100;
 					}
-					if (baseHP <= 0) {
+					/*if (baseHP <= 0) {
 						gameend();
+					}*/
+
+					if (enemyshipadder > 500/((subhanallah + 49999)/50000)) {
+						enemyshipadder = 0;
+						createEnemy("BES", (1* (int) (subhanallah/1000)));
 					}
-				
-				if (enemyshipadder > 500/((subhanallah + 49999)/50000)) {
-					enemyshipadder = 0;
-					createEnemy("BES", (1* (int) (subhanallah/1000)));
-				}
-			
-			}}
+
+				}}
 					);
 
 			bulletsOnScreen = new ArrayList<>();
@@ -355,7 +361,7 @@ public class MainFrame extends JFrame {
 			scoreLabel = new JLabel();
 			scoreLabel.setForeground(Color.RED);
 			scoreLabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
-			
+
 			kebaboinlabel = new JLabel();
 			kebaboinlabel.setForeground(Color.RED);
 			kebaboinlabel.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
@@ -476,7 +482,7 @@ public class MainFrame extends JFrame {
 				//System.out.println("EnemyShip is created at \nx = "+ es.getX() + "\ny = " + es.getY());
 
 			}
-			*/
+			 */
 
 			constraints.gridx = 0;
 			constraints.gridy = 0;
@@ -532,7 +538,7 @@ public class MainFrame extends JFrame {
 				}
 
 			}
-			
+
 			// Adding health bar of our base 
 			baseHealthBar.setValue(100);
 			baseHealthBar.setPreferredSize(new Dimension(100,10));
@@ -578,7 +584,7 @@ public class MainFrame extends JFrame {
 			backgroundContainer.add(scoreLabel, constraints);
 
 			constraints.gridy = 1;
-			
+
 			backgroundContainer.add(kebaboinlabel, constraints);
 
 			/*
@@ -771,21 +777,21 @@ public class MainFrame extends JFrame {
 				enemyShip.fire();
 
 			}
-			*/
-			
+			 */
+
 			for(int i = 0; i < houseContainers.length; i++) {
 
-					enemyShip.setGridIn(i);
-					
-					int rng = new Random().nextInt(200);
-					// %2 chance
-					if(rng == 0) {
-						
-						enemyShip.fire();
-						
-					
+				enemyShip.setGridIn(i);
+
+				int rng = new Random().nextInt(200);
+				// %2 chance
+				if(rng == 0) {
+
+					enemyShip.fire();
+
+
 				}
-				
+
 			}
 
 		}
@@ -960,15 +966,15 @@ public class MainFrame extends JFrame {
 		this.current = current;
 	}
 
-	public void submitScore(int Score) {
-
-		File asd = new File(amelelik);
-		asd.getParentFile().mkdirs();
+	public void submitScore(String score) {
+		int cScore = Integer.parseInt(score);
+		File saveF = new File(amelelik);
+		saveF.getParentFile().mkdirs();
 		Random rand = new Random();
 
 
 		try {
-			PrintWriter outFile = new PrintWriter(asd);
+			PrintWriter outFile = new PrintWriter(saveF);
 			outFile.print(playername);
 			outFile.println();
 			int[] store = new int[30];
@@ -994,7 +1000,7 @@ public class MainFrame extends JFrame {
 				store[28] = store[1] + store[2];
 			}
 			store[29] = 0;
-			String abcd = "" + Score;
+			String abcd = "" + cScore;
 			store[23] = Integer.parseInt(abcd.substring(0,1));
 			store[21] =  Integer.parseInt(abcd.substring(1,2));
 			store[25] = Integer.parseInt(abcd.substring(2,3));
@@ -1016,19 +1022,17 @@ public class MainFrame extends JFrame {
 
 	public void getLeaderBoards() {
 		try {
-			String asd = "", pName = "";
-			
+			String score = "", pName = "";
 			FileInputStream fis = new FileInputStream(amelelik);
 			Scanner scan = new Scanner(fis);
 			while (scan.hasNextLine()) {
 				pName = scan.nextLine();
-				asd = scan.nextLine();
-				
+				score = scan.nextLine();
 			}
 			int[] decryptor = new int[30];
 			boolean test1 = false, test2 = false, test3 = false;
-			for (int i = 0; i<asd.length(); i++) {
-				decryptor[i] = Integer.parseInt(asd.substring(i, i+1));
+			for (int i = 0; i<score.length(); i++) {
+				decryptor[i] = Integer.parseInt(score.substring(i, i+1));
 			}
 			if ( (decryptor[3] + decryptor[7])>9 && decryptor[26] == (decryptor[3] + decryptor[7])%10){
 				test1=true;
@@ -1123,9 +1127,9 @@ public class MainFrame extends JFrame {
 	}
 
 	public int getGridDetected() {
-		
+
 		return gridDetected;
-		
+
 	}
 
 	public JProgressBar[] getHouseHealthBars() {
@@ -1152,25 +1156,62 @@ public class MainFrame extends JFrame {
 		this.baseHealthBar = baseHealthBar;
 	}
 
-	
+
 	public void gameend(){
 		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
-		
+
 		for(Thread t : threadSet) {
 
-				t.suspend();
+			if(t.getName().contains("Thread-")) {
+
+				//try {
+				t.stop();
+				//} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//	e.printStackTrace();
+				//}
+
+			}
+		}
+
+		if (prevHighScore < score){
+			if (score < 10){
+				submitScore("0000" + score);
+			}
+			else if (score >= 10 && score < 100){
+				submitScore("000" + score);
+			}
+			else if (score >= 100 && score < 1000){
+				submitScore("00" + score);
+			}
+			else if (score >= 1000 && score < 10000){
+				submitScore("0" + score);
+			}
+			else if (score >= 10000){
+				submitScore("" + score);
+			}
 
 		}
-			timer.stop();
-			Graphics g = getGraphics();
-			requestFocus();
-			g.setFont(new Font("Cracked Code", Font.PLAIN, getScreenWidth() / 12));
-			g.setColor(Color.RED);
 
-			g.drawString("Game Over \n Your Score is " + score, getScreenWidth() / 2 - getScreenWidth() / 5, getScreenHeight() / 2);
+		timer.stop();
 
+		Graphics g = getGraphics();
+		requestFocus();
+		g.setFont(new Font("Cracked Code", Font.PLAIN, getScreenWidth() / 40));
+		g.setColor(Color.RED);
+		g.drawString("GAME OVER \n YOUR SCORE IS " + score, getScreenWidth() / 2 - getScreenWidth() / 4, getScreenHeight() / 2);
+
+		try {
+			Thread.sleep(7000);
+		} catch(InterruptedException e) {
+			e.printStackTrace();
 		}
-	
+		
+		dispose();
+		new MainMenu(this, "Menu");
+
+	}
+
 
 }
 
