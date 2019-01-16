@@ -31,148 +31,147 @@ public class BasicEnemyShip extends EnemyShip {
 
 	}
 
-
 	@Override
 	public void fire() {
-		
-		BasicEnemyBullet beb = new BasicEnemyBullet(BULLET_PATH, getBuilder().context);
-		
 
-		//JLabel bulletLabel = new JLabel(beb);
+		BasicEnemyBullet beb = new BasicEnemyBullet(BULLET_PATH, getBuilder().context);
+
+		// JLabel bulletLabel = new JLabel(beb);
 
 		Thread enemyFireThread = new Thread(new Runnable() {
-			
+
 			Graphics2D g2d = (Graphics2D) getBuilder().context.getBackgroundContainer().getGraphics();
 			int xPos, yPos, changeY = 1;
 			int bulletCount = 0;
-			
+
 			@Override
 			public void run() {
-				
+
 				xPos = getxPosition();
 				yPos = getyPosition() + 1 + changeY;
-				
-				while(yPos < getBuilder().context.getScreenHeight() - 
-						getBuilder().context.getHouseContainers()[0].getHeight()) {
-					
-					
-					
+
+				while (yPos < getBuilder().context.getScreenHeight()
+						- getBuilder().context.getHouseContainers()[0].getHeight()) {
+
 					g2d.setColor(Color.CYAN);
 					g2d.fillOval(xPos, yPos, 10, 10);
-					
+
 					yPos += changeY;
-					
-					for(Bullet b : getBuilder().context.getBulletsOnScreen()) {
-						
-						if(b.currentLocation.x < xPos+10 && (b.currentLocation.x > xPos) && (b.currentLocation.y < yPos + 10)
-								&& (b.currentLocation.y >yPos)) {
-							
+
+					for (Bullet b : getBuilder().context.getBulletsOnScreen()) {
+
+						if (b.currentLocation.x < xPos + 10 && (b.currentLocation.x > xPos)
+								&& (b.currentLocation.y < yPos + 10) && (b.currentLocation.y > yPos)) {
+
 							// Bullets hit each other
 							System.out.println("mermiyi vurdun kerata");
 							return;
 						}
-						
-						
-						
-						
-						
-						/*if(b.getCurrentLocation().x > xPos) {
-							
-							//System.out.println("bak þu " + b.getImage().getWidth(null));
-							
-							if((xPos + 10) == b.getCurrentLocation().x + b.getImage().getWidth(null)
-							&& yPos + 10 == b.getCurrentLocation().y) {
-								
-								// Bullets hit each other
-								System.out.println("mermiyi vurdun kerata");
-								return;
-								
-							}
-							
-						} 
-						
-						if(b.getCurrentLocation().x < xPos) {
-							
-							if(xPos == b.getCurrentLocation().x
-									&& yPos + 10 == b.getCurrentLocation().y) {
-								
-								// Bullets hit each other
-								System.out.println("mermiyi vurdun kerata");
-								return;
-								
-							}
-							
-						}*/
-					
-						
+
+						/*
+						 * if(b.getCurrentLocation().x > xPos) {
+						 * 
+						 * //System.out.println("bak þu " + b.getImage().getWidth(null));
+						 * 
+						 * if((xPos + 10) == b.getCurrentLocation().x + b.getImage().getWidth(null) &&
+						 * yPos + 10 == b.getCurrentLocation().y) {
+						 * 
+						 * // Bullets hit each other System.out.println("mermiyi vurdun kerata");
+						 * return;
+						 * 
+						 * }
+						 * 
+						 * }
+						 * 
+						 * if(b.getCurrentLocation().x < xPos) {
+						 * 
+						 * if(xPos == b.getCurrentLocation().x && yPos + 10 == b.getCurrentLocation().y)
+						 * {
+						 * 
+						 * // Bullets hit each other System.out.println("mermiyi vurdun kerata");
+						 * return;
+						 * 
+						 * }
+						 * 
+						 * }
+						 */
+
 					}
-					
+
 					try {
 						Thread.sleep(1);
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
-					
-					
-					
-				}	
-				
+
+				}
+
 				// evlerin canýný azalt
-				//if(xPos <= )
-				for(int i = 0 ; i < 4 ; i++) {
-					if((getBuilder().context.getHouseContainers()[i].getX() <= xPos) && (getBuilder().context.getHouseContainers()[i].getX()
-							+ getBuilder().context.getHouseContainers()[i].getWidth() >= xPos) ){
+				// if(xPos <= )
+				for (int i = 0; i < 4; i++) {
+					if ((getBuilder().context.getHouseContainers()[i].getX()
+							+ (getBuilder().context.getHouseContainers()[i].getWidth()
+									- getBuilder().context.getHouseContainers()[i].getIcon().getIconWidth())
+									/ 2 <= xPos)
+							&& (getBuilder().context.getHouseContainers()[i].getX()
+									+ getBuilder().context.getHouseContainers()[i].getWidth()
+									- (getBuilder().context.getHouseContainers()[i].getWidth()
+											- getBuilder().context.getHouseContainers()[i].getIcon().getIconWidth())
+											/ 2 >= xPos)) {
 						getBuilder().context.getHouseHP()[i] -= 10;
 						getBuilder().context.getHouseHealthBars()[i].setValue(getBuilder().context.getHouseHP()[i]);
 					}
 				}
+				
+				if(getBuilder().context.getBaseContainer().getX() <= xPos && 
+						getBuilder().context.getBaseContainer().getX() + getBuilder().context.getBaseContainer().getWidth() >= xPos ) {
+					
+					getBuilder().context.setBaseHP(getBuilder().context.getBaseHP()-10);
+					getBuilder().context.getBaseHealthBar().setValue(getBuilder().context.getBaseHP());
+				}
 			}
 		});
-		
+
 		enemyFireThread.start();
 
 		/*
-		
-		bulletLabel.setLocation(getxPosition(), getyPosition() + bulletLabel.getHeight());
-		
-		MainFrame context = getBuilder().context;
-		
-		GridBagConstraints gbc = new GridBagConstraints();
-		
-		gbc.gridx = getGridIn();
-		gbc.gridy = 0;
-		gbc.weightx = 0.5;
-		gbc.weighty = 0.5;
-		
-		context.getBackgroundContainer().add(bulletLabel);
-		
-		*/
+		 * 
+		 * bulletLabel.setLocation(getxPosition(), getyPosition() +
+		 * bulletLabel.getHeight());
+		 * 
+		 * MainFrame context = getBuilder().context;
+		 * 
+		 * GridBagConstraints gbc = new GridBagConstraints();
+		 * 
+		 * gbc.gridx = getGridIn(); gbc.gridy = 0; gbc.weightx = 0.5; gbc.weighty = 0.5;
+		 * 
+		 * context.getBackgroundContainer().add(bulletLabel);
+		 * 
+		 */
 
 	}
 
 	@Override
 	public void move() {
 
-		// Randomly decide whether the ship will move towards left or right & up and down
+		// Randomly decide whether the ship will move towards left or right & up and
+		// down
 		boolean right = (Math.random() < 0.5) ? true : false;
 		boolean up = (Math.random() < 0.5) ? true : false;
 
 		int changeX = (int) (Math.random() + 1) * (getLevel() * 20);
 		int changeY = (int) (Math.random() + 1) * (getLevel() * 20);
 
-		if(!right) {
+		if (!right) {
 			changeX = -changeX;
 		}
 
-		if(!up) {
+		if (!up) {
 			changeY = -changeY;
 		}
 
-
-		if(getxPosition() + changeX > 0
-				&& getxPosition() + changeX < getBuilder().context.getScreenWidth()) {
+		if (getxPosition() + changeX > 0 && getxPosition() + changeX < getBuilder().context.getScreenWidth()) {
 
 			setxPosition(getxPosition() + changeX);
 
@@ -182,15 +181,14 @@ public class BasicEnemyShip extends EnemyShip {
 
 		}
 
-		if(getyPosition() + changeY > 0
-				&& getyPosition() + changeY < getBuilder().context.getScreenHeight()
+		if (getyPosition() + changeY > 0 && getyPosition() + changeY < getBuilder().context.getScreenHeight()
 				- getBuilder().context.getHouseContainers()[0].getHeight()) {
 
 			setyPosition(getyPosition() + changeY);
 
 		} else {
 
-			setyPosition(getyPosition() - changeY); 
+			setyPosition(getyPosition() - changeY);
 
 		}
 

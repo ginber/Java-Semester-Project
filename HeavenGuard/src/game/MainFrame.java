@@ -69,7 +69,7 @@ public class MainFrame extends JFrame {
 
 	public boolean secondWeaponAvailable = false;
 
-	public String berkaysinirlenme = "";
+	public String berkaysinirlenme = "", playername;
 	public String current = "Buy Machine Gun";
 
 	private Graphics2D g2d = null;
@@ -112,7 +112,7 @@ public class MainFrame extends JFrame {
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
 	JProgressBar[] houseHealthBars = new JProgressBar[4];
-	JProgressBar baseHealthBar = new JProgressBar;
+	JProgressBar baseHealthBar = new JProgressBar();
 	
 	ArrayList<JLabel> enemyBullets = new ArrayList<>();
 
@@ -290,7 +290,7 @@ public class MainFrame extends JFrame {
 
 	}
 
-	public MainFrame(String title, boolean start) {
+	public MainFrame(String title, boolean start, String playername) {
 
 		if(start) {
 
@@ -312,7 +312,6 @@ public class MainFrame extends JFrame {
 					enemyMove++;
 					menu.editmenu();
 					kebaboinadder++;
-					getLeaderBoards();
 					if (kebaboinadder > 100) {
 						kebaboins += houseContainers.length * (houselevel);
 						baseHP += houseContainers.length * (houselevel);
@@ -487,7 +486,7 @@ public class MainFrame extends JFrame {
 			constraints.gridy = 1;
 			constraints.fill = GridBagConstraints.NONE;
 
-			// Adding healthbars for houses
+			// Adding health bars for houses
 			for(int i = 0; i < houseHealthBars.length + 1; i++) {
 
 				if(i == 2) {
@@ -508,7 +507,15 @@ public class MainFrame extends JFrame {
 
 			}
 			
-			
+			// Adding health bar of our base 
+			baseHealthBar.setValue(100);
+			baseHealthBar.setPreferredSize(new Dimension(100,10));
+			baseHealthBar.setForeground(Color.GREEN);
+			baseContainer.setLayout(new GridBagLayout());
+			constraints.weightx = 1;
+			constraints.weighty = 1 ; 
+			constraints.anchor = GridBagConstraints.CENTER;
+			baseContainer.add(baseHealthBar, constraints);
 
 			constraints.gridx = 2;
 			constraints.gridy = 1;
@@ -741,20 +748,15 @@ public class MainFrame extends JFrame {
 			*/
 			
 			for(int i = 0; i < houseContainers.length; i++) {
-				
-				if(enemyShip.getLocation().getX() > houseContainers[i].getLocation().getX() && 
-						enemyShip.getLocation().getX() + enemyShip.getWidth() 
-						< houseContainers[i].getLocation().getX() + houseContainers[i].getWidth()) {
-					
+
 					enemyShip.setGridIn(i);
 					
-					int rng = new Random().nextInt(25);
-					// %4 chance
+					int rng = new Random().nextInt(200);
+					// %2 chance
 					if(rng == 0) {
 						
 						enemyShip.fire();
 						
-					}
 					
 				}
 				
@@ -942,7 +944,7 @@ public class MainFrame extends JFrame {
 
 		try {
 			PrintWriter outFile = new PrintWriter(asd);
-			outFile.print("");
+			outFile.print(playername + "\n");
 			int[] store = new int[30];
 			for (int i = 0; i<20; i++) {
 				store[i]=rand.nextInt(10);
@@ -988,12 +990,13 @@ public class MainFrame extends JFrame {
 
 	public void getLeaderBoards() {
 		try {
-			String asd = "";
+			String asd = "", pName = "";
 			FileInputStream fis = new FileInputStream("C:/Users/alican/Desktop/scorelist.txt");
 			Scanner scan = new Scanner(fis);
 			while (scan.hasNextLine()) {
+				pName = scan.nextLine();
 				asd = scan.nextLine();
-
+				
 			}
 			int[] decryptor = new int[30];
 			boolean test1 = false, test2 = false, test3 = false;
@@ -1105,7 +1108,23 @@ public class MainFrame extends JFrame {
 		this.houseHealthBars = houseHealthBars;
 	}
 
+	public JLabel getBaseContainer() {
+		return baseContainer;
+	}
 
+	public void setBaseContainer(JLabel baseContainer) {
+		this.baseContainer = baseContainer;
+	}
+
+	public JProgressBar getBaseHealthBar() {
+		return baseHealthBar;
+	}
+
+	public void setBaseHealthBar(JProgressBar baseHealthBar) {
+		this.baseHealthBar = baseHealthBar;
+	}
+
+	
 
 
 }

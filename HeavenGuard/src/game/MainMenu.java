@@ -21,6 +21,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class MainMenu extends JFrame {
@@ -153,8 +154,8 @@ public class MainMenu extends JFrame {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
-				game = new MainFrame(title, true);
+				String playername = JOptionPane.showInputDialog("Enter Player Name:");
+				game = new MainFrame(title, true, playername);
 				
 				dispose();
 

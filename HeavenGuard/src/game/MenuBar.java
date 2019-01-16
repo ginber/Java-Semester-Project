@@ -26,6 +26,7 @@ public class MenuBar extends JFrame{
 		
 		this.context = context;
 		
+		context.getLeaderBoards();
 		setAutoRequestFocus(false);
 		
 		setLayout(new FlowLayout());
