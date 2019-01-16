@@ -41,7 +41,7 @@ public class HGMouseListener implements MouseListener {
 
 
 			if (barFill < context.cannonBar.getMaximum()) {
-				barFill+=2;		
+				barFill+=2*((context.weaponlevel + 6)/7);		
 				//System.out.println("bf:" + barFill);
 				context.cannonBar.setValue(barFill);	
 			}

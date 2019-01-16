@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import game.MainFrame;
@@ -46,6 +47,8 @@ public class BasicEnemyShip extends EnemyShip {
 
 			@Override
 			public void run() {
+				
+				
 
 				xPos = getxPosition();
 				yPos = getyPosition() + 1 + changeY;
@@ -64,37 +67,10 @@ public class BasicEnemyShip extends EnemyShip {
 								&& (b.currentLocation.y < yPos + 10) && (b.currentLocation.y > yPos)) {
 
 							// Bullets hit each other
-							System.out.println("mermiyi vurdun kerata");
+							//System.out.println("mermiyi vurdun kerata");
 							return;
 						}
 
-						/*
-						 * if(b.getCurrentLocation().x > xPos) {
-						 * 
-						 * //System.out.println("bak þu " + b.getImage().getWidth(null));
-						 * 
-						 * if((xPos + 10) == b.getCurrentLocation().x + b.getImage().getWidth(null) &&
-						 * yPos + 10 == b.getCurrentLocation().y) {
-						 * 
-						 * // Bullets hit each other System.out.println("mermiyi vurdun kerata");
-						 * return;
-						 * 
-						 * }
-						 * 
-						 * }
-						 * 
-						 * if(b.getCurrentLocation().x < xPos) {
-						 * 
-						 * if(xPos == b.getCurrentLocation().x && yPos + 10 == b.getCurrentLocation().y)
-						 * {
-						 * 
-						 * // Bullets hit each other System.out.println("mermiyi vurdun kerata");
-						 * return;
-						 * 
-						 * }
-						 * 
-						 * }
-						 */
 
 					}
 
@@ -108,7 +84,6 @@ public class BasicEnemyShip extends EnemyShip {
 				}
 
 				// evlerin canýný azalt
-				// if(xPos <= )
 				for (int i = 0; i < 4; i++) {
 					if ((getBuilder().context.getHouseContainers()[i].getX()
 							+ (getBuilder().context.getHouseContainers()[i].getWidth()
@@ -120,6 +95,7 @@ public class BasicEnemyShip extends EnemyShip {
 											- getBuilder().context.getHouseContainers()[i].getIcon().getIconWidth())
 											/ 2 >= xPos)) {
 						getBuilder().context.getHouseHP()[i] -= 10;
+						//System.out.println(i + ". evin caný: " + getBuilder().context.getHouseHP()[i]);
 						getBuilder().context.getHouseHealthBars()[i].setValue(getBuilder().context.getHouseHP()[i]);
 					}
 				}
@@ -130,10 +106,89 @@ public class BasicEnemyShip extends EnemyShip {
 					getBuilder().context.setBaseHP(getBuilder().context.getBaseHP()-10);
 					getBuilder().context.getBaseHealthBar().setValue(getBuilder().context.getBaseHP());
 				}
+				for ( int i = 0 ; i < 4 ; i++) {
+					if(getBuilder().context.getHouseHP()[i] > 51 && getBuilder().context.getHouseHP()[i] < 75 ) {
+						
+						
+					
+					BufferedImage houseImage = null;
+
+					try {
+
+						houseImage = ImageIO.read(new File(getBuilder().context.HOUSE2_PATH));
+
+					} catch(IOException e) {
+
+						System.out.println("Could not load houses");
+
+					}
+
+					Image scaledImage = MainFrame.getScaledImage(houseImage, getBuilder().context.getScreenWidth() / 6, getBuilder().context.getScreenHeight() / 8);
+
+					ImageIcon house = new ImageIcon(scaledImage);
+					
+					getBuilder().context.getHouseContainers()[i].setIcon(house);
+					
+					}else if(getBuilder().context.getHouseHP()[i] > 0 && getBuilder().context.getHouseHP()[i] < 51 ) {
+						
+						
+					
+					BufferedImage houseImage = null;
+
+					try {
+
+						houseImage = ImageIO.read(new File(getBuilder().context.HOUSE3_PATH));
+
+					} catch(IOException e) {
+
+						System.out.println("Could not load houses");
+
+					}
+
+					Image scaledImage = MainFrame.getScaledImage(houseImage, getBuilder().context.getScreenWidth() / 6, getBuilder().context.getScreenHeight() / 8);
+
+					ImageIcon house = new ImageIcon(scaledImage);
+					
+					getBuilder().context.getHouseContainers()[i].setIcon(house);
+					
+					}else if(getBuilder().context.getHouseHP()[i] == 0) {
+						
+						
+					
+					BufferedImage houseImage = null;
+
+					try {
+
+						houseImage = ImageIO.read(new File(getBuilder().context.HOUSE4_PATH));
+
+					} catch(IOException e) {
+
+						System.out.println("Could not load houses");
+
+					}
+
+					Image scaledImage = MainFrame.getScaledImage(houseImage, getBuilder().context.getScreenWidth() / 6, getBuilder().context.getScreenHeight() / 8);
+
+					ImageIcon house = new ImageIcon(scaledImage);
+					
+					getBuilder().context.getHouseContainers()[i].setIcon(house);
+					getBuilder().context.getHouseHP()[i] = -10;
+					getBuilder().context.housecount --;
+					getBuilder().context.getHouseHealthBars()[i].setVisible(false);
+					}
+				}
+				
+				
+				
+				
+				
+				
 			}
 		});
 
 		enemyFireThread.start();
+		
+		//System.out.println(enemyFireThread.getName());
 
 		/*
 		 * 
@@ -195,5 +250,7 @@ public class BasicEnemyShip extends EnemyShip {
 		setLocation(getxPosition(), getyPosition());
 
 	}
+	
+	
 
 }

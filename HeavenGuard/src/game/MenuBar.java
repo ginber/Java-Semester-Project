@@ -2,12 +2,19 @@ package game;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -138,7 +145,7 @@ public class MenuBar extends JFrame{
 		@Override
 		public void actionPerformed(ActionEvent f) {
 			
-			JOptionPane.showMessageDialog(null, "Highest Score: " + context.berkaysinirlenme);
+			JOptionPane.showMessageDialog(null, "Highest Score by " + context.recordname + " - " + context.berkaysinirlenme);
 		}
 		
 }
@@ -205,7 +212,29 @@ public class MenuBar extends JFrame{
 				context.kebaboins -= upgradecost;
 				context.houselevel++;
 				for ( int i = 0 ; i < 4 ; i++) {
+					if(context.getHouseHP()[i] > 0 ) {
 					context.getHouseHP()[i] = 100;
+					context.getHouseHealthBars()[i].setValue(context.getHouseHP()[i]);
+					
+					BufferedImage houseImage = null;
+
+					try {
+
+						houseImage = ImageIO.read(new File(context.HOUSE_PATH));
+
+					} catch(IOException e) {
+
+						System.out.println("Could not load houses");
+
+					}
+
+					Image scaledImage = context.getScaledImage(houseImage, context.getScreenWidth() / 6, context.getScreenHeight() / 8);
+
+					ImageIcon house = new ImageIcon(scaledImage);
+					
+					context.getHouseContainers()[i].setIcon(house);;
+					
+					}
 				}
 			}
 			else if (input == 0 && context.kebaboins < upgradecost ) {

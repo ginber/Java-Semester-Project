@@ -15,6 +15,7 @@ import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TimerTask;
 
 import javax.imageio.ImageIO;
@@ -32,6 +33,8 @@ import javax.swing.JLayeredPane;
 import javax.swing.JProgressBar;
 import javax.swing.Timer;
 
+import com.sun.xml.internal.org.jvnet.fastinfoset.EncodingAlgorithmException;
+
 import elements.*;
 
 
@@ -40,7 +43,10 @@ public class MainFrame extends JFrame {
 	// Path for resources
 	private final String BG_PATH = "HeavenGuard/res/images/misc/menu.png";
 	private final String BASE_PATH = "HeavenGuard/res/images/misc/base.png";
-	private final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
+	public final String HOUSE_PATH = "HeavenGuard/res/images/misc/house.png";
+	public final String HOUSE2_PATH = "HeavenGuard/res/images/misc/1.png";
+	public final String HOUSE3_PATH = "HeavenGuard/res/images/misc/2.png";
+	public final String HOUSE4_PATH = "HeavenGuard/res/images/misc/3.png";
 	private final String BGMUSIC_PATH = "HeavenGuard/res/music/music01.wav";
 	private final String SFXFIRE_PATH = "HeavenGuard/res/music/cannonfire.wav";
 	private final String SFXONHIT_PATH = "HeavenGuard/res/music/explosion.wav";
@@ -59,19 +65,20 @@ public class MainFrame extends JFrame {
 	private Bullet bullet = null;
 	private EnemyShip enemyShip = null;
 
+	public int housecount = 4;
 	private int enemyMove = 1;
 	private int score = 0;
 	private int baseHP = 100;
-	private int kebaboinadder = 0, combo = 0;
+	private int kebaboinadder = 0, combo = 0, enemyshipadder = 0, subhanallah = 1;
 	private int gridDetected;
-
 	public int kebaboins = 0, baselevel = 1, houselevel = 1, weaponlevel = 1,prevHighScore;
 
 	public boolean secondWeaponAvailable = false;
 
-	public String berkaysinirlenme = "", playername;
+	public String berkaysinirlenme = "", playername, recordname;
 	public String current = "Buy Machine Gun";
-
+	public final String amelelik = "HeavenGuard/res/Scorelist.txt";
+	
 	private Graphics2D g2d = null;
 	private boolean isMusicPlaying = false; // Music won't play when the game starts as default 
 	private boolean sfx = true;
@@ -173,19 +180,26 @@ public class MainFrame extends JFrame {
 
 		firstWeaponContainer = new JLabel(baseWeapon);
 		bulletContainer = new JLabel(bullet);
-
+		
 	}
 
 	public void createEnemy(String tag, int howMany) {
 
 		for(int i = 0; i < howMany; i++) {
 
+			GridBagConstraints enemyConstraints = new GridBagConstraints();
+			
+			enemyConstraints.gridx = 0;
+			enemyConstraints.gridy = 0;
+			enemyConstraints.weightx = 1.0;
+			enemyConstraints.weighty = 1.0;
+			
 			enemyShip = new EnemyShipBuilder(this).level(1).build(tag);
 			enemyShip.setIndex(shipsOnScreen.size());
 			//enemyShip.setVisible(false);
 			//enemyShip.setBorder(BorderFactory.createLineBorder(Color.RED, 10));
 			shipsOnScreen.add(enemyShip);
-
+			backgroundContainer.add(enemyShip, enemyConstraints);
 		}
 
 	}
@@ -291,7 +305,7 @@ public class MainFrame extends JFrame {
 	}
 
 	public MainFrame(String title, boolean start, String playername) {
-
+		this.playername = playername;
 		if(start) {
 
 
@@ -312,17 +326,27 @@ public class MainFrame extends JFrame {
 					enemyMove++;
 					menu.editmenu();
 					kebaboinadder++;
+					enemyshipadder++;
+					subhanallah++;
 					if (kebaboinadder > 100) {
-						kebaboins += houseContainers.length * (houselevel);
-						baseHP += houseContainers.length * (houselevel);
+						kebaboins += housecount * (houselevel);
+						baseHP += housecount * (houselevel);
+						baseHealthBar.setValue(baseHP);
 						kebaboinadder = 0;
 					}
 					if (baseHP > baselevel * 100) {
 						baseHP = baselevel * 100;
 					}
+					if (baseHP <= 0) {
+						gameend();
+					}
+				
+				if (enemyshipadder > 500/((subhanallah + 49999)/50000)) {
+					enemyshipadder = 0;
+					createEnemy("BES", (1* (int) (subhanallah/1000)));
 				}
-
-			}
+			
+			}}
 					);
 
 			bulletsOnScreen = new ArrayList<>();
@@ -444,13 +468,15 @@ public class MainFrame extends JFrame {
 
 			GridBagConstraints constraints = new GridBagConstraints();
 
+			/*
 			for(EnemyShip es : shipsOnScreen) {
 
 				backgroundContainer.add(es);
 
-				System.out.println("EnemyShip is created at \nx = "+ es.getX() + "\ny = " + es.getY());
+				//System.out.println("EnemyShip is created at \nx = "+ es.getX() + "\ny = " + es.getY());
 
 			}
+			*/
 
 			constraints.gridx = 0;
 			constraints.gridy = 0;
@@ -735,7 +761,7 @@ public class MainFrame extends JFrame {
 
 				//backgroundContainer.remove(shipsOnScreen.get(enemyShip.getIndex()));
 				shipIterator.remove();
-				score += 50;
+				score += 50 * (combo + 1);
 
 			}
 
@@ -780,7 +806,6 @@ public class MainFrame extends JFrame {
 
 		scoreLabel.setText("Current Score: " + score);
 		kebaboinlabel.setText("Kebaboin: " + kebaboins);
-
 
 	}
 
@@ -937,14 +962,15 @@ public class MainFrame extends JFrame {
 
 	public void submitScore(int Score) {
 
-		File asd = new File("C:/Users/alican/Desktop/scorelist.txt");
+		File asd = new File(amelelik);
 		asd.getParentFile().mkdirs();
 		Random rand = new Random();
 
 
 		try {
 			PrintWriter outFile = new PrintWriter(asd);
-			outFile.print(playername + "\n");
+			outFile.print(playername);
+			outFile.println();
 			int[] store = new int[30];
 			for (int i = 0; i<20; i++) {
 				store[i]=rand.nextInt(10);
@@ -955,11 +981,11 @@ public class MainFrame extends JFrame {
 			else {
 				store[26] = store[3] + store[7];
 			}
-			if((store[14]*3 + store[19] - 5)>9) {
-				store[27] = (store[14]*3 + store[19] - 5)%10;
+			if((store[14]*3 + store[19] )>9) {
+				store[27] = (store[14]*3 + store[19] )%10;
 			}
 			else {
-				store[27] = (store[14]*3 + store[19] - 5);
+				store[27] = (store[14]*3 + store[19]);
 			}
 			if ((store[2] + store[1])>9) {
 				store[28] = (store[2] + store[1])%10;
@@ -991,7 +1017,8 @@ public class MainFrame extends JFrame {
 	public void getLeaderBoards() {
 		try {
 			String asd = "", pName = "";
-			FileInputStream fis = new FileInputStream("C:/Users/alican/Desktop/scorelist.txt");
+			
+			FileInputStream fis = new FileInputStream(amelelik);
 			Scanner scan = new Scanner(fis);
 			while (scan.hasNextLine()) {
 				pName = scan.nextLine();
@@ -1009,10 +1036,10 @@ public class MainFrame extends JFrame {
 			else if ( (decryptor[3] + decryptor[7])<=9 && decryptor[26] == (decryptor[3] + decryptor[7])){
 				test1=true;
 			}
-			if ( (decryptor[14]*3 + decryptor[19] - 5)>9 && decryptor[27] == (decryptor[14]*3 + decryptor[19] - 5)%10){
+			if ( (decryptor[14]*3 + decryptor[19] )>9 && decryptor[27] == (decryptor[14]*3 + decryptor[19] )%10){
 				test2=true;
 			}
-			else if ( (decryptor[14]*3 + decryptor[19] - 5)<=9 && decryptor[27] == (decryptor[14]*3 + decryptor[19] - 5)){
+			else if ( (decryptor[14]*3 + decryptor[19] )<=9 && decryptor[27] == (decryptor[14]*3 + decryptor[19] )){
 				test2=true;
 			}
 			if ( (decryptor[2] + decryptor[1])>9 && decryptor[28] == (decryptor[2] + decryptor[1])%10){
@@ -1025,9 +1052,10 @@ public class MainFrame extends JFrame {
 			if (test1 && test2 && test3) {
 				berkaysinirlenme = "" + decryptor[23] + decryptor[21] + decryptor[25] + decryptor[22] + decryptor[24];
 				prevHighScore = Integer.parseInt(berkaysinirlenme);
+				recordname = pName;
 			}
 			else {
-				File asdf = new File("C:/Users/alican/Desktop/scorelist.txt");
+				File asdf = new File( amelelik);
 				asdf.getParentFile().mkdirs();
 
 				PrintWriter outFile = new PrintWriter(asdf);
@@ -1125,7 +1153,24 @@ public class MainFrame extends JFrame {
 	}
 
 	
+	public void gameend(){
+		Set<Thread> threadSet = Thread.getAllStackTraces().keySet();
+		
+		for(Thread t : threadSet) {
 
+				t.suspend();
+
+		}
+			timer.stop();
+			Graphics g = getGraphics();
+			requestFocus();
+			g.setFont(new Font("Cracked Code", Font.PLAIN, getScreenWidth() / 12));
+			g.setColor(Color.RED);
+
+			g.drawString("Game Over \n Your Score is " + score, getScreenWidth() / 2 - getScreenWidth() / 5, getScreenHeight() / 2);
+
+		}
+	
 
 }
 
