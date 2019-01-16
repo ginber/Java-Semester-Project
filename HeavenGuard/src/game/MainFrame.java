@@ -966,8 +966,8 @@ public class MainFrame extends JFrame {
 		this.current = current;
 	}
 
-	public void submitScore(String score) {
-		int cScore = Integer.parseInt(score);
+	public void submitScore(String ascore) {
+		
 		File saveF = new File(amelelik);
 		saveF.getParentFile().mkdirs();
 		Random rand = new Random();
@@ -1000,7 +1000,7 @@ public class MainFrame extends JFrame {
 				store[28] = store[1] + store[2];
 			}
 			store[29] = 0;
-			String abcd = "" + cScore;
+			String abcd = "" + ascore;
 			store[23] = Integer.parseInt(abcd.substring(0,1));
 			store[21] =  Integer.parseInt(abcd.substring(1,2));
 			store[25] = Integer.parseInt(abcd.substring(2,3));
