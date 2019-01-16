@@ -112,7 +112,8 @@ public class MainFrame extends JFrame {
 	JLabel bulletContainer = null;
 	JLabel[] houseContainers = new JLabel[4];
 	JProgressBar[] houseHealthBars = new JProgressBar[4];
-
+	JProgressBar baseHealthBar = new JProgressBar;
+	
 	ArrayList<JLabel> enemyBullets = new ArrayList<>();
 
 	JLabel scoreLabel = null;
@@ -506,6 +507,8 @@ public class MainFrame extends JFrame {
 				}
 
 			}
+			
+			
 
 			constraints.gridx = 2;
 			constraints.gridy = 1;
@@ -745,8 +748,8 @@ public class MainFrame extends JFrame {
 					
 					enemyShip.setGridIn(i);
 					
-					int rng = new Random().nextInt(20);
-					// 5% chance
+					int rng = new Random().nextInt(25);
+					// %4 chance
 					if(rng == 0) {
 						
 						enemyShip.fire();
@@ -1092,6 +1095,14 @@ public class MainFrame extends JFrame {
 		
 		return gridDetected;
 		
+	}
+
+	public JProgressBar[] getHouseHealthBars() {
+		return houseHealthBars;
+	}
+
+	public void setHouseHealthBars(JProgressBar[] houseHealthBars) {
+		this.houseHealthBars = houseHealthBars;
 	}
 
 

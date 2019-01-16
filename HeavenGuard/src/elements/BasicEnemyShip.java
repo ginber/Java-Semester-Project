@@ -43,23 +43,69 @@ public class BasicEnemyShip extends EnemyShip {
 		Thread enemyFireThread = new Thread(new Runnable() {
 			
 			Graphics2D g2d = (Graphics2D) getBuilder().context.getBackgroundContainer().getGraphics();
-			int xPos, yPos, changeY = 0;
+			int xPos, yPos, changeY = 1;
 			int bulletCount = 0;
 			
 			@Override
 			public void run() {
 				
 				xPos = getxPosition();
+				yPos = getyPosition() + 1 + changeY;
 				
 				while(yPos < getBuilder().context.getScreenHeight() - 
 						getBuilder().context.getHouseContainers()[0].getHeight()) {
 					
 					
-					yPos = getyPosition() + 10 + changeY;
+					
 					g2d.setColor(Color.CYAN);
 					g2d.fillOval(xPos, yPos, 10, 10);
 					
-					changeY++;
+					yPos += changeY;
+					
+					for(Bullet b : getBuilder().context.getBulletsOnScreen()) {
+						
+						if(b.currentLocation.x < xPos+10 && (b.currentLocation.x > xPos) && (b.currentLocation.y < yPos + 10)
+								&& (b.currentLocation.y >yPos)) {
+							
+							// Bullets hit each other
+							System.out.println("mermiyi vurdun kerata");
+							return;
+						}
+						
+						
+						
+						
+						
+						/*if(b.getCurrentLocation().x > xPos) {
+							
+							//System.out.println("bak þu " + b.getImage().getWidth(null));
+							
+							if((xPos + 10) == b.getCurrentLocation().x + b.getImage().getWidth(null)
+							&& yPos + 10 == b.getCurrentLocation().y) {
+								
+								// Bullets hit each other
+								System.out.println("mermiyi vurdun kerata");
+								return;
+								
+							}
+							
+						} 
+						
+						if(b.getCurrentLocation().x < xPos) {
+							
+							if(xPos == b.getCurrentLocation().x
+									&& yPos + 10 == b.getCurrentLocation().y) {
+								
+								// Bullets hit each other
+								System.out.println("mermiyi vurdun kerata");
+								return;
+								
+							}
+							
+						}*/
+					
+						
+					}
 					
 					try {
 						Thread.sleep(1);
@@ -68,11 +114,26 @@ public class BasicEnemyShip extends EnemyShip {
 						e.printStackTrace();
 					}
 					
+					
+					
+					
 				}	
 				
+				// evlerin canýný azalt
+				//if(xPos <= )
+				for(int i = 0 ; i < 4 ; i++) {
+					if((getBuilder().context.getHouseContainers()[i].getX() <= xPos) && (getBuilder().context.getHouseContainers()[i].getX()
+							+ getBuilder().context.getHouseContainers()[i].getWidth() >= xPos) ){
+						getBuilder().context.getHouseHP()[i] -= 10;
+						getBuilder().context.getHouseHealthBars()[i].setValue(getBuilder().context.getHouseHP()[i]);
+					}
+				}
 			}
 		});
+		
+		enemyFireThread.start();
 
+		/*
 		
 		bulletLabel.setLocation(getxPosition(), getyPosition() + bulletLabel.getHeight());
 		
@@ -86,6 +147,8 @@ public class BasicEnemyShip extends EnemyShip {
 		gbc.weighty = 0.5;
 		
 		context.getBackgroundContainer().add(bulletLabel);
+		
+		*/
 
 	}
 

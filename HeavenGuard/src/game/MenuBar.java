@@ -203,6 +203,9 @@ public class MenuBar extends JFrame{
 			if (input == 0 && context.kebaboins >= upgradecost ) {
 				context.kebaboins -= upgradecost;
 				context.houselevel++;
+				for ( int i = 0 ; i < 4 ; i++) {
+					context.getHouseHP()[i] = 100;
+				}
 			}
 			else if (input == 0 && context.kebaboins < upgradecost ) {
 				JOptionPane.showMessageDialog(null, "Not enough kebabs milord");
